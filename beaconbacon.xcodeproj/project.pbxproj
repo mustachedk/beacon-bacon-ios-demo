@@ -18,7 +18,7 @@
 		775CE0FF1D92C1BC0066C905 /* BBBeaconLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0A31D92C1BC0066C905 /* BBBeaconLocation.m */; };
 		775CE1001D92C1BC0066C905 /* BBConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0A51D92C1BC0066C905 /* BBConfig.m */; };
 		775CE1011D92C1BC0066C905 /* BBDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0A71D92C1BC0066C905 /* BBDataManager.m */; };
-		775CE1021D92C1BC0066C905 /* BBFindPOI.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0A91D92C1BC0066C905 /* BBFindPOI.m */; };
+		775CE1021D92C1BC0066C905 /* BBFoundSubject.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0A91D92C1BC0066C905 /* BBFoundSubject.m */; };
 		775CE1031D92C1BC0066C905 /* BBFloor.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0AB1D92C1BC0066C905 /* BBFloor.m */; };
 		775CE1041D92C1BC0066C905 /* BBLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0AD1D92C1BC0066C905 /* BBLocation.m */; };
 		775CE1051D92C1BC0066C905 /* BBPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0AF1D92C1BC0066C905 /* BBPlace.m */; };
@@ -86,8 +86,8 @@
 		775CE0A51D92C1BC0066C905 /* BBConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBConfig.m; sourceTree = "<group>"; };
 		775CE0A61D92C1BC0066C905 /* BBDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBDataManager.h; sourceTree = "<group>"; };
 		775CE0A71D92C1BC0066C905 /* BBDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBDataManager.m; sourceTree = "<group>"; };
-		775CE0A81D92C1BC0066C905 /* BBFindPOI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBFindPOI.h; sourceTree = "<group>"; };
-		775CE0A91D92C1BC0066C905 /* BBFindPOI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBFindPOI.m; sourceTree = "<group>"; };
+		775CE0A81D92C1BC0066C905 /* BBFoundSubject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBFoundSubject.h; sourceTree = "<group>"; };
+		775CE0A91D92C1BC0066C905 /* BBFoundSubject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBFoundSubject.m; sourceTree = "<group>"; };
 		775CE0AA1D92C1BC0066C905 /* BBFloor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBFloor.h; sourceTree = "<group>"; };
 		775CE0AB1D92C1BC0066C905 /* BBFloor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBFloor.m; sourceTree = "<group>"; };
 		775CE0AC1D92C1BC0066C905 /* BBLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBLocation.h; sourceTree = "<group>"; };
@@ -250,8 +250,8 @@
 				775CE0A51D92C1BC0066C905 /* BBConfig.m */,
 				775CE0A61D92C1BC0066C905 /* BBDataManager.h */,
 				775CE0A71D92C1BC0066C905 /* BBDataManager.m */,
-				775CE0A81D92C1BC0066C905 /* BBFindPOI.h */,
-				775CE0A91D92C1BC0066C905 /* BBFindPOI.m */,
+				775CE0A81D92C1BC0066C905 /* BBFoundSubject.h */,
+				775CE0A91D92C1BC0066C905 /* BBFoundSubject.m */,
 				775CE0AA1D92C1BC0066C905 /* BBFloor.h */,
 				775CE0AB1D92C1BC0066C905 /* BBFloor.m */,
 				775CE0AC1D92C1BC0066C905 /* BBLocation.h */,
@@ -395,6 +395,7 @@
 				TargetAttributes = {
 					775CE0811D92C1B20066C905 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = D29532HCY6;
 					};
 				};
 			};
@@ -466,7 +467,7 @@
 				775CE1011D92C1BC0066C905 /* BBDataManager.m in Sources */,
 				775CE1051D92C1BC0066C905 /* BBPlace.m in Sources */,
 				775CE08A1D92C1B20066C905 /* AppDelegate.m in Sources */,
-				775CE1021D92C1BC0066C905 /* BBFindPOI.m in Sources */,
+				775CE1021D92C1BC0066C905 /* BBFoundSubject.m in Sources */,
 				775CE0FF1D92C1BC0066C905 /* BBBeaconLocation.m in Sources */,
 				775CE10E1D92C1BC0066C905 /* AFURLRequestSerialization.m in Sources */,
 				775CE1091D92C1BC0066C905 /* BBPOISection.m in Sources */,
@@ -607,6 +608,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = D29532HCY6;
 				INFOPLIST_FILE = beaconbacon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dk.mustache.beaconbacon;
@@ -618,6 +620,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = D29532HCY6;
 				INFOPLIST_FILE = beaconbacon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dk.mustache.beaconbacon;

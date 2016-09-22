@@ -1,5 +1,5 @@
 //
-// BBFindPOI.h
+// BBFoundSubject.m
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -22,20 +22,33 @@
 // THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
+#import "BBFoundSubject.h"
 
-@interface BBFindPOI : NSObject
+@implementation BBFoundSubject
 
-@property (nonatomic, assign) NSInteger floor_id;
+- (instancetype)initWithAttributes:(NSDictionary *)attributes {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    
+    self.status = [attributes valueForKeyPath:@"status"];
+    NSDictionary *data = [attributes valueForKeyPath:@"data"];
 
-@property (nonatomic, strong) NSString *status;
+    NSDictionary *floorDict = [data valueForKeyPath:@"floor"];
+    self.floor_id   = (NSUInteger)[[floorDict valueForKeyPath:@"id"] integerValue];
+    
+    NSDictionary *locationDict = [data valueForKeyPath:@"location"];
+    
+    self.location_id = (NSUInteger)[[locationDict valueForKeyPath:@"id"] integerValue];
+    self.location_posX = (NSUInteger)[[locationDict valueForKeyPath:@"posX"] integerValue];
+    self.location_posY = (NSUInteger)[[locationDict valueForKeyPath:@"posY"] integerValue];
 
-@property (nonatomic, assign) NSInteger location_id;
-@property (nonatomic, assign) NSInteger location_posX;
-@property (nonatomic, assign) NSInteger location_posY;
+    return self;
+}
 
-- (instancetype)initWithAttributes:(NSDictionary *)attributes;
-
-- (BOOL)isMaterialFound;
+- (BOOL)isSubjectFound {
+    return [self.status isEqualToString:BBStatus_Found];
+}
 
 @end

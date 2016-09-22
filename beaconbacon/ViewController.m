@@ -77,29 +77,24 @@
 
 - (IBAction)mapWayfindingAction:(id)sender {
     
-    NSMutableDictionary *materialDict = [NSMutableDictionary new];
-    [materialDict setObject:@"IMS" forKey:@"find_identifier"];
+    NSMutableDictionary *requestDict = [NSMutableDictionary new];
+    [requestDict setObject:@"IMS" forKey:@"find_identifier"];
     NSMutableDictionary *data = [NSMutableDictionary new];
     [data setObject:@"50631494" forKey:@"Faust"];
-    [materialDict setObject:data forKey:@"data"];
+    [requestDict setObject:data forKey:@"data"];
     
-    [[BBDataManager sharedInstance] requestFindMaterial:materialDict withCompletion:^(BBFindPOI *result, NSError *error) {
+    [[BBDataManager sharedInstance] requestFindASubject:requestDict withCompletion:^(BBFoundSubject *result, NSError *error) {
         if (error == nil) {
-            if (result != nil && [result isMaterialFound]) {
+            if (result != nil && [result isSubjectFound]) {
                 // Material is found for way finding
                 mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
                 
-                NSMutableDictionary *materialDict = [NSMutableDictionary new];
-                [materialDict setObject:@"IMS" forKey:@"find_identifier"];
-                NSMutableDictionary *data = [NSMutableDictionary new];
+                result.subject_name     = @"En mand der hedder Ove";
+                result.subject_subtitle = @"SK";
+                result.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];
                 
-                [data setObject:@"En mand der hedder Ove" forKey:@"title"];
-                [data setObject:@"SK" forKey:@"shelfmark"];
-                [materialDict setObject:data forKey:@"data"];
+                mapViewController.foundSubject = result;
                 
-                mapViewController.theFoundPOI = result;
-                mapViewController.materialDict = [materialDict copy];
-                mapViewController.materialImage = [UIImage imageNamed:@"menu-library-map-icon"];
                 [self presentViewController:mapViewController animated:true completion:nil];
             } else {
                 // No material found for way finding

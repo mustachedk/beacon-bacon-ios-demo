@@ -37,9 +37,8 @@
 
 @interface BBLibraryMapViewController : UIViewController <CLLocationManagerDelegate>
 
-@property (nonatomic, strong) BBFindPOI *theFoundPOI;
-@property (nonatomic, strong) NSDictionary* materialDict;
-@property (nonatomic, strong) UIImage *materialImage;
+// Wayfinding Item
+@property (nonatomic, strong) BBFoundSubject *foundSubject;
 
 // Custom Navigation/Top Bar
 @property (weak, nonatomic) IBOutlet UIView *fakeNavigationBar;

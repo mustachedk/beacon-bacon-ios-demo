@@ -35,6 +35,7 @@
     
     self.labelTitle.font = [[BBConfig sharedConfig] lightFontWithSize:14];
     self.labelText.font = [[BBConfig sharedConfig] lightFontWithSize:12];
+    self.labelText.numberOfLines = 0;
     self.buttonOK.titleLabel.font = [[BBConfig sharedConfig] regularFontWithSize:12];
     
     [self.opacityViewWithShadow.layer setShadowOffset:CGSizeMake(0, 5)];

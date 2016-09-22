@@ -1,5 +1,5 @@
 //
-// BBFindPOI.m
+// BBFoundSubject.h
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -22,32 +22,29 @@
 // THE SOFTWARE.
 //
 
-#import "BBFindPOI.h"
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@implementation BBFindPOI
+@interface BBFoundSubject : NSObject
 
-- (instancetype)initWithAttributes:(NSDictionary *)attributes {
-    self = [super init];
-    if (!self) {
-        return nil;
-    }
-    
-    NSDictionary *floorDict = [attributes valueForKeyPath:@"floor"];
-    self.floor_id   = (NSUInteger)[[floorDict valueForKeyPath:@"id"] integerValue];
-    
-    self.status     = [attributes valueForKeyPath:@"status"];
-    
-    NSDictionary *locationDict = [attributes valueForKeyPath:@"location"];
-    
-    self.location_id = (NSUInteger)[[locationDict valueForKeyPath:@"id"] integerValue];
-    self.location_posX = (NSUInteger)[[locationDict valueForKeyPath:@"posX"] integerValue];
-    self.location_posY = (NSUInteger)[[locationDict valueForKeyPath:@"posY"] integerValue];
+#define BBStatus_NotFound @"Not Found"
+#define BBStatus_Found @"Found"
 
-    return self;
-}
+@property (nonatomic, assign) NSInteger floor_id;
 
-- (BOOL)isMaterialFound {
-    return ![self.status isEqualToString:@"Not Found"];
-}
+@property (nonatomic, strong) NSString *status;
+
+@property (nonatomic, assign) NSInteger location_id;
+@property (nonatomic, assign) NSInteger location_posX;
+@property (nonatomic, assign) NSInteger location_posY;
+
+// To Display
+@property (nonatomic, strong) NSString *subject_name;
+@property (nonatomic, strong) NSString *subject_subtitle;
+@property (nonatomic, strong) UIImage *subject_image;
+
+- (instancetype)initWithAttributes:(NSDictionary *)attributes;
+
+- (BOOL)isSubjectFound;
 
 @end

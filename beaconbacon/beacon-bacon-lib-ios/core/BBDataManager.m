@@ -201,7 +201,7 @@
     
 }
 
-- (void) requestFindMaterial:(NSDictionary *)material withCompletion:(CompletionBlock)completionBlock {
+- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(CompletionBlock)completionBlock {
     
     if ([BBConfig sharedConfig].currentPlaceId == nil) {
         completionBlock(nil, [self unsupportedPlaceError]);
@@ -210,7 +210,7 @@
     NSString *route = [NSString stringWithFormat:@"%@place/%@/find", BB_BASE_URL, [BBConfig sharedConfig].currentPlaceId];
     
     NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:material options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:requestDict options:NSJSONWritingPrettyPrinted error:&error];
     
     NSString *jsonString = @"";
     if (!jsonData) {
@@ -233,18 +233,14 @@
     [[manager dataTaskWithRequest:req uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         
         if (error == nil) {
-            BBFindPOI *findPOI = [[BBFindPOI alloc] initWithAttributes:responseObject];
-            completionBlock(findPOI, nil);
+            BBFoundSubject *result = [[BBFoundSubject alloc] initWithAttributes:responseObject];
+            completionBlock(result, nil);
         } else {
             completionBlock(nil, error);
         }
     }] resume];
     
 
-}
-
-- (void) request_TEMPLATE_WithCompletion:(CompletionBlock)completionBlock {
-    
 }
 
 @end

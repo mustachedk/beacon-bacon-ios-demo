@@ -25,7 +25,7 @@
 "points.of.interest" = "Interessepunkter";
 "showing" = "viser";
 "here.is.your.material" = "Her er dit materiale";
-"your.material.is.at.floor.x" = "Dit materiale befinder sig på sal %ld. Klik på knappen for at få din placering.";
+"your.material.is.at.x" = "Dit materiale befinder sig på %@. Klik på knappen for at få din placering.";
 "ok.find.me" = "Ok, find mig";
 "you.are.here" = "Du er her";
 "you.are.at" = "Du er på";

@@ -28,7 +28,7 @@
 #import "BBAPIClient.h"
 #import "BBPOIMenuItem.h"
 #import "BBPlace.h"
-#import "BBFindPOI.h"
+#import "BBFoundSubject.h"
 #import "AFNetworking.h"
 
 typedef void (^CompletionBlock)(id result, NSError *error);
@@ -45,6 +45,6 @@ typedef void (^CompletionBlock)(id result, NSError *error);
 
 - (void) requestCurrentPlaceSetupWithCompletion:(CompletionBlock)completionBlock;
 
-- (void) requestFindMaterial:(NSDictionary *)material withCompletion:(CompletionBlock)completionBlock;
+- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(CompletionBlock)completionBlock;
 
 @end

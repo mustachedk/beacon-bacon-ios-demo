@@ -57,6 +57,13 @@
     BBLibraryMapPOIViewController *currentPOIViewController;
     
     BOOL zoomToUserPosition;
+    
+    BOOL showMaterialView;
+    BOOL showMyPositionView;
+    
+    BBPopupView *popupView;
+    BOOL foundSubjectPopopViewDisplayed;
+
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -88,6 +95,7 @@
     
     scaleRatio = 1.00f;
     zoomToUserPosition = false;
+    foundSubjectPopopViewDisplayed = NO;
     
     [self showMyPositionView:NO animated:NO];
     [self showMaterialView:NO animated:NO];
@@ -132,19 +140,25 @@
     
     [self.myLocationButton setImage:[UIImage imageNamed:@"location-icon"] forState:UIControlStateNormal];
     [self.pointsOfInterestButton setImage:[UIImage imageNamed:@"marker-icon"] forState:UIControlStateNormal];
-
+    
     [self.mapScrollView addSubview:myCurrentLocationView];
-
+    
+    self.mapScrollView.bounces = YES;
+    self.mapScrollView.alwaysBounceVertical = YES;
+    self.mapScrollView.alwaysBounceHorizontal = YES;
+    
     pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [self.view addGestureRecognizer:pinchGestureRecognizer];
  
     self.navBarNextButton.enabled = NO;
     self.navBarPreviousButton.enabled = NO;
 
-    if (self.theFoundPOI != nil) {
-        self.materialTopTitleLabel.text = ((NSString *)self.materialDict[@"title"]).uppercaseString;
-        self.materialTopSubtitleLabel.text = ((NSString *)self.materialDict[@"shelfmark"]).uppercaseString;
-        self.materialTopImageView.image = self.materialImage;
+    if (self.foundSubject != nil) {
+        self.materialTopTitleLabel.text = self.foundSubject.subject_name.uppercaseString;
+        self.materialTopSubtitleLabel.text = self.foundSubject.subject_subtitle.uppercaseString;
+        self.materialTopImageView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.materialTopImageView.tintColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
+
         self.materialTopBar.hidden = false;
         
     } else {
@@ -164,9 +178,9 @@
 
                 currentDisplayFloorRef = place.floors.firstObject;
 
-                if (self.theFoundPOI != nil) {
+                if (self.foundSubject != nil) {
                     for (BBFloor *floor in place.floors) {
-                        if (floor.floor_id == self.theFoundPOI.floor_id) {
+                        if (floor.floor_id == self.foundSubject.floor_id) {
                             currentDisplayFloorRef = floor;
                             break;
                         }
@@ -292,7 +306,7 @@
                     floorplanImageView = [[UIImageView alloc] initWithImage:image];
                     floorplanImageView.tag = BB_MAP_TAG_FLOORPLAN;
                 }
-                
+                self.mapScrollView.backgroundColor = [self colorAtImage:image xCoordinate:0 yCoordinate:0];
                 floorplanImageView.image = image;
                 scaleRatio = [self minScale];
                 floorplanImageView.frame = CGRectMake(0, 0, image.size.width * scaleRatio, image.size.height * scaleRatio);
@@ -335,46 +349,48 @@
         return;
     }
     
-    if (self.theFoundPOI != nil) {
+    if (self.foundSubject != nil) {
         
-        if (self.theFoundPOI.floor_id == currentDisplayFloorRef.floor_id) {
+        if (self.foundSubject.floor_id == currentDisplayFloorRef.floor_id) {
             
             [self showMaterialView:NO animated:YES];
             
-            BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.theFoundPOI.location_posX * scaleRatio - BB_POI_WIDTH/2, self.theFoundPOI.location_posY * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
+            BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POI_WIDTH/2, self.foundSubject.location_posY * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
             
-            foundMaterialPOIView.poiIconView.image = [self.materialImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            foundMaterialPOIView.poiIconView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             foundMaterialPOIView.poiIconView.tintColor = [UIColor whiteColor];
             [self.mapScrollView addSubview:foundMaterialPOIView];
             
-            BBPopupView *popupView = [[[NSBundle mainBundle] loadNibNamed:@"BBPopupView" owner:self options:nil] firstObject];
-            [popupView setFrame:CGRectMake(self.theFoundPOI.location_posX * scaleRatio - BB_POPUP_WIDTH / 2, self.theFoundPOI.location_posY * scaleRatio - BB_POPUP_HEIGHT, BB_POPUP_WIDTH, BB_POPUP_HEIGHT)];
-            popupView.labelTitle.text = NSLocalizedStringFromTable(@"here.is.you.material", @"BBLocalizable", nil).uppercaseString;
-            popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.at.floor.x", @"BBLocalizable", nil), (long)currentDisplayFloorRef.floor_id];
-            [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok.find.me", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-            [popupView.buttonOK addTarget:self action:@selector(myLocationAction:) forControlEvents: UIControlEventTouchUpInside];
-            [self.mapScrollView addSubview:popupView];
+            if (!foundSubjectPopopViewDisplayed) {
+                popupView = [[[NSBundle mainBundle] loadNibNamed:@"BBPopupView" owner:self options:nil] firstObject];
+                [popupView setFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POPUP_WIDTH / 2, self.foundSubject.location_posY * scaleRatio - BB_POPUP_HEIGHT, BB_POPUP_WIDTH, BB_POPUP_HEIGHT)];
+                popupView.labelTitle.text = NSLocalizedStringFromTable(@"here.is.your.material", @"BBLocalizable", nil).uppercaseString;
+                popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.at.x", @"BBLocalizable", nil), currentDisplayFloorRef.name];
+                [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok.find.me", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+                [popupView.buttonOK addTarget:self action:@selector(popupViewOkButtonAction:) forControlEvents: UIControlEventTouchUpInside];
+                [self.mapScrollView addSubview:popupView];
+            }
             
         } else {
             [self showMaterialView:YES animated:YES];
         }
     }
     
-//    // DEBUG !!!!!!
-//    for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
-//
-//        CGFloat beaconWidth = 12.f;
-//        CGPoint position = [beaconLocation coordinate];
-//        UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
-//        poiView.backgroundColor = [UIColor whiteColor];
-//        
-//        poiView.layer.cornerRadius = beaconWidth/2;
-//        poiView.layer.masksToBounds = YES;
-//        poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-//        poiView.layer.borderWidth = 2.f;
-//        [self.mapScrollView addSubview:poiView];
-//    }
-//    // DEBUG END !!!
+    // DEBUG !!!!!!
+    for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
+
+        CGFloat beaconWidth = 12.f;
+        CGPoint position = [beaconLocation coordinate];
+        UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
+        poiView.backgroundColor = [UIColor whiteColor];
+        
+        poiView.layer.cornerRadius = beaconWidth/2;
+        poiView.layer.masksToBounds = YES;
+        poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+        poiView.layer.borderWidth = 2.f;
+        [self.mapScrollView addSubview:poiView];
+    }
+    // DEBUG END !!!
     
     [[BBDataManager sharedInstance] requestSelectedPOIMenuItemsWithCompletion:^(NSArray *result, NSError *error) {
         
@@ -455,6 +471,13 @@
 
 - (BOOL)isWalkablePixel:(UIImage *)image xCoordinate:(int)x yCoordinate:(int)y {
     
+    UIColor *pixel_color = [self colorAtImage:image xCoordinate:x yCoordinate:y];
+    UIColor *walkable_color = [self colorFromHexString:currentDisplayFloorRef.map_walkable_color];
+    return [self color:pixel_color isEqualToColor:walkable_color withTolerance:0.05];
+}
+
+
+- (UIColor *) colorAtImage:(UIImage *)image xCoordinate:(int)x yCoordinate:(int)y {
     CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
     const UInt8* data = CFDataGetBytePtr(pixelData);
     
@@ -466,9 +489,7 @@
     UInt8 alpha = data[pixelInfo + 3];
     CFRelease(pixelData);
     
-    UIColor *pixel_color = [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:alpha/255.0f];
-    UIColor *walkable_color = [self colorFromHexString:currentDisplayFloorRef.map_walkable_color];
-    return [self color:pixel_color isEqualToColor:walkable_color withTolerance:0.05];
+    return [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:alpha/255.0f];
 }
 
 // Assumes input like "#00FF00" (#RRGGBB).
@@ -499,16 +520,18 @@
 
 - (void) showMyPositionView:(BOOL)shouldShow animated:(BOOL)animated {
     CGFloat animationDuration = animated ? 0.35 : 0;
+    showMyPositionView = shouldShow;
     
     self.myPositionPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.here", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
     
     if (shouldShow) {
         self.myPositionPopDownTopConstraint.constant = 0;
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(self.myPositionPopDownView.frame.size.height, 0, 0, 0);
     } else {
         self.myPositionPopDownTopConstraint.constant = -self.myPositionPopDownView.frame.size.height;
-        self.mapScrollView.contentInset = UIEdgeInsetsZero;
     }
+    
+    [self updateMapScrollViewContentInsets];
+    
     [self.view needsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -517,22 +540,37 @@
 
 - (void) showMaterialView:(BOOL)shouldShow animated:(BOOL)animated {
     CGFloat animationDuration = animated ? 0.35 : 0;
+    showMaterialView = shouldShow;
     
-    self.materialPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.at", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
-    
-    self.materialPopDownText.text = [NSString stringWithFormat:@"%@: %ld. %@", NSLocalizedStringFromTable(@"your.material.is.at", @"BBLocalizable", nil), (long)self.theFoundPOI.floor_id, NSLocalizedStringFromTable(@"floor", @"BBLocalizable", nil)].uppercaseString;
+    if (rangedBeconsFloorRef == nil || rangedBeconsFloorRef.name == nil) {
+        self.materialPopDownLabel.text = nil;
+    } else {
+        self.materialPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.at", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
+    }
+    self.materialPopDownText.text = [NSString stringWithFormat:@"%@: %ld. %@", NSLocalizedStringFromTable(@"your.material.is.at", @"BBLocalizable", nil), (long)self.foundSubject.floor_id, NSLocalizedStringFromTable(@"floor", @"BBLocalizable", nil)].uppercaseString;
     
     if (shouldShow) {
         self.materialPopDownTopConstraint.constant = 0;
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(self.materialPopDownView.frame.size.height, 0, 0, 0);
     } else {
         self.materialPopDownTopConstraint.constant = -self.materialPopDownView.frame.size.height;
-        self.mapScrollView.contentInset = UIEdgeInsetsZero;
     }
+    
+    [self updateMapScrollViewContentInsets];
+    
     [self.view needsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
     }];
+}
+
+- (void) updateMapScrollViewContentInsets {
+    if (showMaterialView) {
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(self.materialPopDownView.frame.size.height, 0, 0, 0);
+    } else if (showMyPositionView) {
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(self.myPositionPopDownView.frame.size.height, 0, 0, 0);
+    } else {
+        self.mapScrollView.contentInset = UIEdgeInsetsZero;
+    }
 }
 
 #pragma mark - Pinch Gesture
@@ -622,16 +660,23 @@
     }
 }
 
+- (IBAction)popupViewOkButtonAction:(id)sender {
+    foundSubjectPopopViewDisplayed = YES;
+    [popupView removeFromSuperview];
+    popupView = nil;
+    [self myLocationAction:nil];
+}
+
 - (IBAction)myPositionPopDownButtonAction:(id)sender {
     [self myLocationAction:nil];
 }
 
 - (IBAction)materialPopDownButtonAction:(id)sender {
-    
-    if (currentDisplayFloorRef.floor_id != self.theFoundPOI.floor_id) {
-        if (self.theFoundPOI != nil) {
+    foundSubjectPopopViewDisplayed = NO;
+    if (currentDisplayFloorRef.floor_id != self.foundSubject.floor_id) {
+        if (self.foundSubject != nil) {
             for (BBFloor *floor in place.floors) {
-                if (floor.floor_id == self.theFoundPOI.floor_id) {
+                if (floor.floor_id == self.foundSubject.floor_id) {
                     currentDisplayFloorRef = floor;
                     break;
                 }
@@ -687,7 +732,7 @@
         [self showMyPositionView:NO animated:NO];
     } else {
         
-        if (self.theFoundPOI == nil) {
+        if (self.foundSubject == nil) {
             [self showMyPositionView:(currentDisplayFloorRef.floor_id != rangedBeconsFloorRef.floor_id) animated:YES];
         } else {
             [self showMyPositionView:NO animated:NO];
