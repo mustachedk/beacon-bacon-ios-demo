@@ -4,7 +4,8 @@ Demo app for https://github.com/nosuchagency/beacon-bacon
 
 ## GET STARTED
 
-1. Request an API Key from https://beaconbacon.nosuchagency.com (Don't you have a user? - Read how to get setup Places/Points of Interest/Beacons etc. at https://github.com/nosuchagency/beacon-bacon)
+1. Request an API Key from https://beaconbacon.nosuchagency.com 
+   (Read how to get setup Places/Points of Interest/Beacons etc. at [here](https://github.com/nosuchagency/beacon-bacon))
 2. BBConfig.h -> BB_API_KEY -> Insert your API Key
 
 You are now able to use the lib. 
