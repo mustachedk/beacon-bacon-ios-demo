@@ -33,31 +33,40 @@ BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController all
 [self presentViewController:mapViewController animated:true completion:nil];
 ```
 
+####Find a subject (IMS)
+```Objective-C
+// Create a request (JSON body) - The API will return a subject
+// This example is for a IMS subject - but can be anything you want the API to look for
+
+NSMutableDictionary *requestDict = [NSMutableDictionary new];
+[requestDict setObject:@"IMS" forKey:@"find_identifier"];
+
+NSMutableDictionary *data = [NSMutableDictionary new];
+[data setObject:@"FAUST_IDENTIFIER" forKey:@"Faust"];
+[requestDict setObject:data forKey:@"data"];
+
+[[BBDataManager sharedInstance] requestFindASubject:requestDict withCompletion:^(BBFoundSubject *result, NSError *error) {
+   if (error == nil) {
+       if (result != nil && [result isSubjectFound]) {
+           // Material is found for way finding
+           result.subject_name     = @"NAME_TO_DISPLAY";
+           result.subject_subtitle = @"SUBTITLE_TO_DISPLAY";
+           result.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"]; // Or any other icon you want it to display, eg. a book/video/tape etc.
+           
+           // 1. Store the BBFoundSubject 'result' for when you need to 'Initiale map with wayfinding'
+           // 2. Optional: display/enable a button for wayfinding
+       } else {
+           // No material found for way finding
+       }
+   } else {
+       // An error occurred
+   }
+}];
+```
 ####Initiate map with wayfinding:
 ```Objective-C
- [[BBDataManager sharedInstance] requestFindMaterial:materialDict withCompletion:^(BBFindPOI *result, NSError *error) {
-        if (error == nil) {
-            if (result != nil && [result isMaterialFound]) {
-                // Material is found for way finding
-                mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
-                
-                NSMutableDictionary *materialDict = [NSMutableDictionary new];
-                [materialDict setObject:@"IMS" forKey:@"find_identifier"];
-                NSMutableDictionary *data = [NSMutableDictionary new];
-                
-                [data setObject:@"En mand der hedder Ove" forKey:@"title"];
-                [data setObject:@"SK" forKey:@"shelfmark"];
-                [materialDict setObject:data forKey:@"data"];
-                
-                mapViewController.theFoundPOI = result;
-                mapViewController.materialDict = [materialDict copy];
-                mapViewController.materialImage = [UIImage imageNamed:@"menu-library-map-icon"];
-                [self presentViewController:mapViewController animated:true completion:nil];
-            } else {
-                // No material found for way finding
-            }
-        } else {
-            // An error occurred
-        }
-    }];
+BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
+mapViewController.foundSubject = theFoundSubject; // Stored BBFoundSubject 'result' from BBDataManager.requestFindASubject:
+
+[self presentViewController:mapViewController animated:true completion:nil];
 ```
