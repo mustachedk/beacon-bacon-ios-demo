@@ -58,8 +58,8 @@
         
     } else if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
         [self.iconImageView setImage:[UIImage imageNamed:@"icon-area"]];
-        CAShapeLayer *dotLayer = [CAShapeLayer new];
-        dotLayer.fillColor = [UIColor colorFromHexString:poi.hex_color].CGColor;
+        CAShapeLayer *dotLayer = [CAShapeLayer layer];
+        dotLayer.fillColor = [[UIColor colorFromHexString:poi.hex_color] colorWithAlphaComponent:0.4].CGColor;
         dotLayer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.iconImageView.bounds.size.width/2 - 3, self.iconImageView.bounds.size.height/2 - 3, 6, 6)].CGPath;
         [self.iconImageView.layer addSublayer:dotLayer];
     }

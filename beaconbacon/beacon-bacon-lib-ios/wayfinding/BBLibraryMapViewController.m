@@ -28,6 +28,7 @@
 
 #define BB_MAP_TAG_FLOORPLAN   999
 #define BB_MAP_TAG_MY_POSITION 666
+
 #define BB_POPUP_HEIGHT 170
 #define BB_POPUP_WIDTH 280
 
@@ -90,8 +91,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    _bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:0] forKey:CBCentralManagerOptionShowPowerAlertKey]];
     
     scaleRatio = 1.00f;
     zoomToUserPosition = false;
@@ -209,7 +208,9 @@
 
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self layoutPOI];
+    if (self != nil) {
+        [self layoutPOI];
+    }
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -232,6 +233,8 @@
         
         [self.locationManager startMonitoringForRegion:[self beaconRegion]];
         [self.locationManager startRangingBeaconsInRegion:[self beaconRegion]];
+        
+        _bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:0] forKey:CBCentralManagerOptionShowPowerAlertKey]];
         
     } else {
         [self showAlert:NSLocalizedStringFromTable(@"invalid.current.location.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"invalid.current.location.message", @"BBLocalizable", nil)];
@@ -337,106 +340,126 @@
 
 - (void) layoutPOI {
     
-    for (UIView *view in self.mapScrollView.subviews) {
-        if (view.tag == BB_MAP_TAG_MY_POSITION || view.tag == BB_MAP_TAG_FLOORPLAN) {
-            continue;
-        } else {
-            [view removeFromSuperview];
-        }
-    }
-
-    if (place == nil) {
-        return;
-    }
-    
-    if (self.foundSubject != nil) {
-        
-        if (self.foundSubject.floor_id == currentDisplayFloorRef.floor_id) {
-            
-            [self showMaterialView:NO animated:YES];
-            
-            BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POI_WIDTH/2, self.foundSubject.location_posY * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
-            
-            foundMaterialPOIView.poiIconView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            foundMaterialPOIView.poiIconView.tintColor = [UIColor whiteColor];
-            [self.mapScrollView addSubview:foundMaterialPOIView];
-            
-            if (!foundSubjectPopopViewDisplayed) {
-                popupView = [[[NSBundle mainBundle] loadNibNamed:@"BBPopupView" owner:self options:nil] firstObject];
-                [popupView setFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POPUP_WIDTH / 2, self.foundSubject.location_posY * scaleRatio - BB_POPUP_HEIGHT, BB_POPUP_WIDTH, BB_POPUP_HEIGHT)];
-                popupView.labelTitle.text = NSLocalizedStringFromTable(@"here.is.your.material", @"BBLocalizable", nil).uppercaseString;
-                popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.at.x", @"BBLocalizable", nil), currentDisplayFloorRef.name];
-                [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok.find.me", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-                [popupView.buttonOK addTarget:self action:@selector(popupViewOkButtonAction:) forControlEvents: UIControlEventTouchUpInside];
-                [self.mapScrollView addSubview:popupView];
+        for (UIView *view in self.mapScrollView.subviews) {
+            if (view.tag == BB_MAP_TAG_MY_POSITION || view.tag == BB_MAP_TAG_FLOORPLAN) {
+                continue;
+            } else {
+                [view removeFromSuperview];
             }
-            
-        } else {
-            [self showMaterialView:YES animated:YES];
         }
-    }
-    
-//    // DEBUG !!!!!!
-//    for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
-//
-//        CGFloat beaconWidth = 12.f;
-//        CGPoint position = [beaconLocation coordinate];
-//        UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
-//        poiView.backgroundColor = [UIColor whiteColor];
-//        
-//        poiView.layer.cornerRadius = beaconWidth/2;
-//        poiView.layer.masksToBounds = YES;
-//        poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-//        poiView.layer.borderWidth = 2.f;
-//        [self.mapScrollView addSubview:poiView];
-//    }
-//    // DEBUG END !!!
-    
-    [[BBDataManager sharedInstance] requestSelectedPOIMenuItemsWithCompletion:^(NSArray *result, NSError *error) {
-        
-        if (result == nil || result.count == 0) {
+
+        if (place == nil) {
             return;
         }
-        NSMutableDictionary *displayPOI = [NSMutableDictionary new];
         
-        for (BBPOIMenuItem *menuItem in result) {
-            if ([menuItem isPOIMenuItem] == YES) {
-                if (menuItem.poi.selected == YES) {
-                    [displayPOI setObject:menuItem.poi forKey:[NSString stringWithFormat:@"%ld",(long)menuItem.poi.poi_id]];
-                    
-                }
-            }
-        }
-        
-        for (BBPOILocation *poiLocation in currentDisplayFloorRef.poiLocations) {
+        if (self.foundSubject != nil) {
             
-            BBPOI *poi = [displayPOI objectForKey:[NSString stringWithFormat:@"%ld",(long)poiLocation.poi.poi_id]];
-            if (poi != nil) {
-
-                if ([poi.type isEqualToString:BB_POI_TYPE_ICON]) {
-                    CGPoint position = [poiLocation coordinate];
-                    BBPOIMapView *poiView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(position.x * scaleRatio - BB_POI_WIDTH/2, position.y * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
-                    
-                    __weak UIImageView* weakPOIIconView = poiView.poiIconView;
-                    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:poiLocation.poi.icon_url]];
-                    [poiView.poiIconView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                        weakPOIIconView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                        weakPOIIconView.tintColor = [UIColor whiteColor];
-                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                        NSLog(@"An error occured: %@",error.localizedDescription);
-                    }];
-                    [self.mapScrollView addSubview:poiView];
-                } else if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
-                    NSLog(@"BB_POI_TYPE_AREA");
-                    
+            if (self.foundSubject.floor_id == currentDisplayFloorRef.floor_id) {
+                
+                [self showMaterialView:NO animated:YES];
+                
+                BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POI_WIDTH/2, self.foundSubject.location_posY * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
+                
+                foundMaterialPOIView.poiIconView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                foundMaterialPOIView.poiIconView.tintColor = [UIColor whiteColor];
+                [self.mapScrollView addSubview:foundMaterialPOIView];
+                
+                if (!foundSubjectPopopViewDisplayed) {
+                    popupView = [[[NSBundle mainBundle] loadNibNamed:@"BBPopupView" owner:self options:nil] firstObject];
+                    [popupView setFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POPUP_WIDTH / 2, self.foundSubject.location_posY * scaleRatio - BB_POPUP_HEIGHT, BB_POPUP_WIDTH, BB_POPUP_HEIGHT)];
+                    popupView.labelTitle.text = NSLocalizedStringFromTable(@"here.is.your.material", @"BBLocalizable", nil).uppercaseString;
+                    popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.at.x", @"BBLocalizable", nil), currentDisplayFloorRef.name];
+                    [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok.find.me", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+                    [popupView.buttonOK addTarget:self action:@selector(popupViewOkButtonAction:) forControlEvents: UIControlEventTouchUpInside];
+                    [self.mapScrollView addSubview:popupView];
                 }
                 
-                
+            } else {
+                [self showMaterialView:YES animated:YES];
             }
-           
         }
-    }];
-
+        
+//        // DEBUG !!!!!!
+//        for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
+//            
+//            CGFloat beaconWidth = 12.f;
+//            CGPoint position = [beaconLocation coordinate];
+//            UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
+//            poiView.backgroundColor = [UIColor whiteColor];
+//            
+//            poiView.layer.cornerRadius = beaconWidth/2;
+//            poiView.layer.masksToBounds = YES;
+//            poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+//            poiView.layer.borderWidth = 2.f;
+//            [self.mapScrollView addSubview:poiView];
+//        }
+//        // DEBUG END !!!
+        
+        [[BBDataManager sharedInstance] requestSelectedPOIMenuItemsWithCompletion:^(NSArray *result, NSError *error) {
+            
+            if (result == nil || result.count == 0) {
+                return;
+            }
+            NSMutableDictionary *displayPOI = [NSMutableDictionary new];
+            
+            for (BBPOIMenuItem *menuItem in result) {
+                if ([menuItem isPOIMenuItem] == YES) {
+                    if (menuItem.poi.selected == YES) {
+                        [displayPOI setObject:menuItem.poi forKey:[NSString stringWithFormat:@"%ld",(long)menuItem.poi.poi_id]];
+                        
+                    }
+                }
+            }
+            for (BBPOILocation *poiLocation in currentDisplayFloorRef.poiLocations) {
+                BBPOI *poi = [displayPOI objectForKey:[NSString stringWithFormat:@"%ld",(long)poiLocation.poi.poi_id]];
+                if (poi != nil) {
+                    
+                    if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
+                        // Layout All Areas's (at the bottom)
+                        CGMutablePathRef p = CGPathCreateMutable() ;
+                        CGPoint startingPoint = [poiLocation.area.firstObject CGPointValue];
+                        CGPathMoveToPoint(p, NULL, 0, 0);
+                        
+                        for (NSValue *pointValue in poiLocation.area) {
+                            CGPoint point = [pointValue CGPointValue];
+                            if (pointValue == poiLocation.area.firstObject) {
+                                continue;
+                            } else {
+                                CGPathAddLineToPoint(p, NULL, floor((point.x - startingPoint.x) * scaleRatio), floor((point.y - startingPoint.y) * scaleRatio));
+                            }
+                        }
+                        CGPathCloseSubpath(p) ;
+                        
+                        CAShapeLayer *layer = [CAShapeLayer layer];
+                        layer.path = p;
+                        layer.fillColor = [[UIColor colorFromHexString:poiLocation.poi.hex_color] colorWithAlphaComponent:0.4].CGColor;
+                        
+                        UIView *container = [[UIView alloc] initWithFrame:CGRectMake(startingPoint.x * scaleRatio, startingPoint.y * scaleRatio, 0, 0)];
+                        container.clipsToBounds = NO;
+                        [container.layer addSublayer:layer];
+                        [self.mapScrollView insertSubview:container atIndex:2];
+                        
+                    } else
+                        if ([poi.type isEqualToString:BB_POI_TYPE_ICON]) {
+                            // Layout All POI (at the middle)
+                            CGPoint position = [poiLocation coordinate];
+                            BBPOIMapView *poiView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(position.x * scaleRatio - BB_POI_WIDTH/2, position.y * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
+                            
+                            __weak UIImageView* weakPOIIconView = poiView.poiIconView;
+                            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:poiLocation.poi.icon_url]];
+                            [poiView.poiIconView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                weakPOIIconView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                                weakPOIIconView.tintColor = [UIColor whiteColor];
+                            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                NSLog(@"An error occured: %@",error.localizedDescription);
+                            }];
+                            [self.mapScrollView addSubview:poiView];
+                        }
+                }
+            }
+            // Bring My Current Location at the top
+            [myCurrentLocationView.superview bringSubviewToFront:myCurrentLocationView];
+        }];
 }
 
 - (void) layoutMyLocationAnimated:(Boolean) animated {
