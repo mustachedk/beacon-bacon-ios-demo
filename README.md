@@ -15,7 +15,7 @@ You can also use the default UI library [./wayfinding](https://github.com/mustac
 
 You can see an example in [./ViewController.m](https://github.com/mustachedk/beacon-bacon-ios/blob/master/beaconbacon/ViewController.m)
 
-####Start using a specific Place:
+####Start using a specific 'Place':
 ```Objective-C
 [[BBConfig sharedConfig] setPlaceIdentifierInBackground:@"YOUR_PLACE_ID"];
 ```
@@ -36,7 +36,7 @@ BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController all
 ####Find a subject (IMS)
 ```Objective-C
 // Create a request (JSON body) - The API will return a subject
-// This example is for a IMS subject - but can be anything you want the API to look for
+// This example is for an IMS subject - but can be anything you want the API to look for
 
 NSMutableDictionary *requestDict = [NSMutableDictionary new];
 [requestDict setObject:@"IMS" forKey:@"find_identifier"];
@@ -48,15 +48,15 @@ NSMutableDictionary *data = [NSMutableDictionary new];
 [[BBDataManager sharedInstance] requestFindASubject:requestDict withCompletion:^(BBFoundSubject *result, NSError *error) {
    if (error == nil) {
        if (result != nil && [result isSubjectFound]) {
-           // Material is found for way finding
+           // Subject is found for wayfinding
            result.subject_name     = @"NAME_TO_DISPLAY";
            result.subject_subtitle = @"SUBTITLE_TO_DISPLAY";
            result.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"]; // Or any other icon you want it to display, eg. a book/video/tape etc.
            
-           // 1. Store the BBFoundSubject 'result' for when you need to 'Initiale map with wayfinding'
+           // 1. Store the BBFoundSubject 'result' for when you need to 'Initiate map with wayfinding'
            // 2. Optional: display/enable a button for wayfinding
        } else {
-           // No material found for way finding
+           // No subject found for way finding
        }
    } else {
        // An error occurred
