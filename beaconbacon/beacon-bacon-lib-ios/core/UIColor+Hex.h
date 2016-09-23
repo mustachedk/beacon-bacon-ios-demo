@@ -1,5 +1,5 @@
 //
-// BBPOITableViewCell.h
+// UIColor+Hex.h
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -23,22 +23,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BBPOI.h"
-#import "UIImageView+AFNetworking.h"
-#import "BBConfig.h"
-#import "UIColor+Hex.h"
 
-@interface BBPOITableViewCell : UITableViewCell
+@interface UIColor (Hex)
 
-@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
-
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-
-@property (weak, nonatomic) IBOutlet UIImageView *selectedImageView;
-
-
--(void) applyPointOfInterst:(BBPOI *)poi atIndex:(NSIndexPath *)indexPath;
-
-- (void) setCheckmarkSelected:(BOOL)selected animated:(BOOL)animated;
++ (UIColor *)colorFromHexString:(NSString *)hexString;
 
 @end

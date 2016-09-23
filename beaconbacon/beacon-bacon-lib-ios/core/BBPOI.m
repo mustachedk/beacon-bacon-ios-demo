@@ -37,6 +37,8 @@
     self.name           = [attributes valueForKeyPath:@"name"];
     self.internal_name  = [attributes valueForKeyPath:@"internal_name"];
     self.icon_url       = [attributes valueForKeyPath:@"icon"];
+    self.type           = [attributes valueForKeyPath:@"type"];
+    self.hex_color      = [attributes valueForKeyPath:@"color"];
     
     self.selected       = NO;
     return self;

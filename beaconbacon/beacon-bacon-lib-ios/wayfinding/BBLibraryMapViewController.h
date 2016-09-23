@@ -34,6 +34,7 @@
 #import "BBMyPositionView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "BBPOIMapView.h"
+#import "UIColor+Hex.h"
 
 @interface BBLibraryMapViewController : UIViewController <CLLocationManagerDelegate>
 

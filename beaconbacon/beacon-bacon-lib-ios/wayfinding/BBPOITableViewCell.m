@@ -50,8 +50,19 @@
     [self setCheckmarkSelected:poi.selected animated:NO];
     
     self.nameLabel.text = poi.name;
+    self.iconImageView.image = nil;
+    self.iconImageView.layer.sublayers = nil;
+
+    if ([poi.type isEqualToString:BB_POI_TYPE_ICON]) {
+        [self.iconImageView setImageWithURL:[NSURL URLWithString:poi.icon_url]];
         
-    [self.iconImageView setImageWithURL:[NSURL URLWithString:poi.icon_url]];
+    } else if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
+        [self.iconImageView setImage:[UIImage imageNamed:@"icon-area"]];
+        CAShapeLayer *dotLayer = [CAShapeLayer new];
+        dotLayer.fillColor = [UIColor colorFromHexString:poi.hex_color].CGColor;
+        dotLayer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.iconImageView.bounds.size.width/2 - 3, self.iconImageView.bounds.size.height/2 - 3, 6, 6)].CGPath;
+        [self.iconImageView.layer addSublayer:dotLayer];
+    }
 }
 
 - (void) setCheckmarkSelected:(BOOL)selected animated:(BOOL)animated {

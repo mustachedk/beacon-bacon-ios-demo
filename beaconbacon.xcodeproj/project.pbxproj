@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		770566851D952F9600FD96D2 /* UIColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 770566841D952F9600FD96D2 /* UIColor+Hex.m */; };
 		775CE0871D92C1B20066C905 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0861D92C1B20066C905 /* main.m */; };
 		775CE08A1D92C1B20066C905 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0891D92C1B20066C905 /* AppDelegate.m */; };
 		775CE08D1D92C1B20066C905 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE08C1D92C1B20066C905 /* ViewController.m */; };
@@ -66,6 +67,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		770566831D952F9600FD96D2 /* UIColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hex.h"; sourceTree = "<group>"; };
+		770566841D952F9600FD96D2 /* UIColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hex.m"; sourceTree = "<group>"; };
 		775CE0821D92C1B20066C905 /* beaconbacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beaconbacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		775CE0861D92C1B20066C905 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		775CE0881D92C1B20066C905 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -268,6 +271,8 @@
 				775CE0B71D92C1BC0066C905 /* BBPOISection.m */,
 				775CE0B81D92C1BC0066C905 /* BBTrilateration.h */,
 				775CE0B91D92C1BC0066C905 /* BBTrilateration.m */,
+				770566831D952F9600FD96D2 /* UIColor+Hex.h */,
+				770566841D952F9600FD96D2 /* UIColor+Hex.m */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -461,6 +466,7 @@
 				775CE1251D92C1BC0066C905 /* BBPOIMapView.m in Sources */,
 				775CE1161D92C1BC0066C905 /* UIImageView+AFNetworking.m in Sources */,
 				775CE0FD1D92C1BC0066C905 /* BBAPIClient.m in Sources */,
+				770566851D952F9600FD96D2 /* UIColor+Hex.m in Sources */,
 				775CE10C1D92C1BC0066C905 /* AFNetworkReachabilityManager.m in Sources */,
 				775CE1121D92C1BC0066C905 /* AFImageDownloader.m in Sources */,
 				775CE0FE1D92C1BC0066C905 /* BBBeacon.m in Sources */,

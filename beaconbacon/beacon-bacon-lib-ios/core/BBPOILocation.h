@@ -23,8 +23,12 @@
 #import <Foundation/Foundation.h>
 #import "BBLocation.h"
 #import "BBPOI.h"
+#import <UIKit/UIKit.h>
+
 @interface BBPOILocation : BBLocation
 
 @property (nonatomic, strong) BBPOI *poi;
+
+@property (nonatomic, strong) NSArray *area; // NSValue <CGPoint>
 
 @end

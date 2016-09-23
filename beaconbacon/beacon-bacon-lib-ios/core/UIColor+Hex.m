@@ -1,5 +1,5 @@
 //
-// BBPOITableViewCell.h
+// UIColor+Hex.m
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -22,23 +22,21 @@
 // THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
-#import "BBPOI.h"
-#import "UIImageView+AFNetworking.h"
-#import "BBConfig.h"
 #import "UIColor+Hex.h"
 
-@interface BBPOITableViewCell : UITableViewCell
+@implementation UIColor (Hex)
 
-@property (weak, nonatomic) IBOutlet UIImageView *iconImageView;
+// Assumes input like "#00FF00" (#RRGGBB).
++ (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    if ([hexString containsString:@"#"]) {
+        // bypass '#' character
+        [scanner setScanLocation:1];
+    }
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+}
 
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-
-@property (weak, nonatomic) IBOutlet UIImageView *selectedImageView;
-
-
--(void) applyPointOfInterst:(BBPOI *)poi atIndex:(NSIndexPath *)indexPath;
-
-- (void) setCheckmarkSelected:(BOOL)selected animated:(BOOL)animated;
 
 @end

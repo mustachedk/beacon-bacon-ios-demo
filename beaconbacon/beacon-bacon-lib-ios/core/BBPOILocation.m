@@ -32,6 +32,18 @@
 
     self.poi = [[BBPOI alloc] initWithAttributes:attributes[@"poi"]];
 
+    NSString *areaStr = [attributes valueForKeyPath:@"area"];
+    NSArray *areaValues = [areaStr componentsSeparatedByString:@","];
+   
+    NSMutableArray *areaResult = [NSMutableArray new];
+    for (int i = 0; i < areaValues.count/2; i++) {
+        int offset = i*2;
+        CGFloat x = [areaValues[offset] floatValue];
+        CGFloat y = [areaValues[offset+1] floatValue];
+        [areaResult addObject:[NSValue valueWithCGPoint:CGPointMake(x,y)]];
+    }
+    self.area = [areaResult copy];
+    
     return self;
 }
 

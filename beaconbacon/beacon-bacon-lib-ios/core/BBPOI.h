@@ -26,11 +26,16 @@
 
 @interface BBPOI : NSObject
 
+#define BB_POI_TYPE_AREA @"area"
+#define BB_POI_TYPE_ICON @"icon"
+
 @property (nonatomic, assign) NSInteger poi_id;
 @property (nonatomic, assign) NSInteger team_id;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *internal_name;
 @property (nonatomic, strong) NSString *icon_url;
+@property (nonatomic, strong) NSString *type; // "area", "icon"
+@property (nonatomic, strong) NSString *hex_color;
 
 @property (nonatomic, assign) BOOL selected;
 

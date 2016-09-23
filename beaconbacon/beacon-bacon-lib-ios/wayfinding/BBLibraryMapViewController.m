@@ -376,21 +376,21 @@
         }
     }
     
-    // DEBUG !!!!!!
-    for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
-
-        CGFloat beaconWidth = 12.f;
-        CGPoint position = [beaconLocation coordinate];
-        UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
-        poiView.backgroundColor = [UIColor whiteColor];
-        
-        poiView.layer.cornerRadius = beaconWidth/2;
-        poiView.layer.masksToBounds = YES;
-        poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-        poiView.layer.borderWidth = 2.f;
-        [self.mapScrollView addSubview:poiView];
-    }
-    // DEBUG END !!!
+//    // DEBUG !!!!!!
+//    for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
+//
+//        CGFloat beaconWidth = 12.f;
+//        CGPoint position = [beaconLocation coordinate];
+//        UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
+//        poiView.backgroundColor = [UIColor whiteColor];
+//        
+//        poiView.layer.cornerRadius = beaconWidth/2;
+//        poiView.layer.masksToBounds = YES;
+//        poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+//        poiView.layer.borderWidth = 2.f;
+//        [self.mapScrollView addSubview:poiView];
+//    }
+//    // DEBUG END !!!
     
     [[BBDataManager sharedInstance] requestSelectedPOIMenuItemsWithCompletion:^(NSArray *result, NSError *error) {
         
@@ -413,20 +413,25 @@
             BBPOI *poi = [displayPOI objectForKey:[NSString stringWithFormat:@"%ld",(long)poiLocation.poi.poi_id]];
             if (poi != nil) {
 
-                CGPoint position = [poiLocation coordinate];
-                BBPOIMapView *poiView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(position.x * scaleRatio - BB_POI_WIDTH/2, position.y * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
+                if ([poi.type isEqualToString:BB_POI_TYPE_ICON]) {
+                    CGPoint position = [poiLocation coordinate];
+                    BBPOIMapView *poiView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(position.x * scaleRatio - BB_POI_WIDTH/2, position.y * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
+                    
+                    __weak UIImageView* weakPOIIconView = poiView.poiIconView;
+                    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:poiLocation.poi.icon_url]];
+                    [poiView.poiIconView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                        weakPOIIconView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                        weakPOIIconView.tintColor = [UIColor whiteColor];
+                    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                        NSLog(@"An error occured: %@",error.localizedDescription);
+                    }];
+                    [self.mapScrollView addSubview:poiView];
+                } else if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
+                    NSLog(@"BB_POI_TYPE_AREA");
+                    
+                }
                 
-                __weak UIImageView* weakPOIIconView = poiView.poiIconView;
-                NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:poiLocation.poi.icon_url]];
-                [poiView.poiIconView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                    weakPOIIconView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    weakPOIIconView.tintColor = [UIColor whiteColor];
-                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                    NSLog(@"An error occured: %@",error.localizedDescription);
-                }];
-
                 
-                [self.mapScrollView addSubview:poiView];
             }
            
         }
@@ -472,7 +477,7 @@
 - (BOOL)isWalkablePixel:(UIImage *)image xCoordinate:(int)x yCoordinate:(int)y {
     
     UIColor *pixel_color = [self colorAtImage:image xCoordinate:x yCoordinate:y];
-    UIColor *walkable_color = [self colorFromHexString:currentDisplayFloorRef.map_walkable_color];
+    UIColor *walkable_color = [UIColor colorFromHexString:currentDisplayFloorRef.map_walkable_color];
     return [self color:pixel_color isEqualToColor:walkable_color withTolerance:0.05];
 }
 
@@ -490,18 +495,6 @@
     CFRelease(pixelData);
     
     return [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:alpha/255.0f];
-}
-
-// Assumes input like "#00FF00" (#RRGGBB).
-- (UIColor *)colorFromHexString:(NSString *)hexString {
-    unsigned rgbValue = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    if ([hexString containsString:@"#"]) {
-        // bypass '#' character
-        [scanner setScanLocation:1];
-    }
-    [scanner scanHexInt:&rgbValue];
-    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
 - (BOOL)color:(UIColor *)color1 isEqualToColor:(UIColor *)color2 withTolerance:(CGFloat)tolerance {
