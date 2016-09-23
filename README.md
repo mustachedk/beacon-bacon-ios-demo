@@ -6,6 +6,8 @@ Demo app for https://github.com/nosuchagency/beacon-bacon
 
 1. Request an API Key from https://beaconbacon.nosuchagency.com <br>(Read how to get setup Places / Points of Interest / Beacons etc. [here](https://github.com/nosuchagency/beacon-bacon))
 2. BBConfig.h -> BB_API_KEY -> Insert your API Key
+3. Import the lib into your project (Objective-C) [beacon-bacon-lib-ios](https://github.com/mustachedk/beacon-bacon-ios/tree/master/beaconbacon/beacon-bacon-lib-ios)
+4. Import CoreLocation.framework into Linked Frameworks and Libraries
 
 You are now able to use the lib. 
 You can either use your own integration with API using element from the [./core](https://github.com/mustachedk/beacon-bacon-ios/tree/master/beaconbacon/beacon-bacon-lib-ios/core) folder.
