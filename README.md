@@ -35,19 +35,11 @@ BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController all
 [self presentViewController:mapViewController animated:true completion:nil];
 ```
 
-####Find a subject (IMS)
+####Find IMS Subject
 ```Objective-C
-// Create a request (JSON body) - The API will return a subject
-// This example is for an IMS subject - but can be anything you want the API to look for
 
-NSMutableDictionary *requestDict = [NSMutableDictionary new];
-[requestDict setObject:@"IMS" forKey:@"find_identifier"];
-
-NSMutableDictionary *data = [NSMutableDictionary new];
-[data setObject:@"FAUST_IDENTIFIER" forKey:@"Faust"];
-[requestDict setObject:data forKey:@"data"];
-
-[[BBDataManager sharedInstance] requestFindASubject:requestDict withCompletion:^(BBFoundSubject *result, NSError *error) {
+BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"50631494"];
+[[BBDataManager sharedInstance] requestFindIMSSubject:requstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
    if (error == nil) {
        if (result != nil && [result isSubjectFound]) {
            // Subject is found for wayfinding
@@ -65,6 +57,7 @@ NSMutableDictionary *data = [NSMutableDictionary new];
    }
 }];
 ```
+
 ####Initiate map with wayfinding:
 ```Objective-C
 BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
