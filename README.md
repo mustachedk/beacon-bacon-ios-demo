@@ -38,7 +38,7 @@ BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController all
 ####Find IMS Subject
 ```Objective-C
 
-BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"50631494"];
+BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"FAUST_IDENTIFIER"];
 [[BBDataManager sharedInstance] requestFindIMSSubject:requstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
    if (error == nil) {
        if (result != nil && [result isSubjectFound]) {
