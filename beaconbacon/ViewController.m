@@ -77,13 +77,9 @@
 
 - (IBAction)mapWayfindingAction:(id)sender {
     
-    NSMutableDictionary *requestDict = [NSMutableDictionary new];
-    [requestDict setObject:@"IMS" forKey:@"find_identifier"];
-    NSMutableDictionary *data = [NSMutableDictionary new];
-    [data setObject:@"50631494" forKey:@"Faust"];
-    [requestDict setObject:data forKey:@"data"];
-    
-    [[BBDataManager sharedInstance] requestFindASubject:requestDict withCompletion:^(BBFoundSubject *result, NSError *error) {
+    BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"50631494"];
+
+    [[BBDataManager sharedInstance] requestFindIMSSubject:requstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
         if (error == nil) {
             if (result != nil && [result isSubjectFound]) {
                 // Material is found for way finding

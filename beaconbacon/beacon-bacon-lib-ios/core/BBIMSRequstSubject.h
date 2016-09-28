@@ -1,5 +1,5 @@
 //
-// BBDataManager.h
+// BBIMSRequstSubject.h
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -23,31 +23,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BBPOISection.h"
-#import "BBPOI.h"
-#import "BBAPIClient.h"
-#import "BBPOIMenuItem.h"
-#import "BBPlace.h"
-#import "BBFoundSubject.h"
-#import "AFNetworking.h"
-#import "BBIMSRequstSubject.h"
+#import <UIKit/UIKit.h>
 
-typedef void (^CompletionBlock)(id result, NSError *error);
+@interface BBIMSRequstSubject : NSObject
 
-@interface BBDataManager : NSObject
+@property (nonatomic, strong) NSString *faust;
 
-+ (BBDataManager *)sharedInstance;
-
-- (void) setCurrentPlaceFromLibraryIdInBackground:(NSString *)libraryID;
-
-- (void) requestPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestSelectedPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestCurrentPlaceSetupWithCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestFindIMSSubject:(BBIMSRequstSubject *)requstObject withCompletion:(void (^)(BBFoundSubject *result, NSError *error))completionBlock;
+- (instancetype)initWithFaustId:(NSString *)faust;
 
 @end

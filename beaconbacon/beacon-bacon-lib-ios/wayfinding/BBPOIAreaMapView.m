@@ -1,5 +1,5 @@
 //
-// BBDataManager.h
+// BBPOIAreaMapView.m
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -22,32 +22,20 @@
 // THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import "BBPOISection.h"
-#import "BBPOI.h"
-#import "BBAPIClient.h"
-#import "BBPOIMenuItem.h"
-#import "BBPlace.h"
-#import "BBFoundSubject.h"
-#import "AFNetworking.h"
-#import "BBIMSRequstSubject.h"
+#import "BBPOIAreaMapView.h"
 
-typedef void (^CompletionBlock)(id result, NSError *error);
+@implementation BBPOIAreaMapView
 
-@interface BBDataManager : NSObject
-
-+ (BBDataManager *)sharedInstance;
-
-- (void) setCurrentPlaceFromLibraryIdInBackground:(NSString *)libraryID;
-
-- (void) requestPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestSelectedPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestCurrentPlaceSetupWithCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(CompletionBlock)completionBlock;
-
-- (void) requestFindIMSSubject:(BBIMSRequstSubject *)requstObject withCompletion:(void (^)(BBFoundSubject *result, NSError *error))completionBlock;
+- (id) initWithFrame:(CGRect)frame {
+    
+    self = [super initWithFrame:frame];
+    if (!self) {
+        return nil;
+    }
+   
+    
+    
+    return self;
+}
 
 @end

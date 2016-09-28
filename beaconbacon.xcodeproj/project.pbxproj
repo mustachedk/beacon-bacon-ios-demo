@@ -64,6 +64,8 @@
 		775CE12D1D92C2310066C905 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775CE12C1D92C2310066C905 /* Foundation.framework */; };
 		775CE12F1D92C2940066C905 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775CE12E1D92C2940066C905 /* CoreLocation.framework */; };
 		775CE1311D92C33A0066C905 /* BBAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 775CE1301D92C33A0066C905 /* BBAssets.xcassets */; };
+		775D2CEE1D9BC641004FB07C /* BBPOIAreaMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D2CED1D9BC641004FB07C /* BBPOIAreaMapView.m */; };
+		775D2CF11D9BD4ED004FB07C /* BBIMSRequstSubject.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D2CF01D9BD4ED004FB07C /* BBIMSRequstSubject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -172,6 +174,10 @@
 		775CE12C1D92C2310066C905 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		775CE12E1D92C2940066C905 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		775CE1301D92C33A0066C905 /* BBAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = BBAssets.xcassets; sourceTree = "<group>"; };
+		775D2CEC1D9BC641004FB07C /* BBPOIAreaMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBPOIAreaMapView.h; sourceTree = "<group>"; };
+		775D2CED1D9BC641004FB07C /* BBPOIAreaMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBPOIAreaMapView.m; sourceTree = "<group>"; };
+		775D2CEF1D9BD4ED004FB07C /* BBIMSRequstSubject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBIMSRequstSubject.h; sourceTree = "<group>"; };
+		775D2CF01D9BD4ED004FB07C /* BBIMSRequstSubject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBIMSRequstSubject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +261,8 @@
 				775CE0A71D92C1BC0066C905 /* BBDataManager.m */,
 				775CE0A81D92C1BC0066C905 /* BBFoundSubject.h */,
 				775CE0A91D92C1BC0066C905 /* BBFoundSubject.m */,
+				775D2CEF1D9BD4ED004FB07C /* BBIMSRequstSubject.h */,
+				775D2CF01D9BD4ED004FB07C /* BBIMSRequstSubject.m */,
 				775CE0AA1D92C1BC0066C905 /* BBFloor.h */,
 				775CE0AB1D92C1BC0066C905 /* BBFloor.m */,
 				775CE0AC1D92C1BC0066C905 /* BBLocation.h */,
@@ -356,6 +364,8 @@
 				775CE0F11D92C1BC0066C905 /* BBPOIEmptyTableViewCell.xib */,
 				775CE0F21D92C1BC0066C905 /* BBPOIMapView.h */,
 				775CE0F31D92C1BC0066C905 /* BBPOIMapView.m */,
+				775D2CEC1D9BC641004FB07C /* BBPOIAreaMapView.h */,
+				775D2CED1D9BC641004FB07C /* BBPOIAreaMapView.m */,
 				775CE0F41D92C1BC0066C905 /* BBPOISectionHeaderView.h */,
 				775CE0F51D92C1BC0066C905 /* BBPOISectionHeaderView.m */,
 				775CE0F61D92C1BC0066C905 /* BBPOISectionHeaderView.xib */,
@@ -453,6 +463,7 @@
 			files = (
 				775CE1231D92C1BC0066C905 /* BBPOIEmptyTableViewCell.m in Sources */,
 				775CE1081D92C1BC0066C905 /* BBPOIMenuItem.m in Sources */,
+				775D2CF11D9BD4ED004FB07C /* BBIMSRequstSubject.m in Sources */,
 				775CE08D1D92C1B20066C905 /* ViewController.m in Sources */,
 				775CE11F1D92C1BC0066C905 /* BBLoadingIndicatorCell.m in Sources */,
 				775CE1151D92C1BC0066C905 /* UIButton+AFNetworking.m in Sources */,
@@ -470,6 +481,7 @@
 				775CE10C1D92C1BC0066C905 /* AFNetworkReachabilityManager.m in Sources */,
 				775CE1121D92C1BC0066C905 /* AFImageDownloader.m in Sources */,
 				775CE0FE1D92C1BC0066C905 /* BBBeacon.m in Sources */,
+				775D2CEE1D9BC641004FB07C /* BBPOIAreaMapView.m in Sources */,
 				775CE1011D92C1BC0066C905 /* BBDataManager.m in Sources */,
 				775CE1051D92C1BC0066C905 /* BBPlace.m in Sources */,
 				775CE08A1D92C1B20066C905 /* AppDelegate.m in Sources */,

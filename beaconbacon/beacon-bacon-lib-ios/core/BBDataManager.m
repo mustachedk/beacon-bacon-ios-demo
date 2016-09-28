@@ -239,8 +239,17 @@
             completionBlock(nil, error);
         }
     }] resume];
-    
+}
 
+- (void) requestFindIMSSubject:(BBIMSRequstSubject *)requstObject withCompletion:(void (^)(BBFoundSubject *result, NSError *error))completionBlock {
+    
+    NSMutableDictionary *requestDict = [NSMutableDictionary new];
+    [requestDict setObject:@"IMS" forKey:@"find_identifier"];
+    NSMutableDictionary *data = [NSMutableDictionary new];
+    [data setObject:requstObject.faust forKey:@"Faust"];
+    [requestDict setObject:data forKey:@"data"];
+    
+    [[BBDataManager sharedInstance] requestFindASubject:requestDict withCompletion:completionBlock];
 }
 
 @end
