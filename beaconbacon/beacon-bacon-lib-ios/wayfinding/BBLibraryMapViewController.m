@@ -137,6 +137,8 @@
     self.mapScrollView.bounces = YES;
     self.mapScrollView.alwaysBounceVertical = YES;
     self.mapScrollView.alwaysBounceHorizontal = YES;
+
+    [self updateMapScrollViewContentInsets];
     
     pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
     [self.view addGestureRecognizer:pinchGestureRecognizer];
@@ -202,6 +204,9 @@
     [super viewDidAppear:animated];
     if (self != nil) {
         [self layoutPOI];
+    }
+    if (currentDisplayFloorRef != nil) {
+        [self startLookingForBeacons];
     }
 }
 
@@ -308,6 +313,12 @@
 
                 // Default Scale Ratio
                 [weakSelf.mapScrollView setContentSize: floorplanImageView.frame.size];
+                
+                CGPoint center = floorplanImageView.center;
+                CGRect frame = weakSelf.mapScrollView.frame;
+                
+                [weakSelf.mapScrollView setContentOffset:CGPointMake(center.x - frame.size.width/2, center.y - frame.size.height/2)];
+                
                 [weakSelf.mapScrollView addSubview:floorplanImageView];
                 [weakSelf.spinner stopAnimating];
                 
@@ -509,7 +520,9 @@
         CGRect position = [[myCurrentLocationView.layer presentationLayer] frame];
         
         CGPoint center = CGPointMake(position.origin.x + position.size.width/2, position.origin.y + position.size.height/2);
-        [self.mapScrollView scrollRectToVisible:CGRectMake(center.x - roundf(self.mapScrollView.frame.size.width/2.), center.y - roundf(self.mapScrollView.frame.size.height/2.), self.mapScrollView.frame.size.width, self.mapScrollView.frame.size.height) animated:YES];
+        
+        [self.mapScrollView setContentOffset:CGPointMake(center.x - roundf(self.mapScrollView.frame.size.width/2.),center.y - roundf(self.mapScrollView.frame.size.height/2)) animated:YES];
+        
         zoomToUserPosition = NO;
     }
 }
@@ -597,12 +610,13 @@
 }
 
 - (void) updateMapScrollViewContentInsets {
+    
     if (showMaterialView) {
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(self.materialPopDownView.frame.size.height, 0, 0, 0);
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT + self.materialPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2);
     } else if (showMyPositionView) {
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(self.myPositionPopDownView.frame.size.height, 0, 0, 0);
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT + self.myPositionPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2);
     } else {
-        self.mapScrollView.contentInset = UIEdgeInsetsZero;
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2);
     }
 }
 
