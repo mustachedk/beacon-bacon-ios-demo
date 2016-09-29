@@ -24,6 +24,12 @@
 
 #import "BBPOIAreaMapView.h"
 
+@interface BBPOIAreaMapView() {
+    UILabel *nameLabel;
+}
+
+@end
+
 @implementation BBPOIAreaMapView
 
 - (id) initWithFrame:(CGRect)frame {
@@ -32,10 +38,46 @@
     if (!self) {
         return nil;
     }
-   
-    
     
     return self;
+}
+
+-(void) touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+    if (nameLabel == nil && !self.areaTitleVisible) {
+        self.areaTitleVisible = YES;
+        
+        CGRect labelRect = [self.areaTitle boundingRectWithSize:self.bounds.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [[BBConfig sharedConfig] lightFontWithSize:14] } context:nil];
+
+        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, labelRect.size.width + 32, labelRect.size.height + 16)];
+        nameLabel.text = self.areaTitle;
+        nameLabel.font = [[BBConfig sharedConfig] lightFontWithSize:14];
+        nameLabel.textAlignment = NSTextAlignmentCenter;
+        nameLabel.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
+        
+        nameLabel.clipsToBounds = NO;
+        
+        [nameLabel.layer setShadowOffset:CGSizeMake(0, 5)];
+        [nameLabel.layer setShadowOpacity:0.1f];
+        [nameLabel.layer setShadowRadius:2.5f];
+        [nameLabel.layer setShouldRasterize:NO];
+        [nameLabel.layer setShadowColor:[[UIColor blackColor] CGColor]];
+        
+        UIImageView *triangle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrowtriangle"]];
+        triangle.frame = CGRectMake(nameLabel.frame.size.width/2 - triangle.frame.size.width/2, nameLabel.frame.size.height, triangle.frame.size.width, triangle.frame.size.height);
+        [nameLabel addSubview:triangle];
+
+        CGPoint touchPoint = [[touches anyObject] locationInView:self];
+        nameLabel.center = CGPointMake(touchPoint.x, touchPoint.y - labelRect.size.height/2 - triangle.frame.size.height);
+        
+        [self addSubview:nameLabel];
+    } else {
+        self.areaTitleVisible = NO;
+        if (nameLabel != nil) {
+            [nameLabel removeFromSuperview];
+            nameLabel = nil;
+        }
+    }
 }
 
 @end

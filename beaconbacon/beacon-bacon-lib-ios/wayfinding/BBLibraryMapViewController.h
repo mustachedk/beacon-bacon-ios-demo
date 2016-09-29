@@ -23,20 +23,32 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
+#import <QuartzCore/QuartzCore.h>
+
+#import "AFNetworking.h"
+#import "UIColor+Hex.h"
+
 #import "BBTrilateration.h"
 #import "BBBeacon.h"
 #import "BBLibraryMapPOIViewController.h"
 #import "BBDataManager.h"
 #import "BBFloor.h"
-#import "AFNetworking.h"
 #import "BBMyPositionView.h"
-#import <QuartzCore/QuartzCore.h>
 #import "BBPOIMapView.h"
-#import "UIColor+Hex.h"
+#import "BBPopupView.h"
+#import "BBPOIAreaMapView.h"
 
 @interface BBLibraryMapViewController : UIViewController <CLLocationManagerDelegate>
+
+#define BB_MAP_TAG_FLOORPLAN   999
+#define BB_MAP_TAG_MY_POSITION 666
+
+#define BB_POPUP_HEIGHT 170
+#define BB_POPUP_WIDTH 280
 
 // Wayfinding Item
 @property (nonatomic, strong) BBFoundSubject *foundSubject;

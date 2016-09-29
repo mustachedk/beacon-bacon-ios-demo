@@ -23,14 +23,6 @@
 //
 
 #import "BBLibraryMapViewController.h"
-#import <CoreBluetooth/CoreBluetooth.h>
-#import "BBPopupView.h"
-
-#define BB_MAP_TAG_FLOORPLAN   999
-#define BB_MAP_TAG_MY_POSITION 666
-
-#define BB_POPUP_HEIGHT 170
-#define BB_POPUP_WIDTH 280
 
 @interface BBLibraryMapViewController() <CBCentralManagerDelegate>
 
@@ -415,29 +407,54 @@
                 if (poi != nil) {
                     
                     if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
+                        
                         // Layout All Areas's (at the bottom)
                         CGMutablePathRef p = CGPathCreateMutable() ;
                         CGPoint startingPoint = [poiLocation.area.firstObject CGPointValue];
-                        CGPathMoveToPoint(p, NULL, 0, 0);
+                        
+                        CGFloat minX = startingPoint.x;
+                        CGFloat maxX = startingPoint.x;
+                        
+                        CGFloat minY = startingPoint.y;
+                        CGFloat maxY = startingPoint.y;
                         
                         for (NSValue *pointValue in poiLocation.area) {
                             CGPoint point = [pointValue CGPointValue];
+                            
+                            minX = fmin(point.x, minX);
+                            maxX = fmax(point.x, maxX);
+                            
+                            minY = fmin(point.y, minY);
+                            maxY = fmax(point.y, maxY);
+                        }
+
+                        CGSize size = CGSizeMake(fabs(minX - maxX), fabs(minY - maxY));
+
+                        
+                        for (NSValue *pointValue in poiLocation.area) {
+                            CGPoint point = [pointValue CGPointValue];
+                            
                             if (pointValue == poiLocation.area.firstObject) {
-                                continue;
+                                CGPathMoveToPoint(p, NULL, floor((point.x - minX) * scaleRatio), floor((point.y - minY) * scaleRatio));
                             } else {
-                                CGPathAddLineToPoint(p, NULL, floor((point.x - startingPoint.x) * scaleRatio), floor((point.y - startingPoint.y) * scaleRatio));
+                                CGPathAddLineToPoint(p, NULL, floor((point.x - minX) * scaleRatio), floor((point.y - minY) * scaleRatio));
                             }
                         }
+
                         CGPathCloseSubpath(p) ;
                         
                         CAShapeLayer *layer = [CAShapeLayer layer];
                         layer.path = p;
                         layer.fillColor = [[UIColor colorFromHexString:poiLocation.poi.hex_color] colorWithAlphaComponent:0.4].CGColor;
                         
-                        UIView *container = [[UIView alloc] initWithFrame:CGRectMake(startingPoint.x * scaleRatio, startingPoint.y * scaleRatio, 0, 0)];
-                        container.clipsToBounds = NO;
-                        [container.layer addSublayer:layer];
-                        [self.mapScrollView insertSubview:container atIndex:2];
+                        
+                        BBPOIAreaMapView *areaView = [[BBPOIAreaMapView alloc] initWithFrame:CGRectMake(minX * scaleRatio, minY * scaleRatio, size.width * scaleRatio, size.height * scaleRatio)];
+                        
+                        areaView.areaTitleVisible = false;
+                        areaView.areaTitle = poi.name;
+                        areaView.clipsToBounds = NO;
+                        [areaView.layer addSublayer:layer];
+                        [self.mapScrollView insertSubview:areaView atIndex:2];
                         
                     } else
                         if ([poi.type isEqualToString:BB_POI_TYPE_ICON]) {
