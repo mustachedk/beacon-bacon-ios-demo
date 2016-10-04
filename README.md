@@ -19,12 +19,14 @@ You can see an example in [./ViewController.m](https://github.com/mustachedk/bea
 
 ####Start using a specific 'Place':
 ```Objective-C
-[[BBConfig sharedConfig] setPlaceIdentifierInBackground:@"YOUR_PLACE_ID"];
+[[BBConfig sharedConfig] setupWithPlaceIdentifier:@"YOUR_PLACE_ID" withCompletion:^(NSString *placeIdentifier, NSError *error) { 
+   ...
+}];
 ```
 
 ####Configure the UI:
 ```Objective-C
-[BBConfig sharedConfig].customColor = [UIColor magentaColor];
+[BBConfig sharedConfig].customColor = [UIColor orangeColor];
 [BBConfig sharedConfig].regularFont = [UIFont fontWithName:@"Avenir-Regular" size:16];
 [BBConfig sharedConfig].lightFont   = [UIFont fontWithName:@"Avenir-Light" size:16];
 ```
@@ -41,7 +43,7 @@ BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController all
 BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"FAUST_IDENTIFIER"];
 [[BBDataManager sharedInstance] requestFindIMSSubject:requstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
    if (error == nil) {
-       if (result != nil && [result isSubjectFound]) {
+       if (result != nil) {
            // Subject is found for wayfinding
            result.subject_name     = @"NAME_TO_DISPLAY";
            result.subject_subtitle = @"SUBTITLE_TO_DISPLAY";
@@ -50,10 +52,15 @@ BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@
            // 1. Store the BBFoundSubject 'result' for when you need to 'Initiate map with wayfinding'
            // 2. Optional: display/enable a button for wayfinding
        } else {
-           // No subject found for way finding
+           ...
        }
    } else {
-       // An error occurred
+       if (error.code == BB_ERROR_CODE_SUBJECT_NOT_FOUND) {
+           // No material found for way finding
+           [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
+       } else {
+           // Check for other error codes and handle error
+       }   
    }
 }];
 ```
@@ -61,7 +68,7 @@ BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@
 ####Initiate map with wayfinding:
 ```Objective-C
 BBLibraryMapViewController *mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
-mapViewController.foundSubject = theFoundSubject; // Stored BBFoundSubject 'result' from BBDataManager.requestFindASubject:
+mapViewController.foundSubject = theFoundSubject; // Stored BBFoundSubject 'result' from BBDataManager.requestFindIMSSubject:
 
 [self presentViewController:mapViewController animated:true completion:nil];
 ```
