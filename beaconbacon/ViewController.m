@@ -132,7 +132,8 @@
                 [self removeSpinner];
 
                 [self presentViewController:mapViewController animated:true completion:nil];
-                
+            } else {
+                [self removeSpinner];
             }
         } else {
             [self removeSpinner];
