@@ -32,21 +32,25 @@
 #import "AFNetworking.h"
 #import "BBIMSRequstSubject.h"
 
-typedef void (^CompletionBlock)(id result, NSError *error);
 
 @interface BBDataManager : NSObject
 
+#define BB_ERROR_CODE_INVALID_CONFIGURATION 69001
+#define BB_ERROR_CODE_UNSUPPORTED_PLACE 69002
+#define BB_ERROR_CODE_INVALID_RESPONSE 69003
+#define BB_ERROR_CODE_SUBJECT_NOT_FOUND 69004
+
 + (BBDataManager *)sharedInstance;
 
-- (void) setCurrentPlaceFromLibraryIdInBackground:(NSString *)libraryID;
+- (void) fetchPlaceIdFromIdentifier:(NSString *)identifier withCompletion:(void (^)(NSString *placeIdentifier, NSError *error))completionBlock;
 
-- (void) requestPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock;
+- (void) requestPOIMenuItemsWithCompletion:(void (^)(NSArray *result, NSError *error))completionBlock;
 
-- (void) requestSelectedPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock;
+- (void) requestSelectedPOIMenuItemsWithCompletion:(void (^)(NSArray *result, NSError *error))completionBlock;
 
-- (void) requestCurrentPlaceSetupWithCompletion:(CompletionBlock)completionBlock;
+- (void) requestCurrentPlaceSetupWithCompletion:(void (^)(BBPlace *result, NSError *error))completionBlock;
 
-- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(CompletionBlock)completionBlock;
+- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(void (^)(id result, NSError *error))completionBlock;
 
 - (void) requestFindIMSSubject:(BBIMSRequstSubject *)requstObject withCompletion:(void (^)(BBFoundSubject *result, NSError *error))completionBlock;
 

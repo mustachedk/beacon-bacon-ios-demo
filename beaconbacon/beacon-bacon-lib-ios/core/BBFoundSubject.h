@@ -43,6 +43,7 @@
 @property (nonatomic, strong) NSString *subject_subtitle;
 @property (nonatomic, strong) UIImage *subject_image;
 
+// Returns nil, if json is invalid
 - (instancetype)initWithAttributes:(NSDictionary *)attributes;
 
 - (BOOL)isSubjectFound;

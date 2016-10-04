@@ -32,18 +32,39 @@
         return nil;
     }
     
-    self.status = [attributes valueForKeyPath:@"status"];
-    NSDictionary *data = [attributes valueForKeyPath:@"data"];
-
-    NSDictionary *floorDict = [data valueForKeyPath:@"floor"];
-    self.floor_id   = (NSUInteger)[[floorDict valueForKeyPath:@"id"] integerValue];
+    if ([attributes objectForKey:@"status"]) {
+        self.status = [attributes objectForKey:@"status"];
+    }
     
-    NSDictionary *locationDict = [data valueForKeyPath:@"location"];
-    
-    self.location_id = (NSUInteger)[[locationDict valueForKeyPath:@"id"] integerValue];
-    self.location_posX = (NSUInteger)[[locationDict valueForKeyPath:@"posX"] integerValue];
-    self.location_posY = (NSUInteger)[[locationDict valueForKeyPath:@"posY"] integerValue];
+    if ([attributes objectForKey:@"data"]) {
+        NSDictionary *data = [attributes objectForKey:@"data"];
 
+        if (![data isKindOfClass:[NSDictionary class]]) {
+            return nil;
+        }
+        if ([data objectForKey:@"floor"]) {
+            NSDictionary *floorDict = [data objectForKey:@"floor"];
+
+            if ([floorDict objectForKey:@"id"]) {
+                self.floor_id = (NSUInteger)[[floorDict objectForKey:@"id"] integerValue];
+            }
+        }
+
+        if ([data objectForKey:@"location"]) {
+            NSDictionary *locationDict = [data objectForKey:@"location"];
+
+            if ([locationDict valueForKeyPath:@"id"]) {
+                self.location_id = (NSUInteger)[[locationDict objectForKey:@"id"] integerValue];
+            }
+            if ([locationDict valueForKeyPath:@"posX"]) {
+                self.location_posX = (NSUInteger)[[locationDict objectForKey:@"posX"] integerValue];
+            }
+            if ([locationDict valueForKeyPath:@"posY"]) {
+                self.location_posY = (NSUInteger)[[locationDict objectForKey:@"posY"] integerValue];
+            }
+        }
+    }
+    
     return self;
 }
 

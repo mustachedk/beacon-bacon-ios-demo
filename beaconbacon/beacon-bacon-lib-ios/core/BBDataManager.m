@@ -28,6 +28,7 @@
 
 @property (nonatomic, strong) NSArray *cachedMenuItems;
 @property (nonatomic, strong) BBPlace *cachedCurrentPlace;
+@property (nonatomic, strong) NSArray *cachedPlaces;
 
 @end
 
@@ -45,64 +46,78 @@
     return sharedInstance;
 }
 
-- (NSError *) unsupportedPlaceError {
-    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : @"Unsupported Place", NSUnderlyingErrorKey : @(404) };
-    return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:404 userInfo:errorDictionary];
-
+- (NSError *) errorInvalidConfiguration {
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.invalid.configuration", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_INVALID_CONFIGURATION) };
+    return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_INVALID_CONFIGURATION userInfo:errorDictionary];
 }
+
+- (NSError *) errorUnsupportedPlace {
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.unsupported.place", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_UNSUPPORTED_PLACE) };
+    return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_UNSUPPORTED_PLACE userInfo:errorDictionary];
+}
+
+- (NSError *) errorInvalidResponse {
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.invalid.server.response", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_INVALID_RESPONSE) };
+    return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_INVALID_RESPONSE userInfo:errorDictionary];
+}
+
+- (NSError *) errorSubjectNotFound {
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.subject.not.found", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_SUBJECT_NOT_FOUND) };
+    return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_SUBJECT_NOT_FOUND userInfo:errorDictionary];
+}
+
 
 - (void) clearAllChacedData {
     self.cachedMenuItems = nil;
     self.cachedCurrentPlace = nil;
 }
 
-- (void) setCurrentPlaceFromLibraryIdInBackground:(NSString *)libraryID {
+- (void) fetchPlaceIdFromIdentifier:(NSString *)identifier withCompletion:(void (^)(NSString *placeIdentifier, NSError *error))completionBlock {
     
     [[BBAPIClient sharedClient] GET:@"place/" parameters:nil progress:nil success:^(NSURLSessionDataTask __unused *task, id JSON) {
         
         NSError *error;
         NSDictionary *attributes = [NSJSONSerialization JSONObjectWithData:JSON options:kNilOptions error:&error];
         if (error) {
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:BB_STORE_KEY_CURRENT_PLACE_ID];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            [BBConfig sharedConfig].currentPlaceId = nil;
+            
             [self clearAllChacedData];
+            completionBlock(nil, error);
             return;
         }
         
         NSArray *places = attributes[@"data"];
+        if (!places) {
+            
+            [self clearAllChacedData];
+            completionBlock(false, [self errorInvalidResponse]);
+            return;
+        }
         for (NSDictionary *placeAttributes in places) {
-            if ([placeAttributes[@"identifier"] isEqualToString:libraryID]) {
+            if ([placeAttributes[@"identifier"] isEqualToString:identifier]) {
                 NSString *currentPlaceId = [NSString stringWithFormat:@"%ld", (unsigned long)[[placeAttributes valueForKeyPath:@"id"] integerValue]];
-                [[NSUserDefaults standardUserDefaults] setObject:currentPlaceId forKey:BB_STORE_KEY_CURRENT_PLACE_ID];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                [BBConfig sharedConfig].currentPlaceId = currentPlaceId;
+               
                 [self clearAllChacedData];
+                completionBlock(currentPlaceId, nil);
                 return;
             }
         }
         
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:BB_STORE_KEY_CURRENT_PLACE_ID];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [BBConfig sharedConfig].currentPlaceId = nil;
         [self clearAllChacedData];
+        completionBlock(nil, [self errorUnsupportedPlace]);
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:BB_STORE_KEY_CURRENT_PLACE_ID];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [BBConfig sharedConfig].currentPlaceId = nil;
+       
         [self clearAllChacedData];
-        
+        completionBlock(nil, error);
     }];
     
 }
 
 
-- (void) requestPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock {
+- (void) requestPOIMenuItemsWithCompletion:(void (^)(NSArray *result, NSError *error))completionBlock {
     
     if ([BBConfig sharedConfig].currentPlaceId == nil) {
-        completionBlock(nil, [self unsupportedPlaceError]);
+        completionBlock(nil, [self errorInvalidConfiguration]);
         return;
     }
     
@@ -121,7 +136,7 @@
             
             for (NSDictionary *attributes in jsonData) {
                 BBPOIMenuItem *menuItem = [[BBPOIMenuItem alloc] initWithAttributes:attributes];
-                [menu addObject:menuItem];
+                if (menuItem) { [menu addObject:menuItem]; }
             }
             
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
@@ -142,10 +157,10 @@
     }
 }
 
-- (void) requestSelectedPOIMenuItemsWithCompletion:(CompletionBlock)completionBlock {
+- (void) requestSelectedPOIMenuItemsWithCompletion:(void (^)(NSArray *result, NSError *error))completionBlock {
     
     if ([BBConfig sharedConfig].currentPlaceId == nil) {
-        completionBlock(nil, [self unsupportedPlaceError]);
+        completionBlock(nil, [self errorInvalidConfiguration]);
         return;
     }
     
@@ -166,10 +181,10 @@
     }
 }
 
-- (void) requestCurrentPlaceSetupWithCompletion:(CompletionBlock)completionBlock {
+- (void) requestCurrentPlaceSetupWithCompletion:(void (^)(BBPlace *result, NSError *error))completionBlock {
     
     if ([BBConfig sharedConfig].currentPlaceId == nil) {
-        completionBlock(nil, [self unsupportedPlaceError]);
+        completionBlock(nil, [self errorInvalidConfiguration]);
         return;
     }
     
@@ -185,26 +200,33 @@
                 completionBlock(nil, error);
                 return;
             }
-            self.cachedCurrentPlace = [[BBPlace alloc] initWithAttributes:attributes];
+            BBPlace *place = [[BBPlace alloc] initWithAttributes:attributes];
+            if (place) {
+                self.cachedCurrentPlace = place;
+                completionBlock(self.cachedCurrentPlace, nil);
+            } else {
+                self.cachedCurrentPlace = nil;
+                completionBlock(nil, [self errorInvalidResponse]);
+
+            }
             
-            completionBlock(self.cachedCurrentPlace, nil);
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            self.cachedCurrentPlace = nil;
             completionBlock(nil, error);
             
         }];
         
     } else {
         completionBlock(self.cachedCurrentPlace, nil);
-
     }
     
 }
 
-- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(CompletionBlock)completionBlock {
+- (void) requestFindASubject:(NSDictionary *)requestDict withCompletion:(void (^)(id result, NSError *error))completionBlock {
     
     if ([BBConfig sharedConfig].currentPlaceId == nil) {
-        completionBlock(nil, [self unsupportedPlaceError]);
+        completionBlock(nil, [self errorInvalidConfiguration]);
         return;
     }
     NSString *route = [NSString stringWithFormat:@"%@place/%@/find", BB_BASE_URL, [BBConfig sharedConfig].currentPlaceId];
@@ -234,9 +256,16 @@
         
         if (error == nil) {
             BBFoundSubject *result = [[BBFoundSubject alloc] initWithAttributes:responseObject];
-            completionBlock(result, nil);
+            if (result) {
+                if ([result isSubjectFound]) {
+                    completionBlock(result, nil);
+                } else {
+                    completionBlock(nil, [self errorSubjectNotFound]);
+                }
+            } else {
+                completionBlock(nil, [self errorSubjectNotFound]);
+            }
         } else {
-            completionBlock(nil, error);
         }
     }] resume];
 }

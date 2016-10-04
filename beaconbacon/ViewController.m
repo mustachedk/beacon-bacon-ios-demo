@@ -35,6 +35,17 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
+- (void) setSpinner {
+    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [spinner startAnimating];
+    spinner.color = self.style1Button.tintColor;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+}
+
+- (void) removeSpinner {
+    self.navigationItem.rightBarButtonItem = nil;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -44,30 +55,57 @@
     [BBConfig sharedConfig].customColor = nil;
     [BBConfig sharedConfig].regularFont = nil;
     [BBConfig sharedConfig].lightFont   = nil;
+    [self.style1Button setSelected:YES];
+    [self.style2Button setSelected:NO];
+    [self.style3Button setSelected:NO];
 }
 
 - (IBAction)style1Action:(id)sender {
     [BBConfig sharedConfig].customColor = [UIColor magentaColor];
-    [BBConfig sharedConfig].regularFont = [UIFont fontWithName:@"Avenir-Regular" size:16];
-    [BBConfig sharedConfig].lightFont   = [UIFont fontWithName:@"Avenir-Light" size:16];
+    [BBConfig sharedConfig].regularFont = [UIFont fontWithName:@"Menlo-Bold" size:16];
+    [BBConfig sharedConfig].lightFont   = [UIFont fontWithName:@"Menlo-Regular" size:16];
+    [self.style1Button setSelected:NO];
+    [self.style2Button setSelected:YES];
+    [self.style3Button setSelected:NO];
 }
 
 - (IBAction)style2Action:(id)sender {
     [BBConfig sharedConfig].customColor = [UIColor orangeColor];
-    [BBConfig sharedConfig].regularFont = [UIFont fontWithName:@"Menlo-Bold" size:16];
-    [BBConfig sharedConfig].lightFont   = [UIFont fontWithName:@"Menlo-Regular" size:16];
+    [BBConfig sharedConfig].regularFont = [UIFont fontWithName:@"Avenir-Regular" size:16];
+    [BBConfig sharedConfig].lightFont   = [UIFont fontWithName:@"Avenir-Light" size:16];
+    [self.style1Button setSelected:NO];
+    [self.style2Button setSelected:NO];
+    [self.style3Button setSelected:YES];
 }
 
 - (IBAction)placeKBHaction:(id)sender {
-    [[BBConfig sharedConfig] setPlaceIdentifierInBackground:@"koebenhavnsbib"];
+    [self setSpinner];
+    [[BBConfig sharedConfig] setupWithPlaceIdentifier:@"koebenhavnsbib" withCompletion:^(NSString *placeIdentifier, NSError *error) {
+        [self removeSpinner];
+        [self.place1Button setSelected:YES];
+        [self.place2Button setSelected:NO];
+        [self.place3Button setSelected:NO];
+    }];
 }
 
 - (IBAction)placeMustacheAction:(id)sender {
-    [[BBConfig sharedConfig] setPlaceIdentifierInBackground:@"koldingbib"];
+    [self setSpinner];
+    [[BBConfig sharedConfig] setupWithPlaceIdentifier:@"koldingbib" withCompletion:^(NSString *placeIdentifier, NSError *error) {
+        [self removeSpinner];
+        [self.place1Button setSelected:NO];
+        [self.place2Button setSelected:YES];
+        [self.place3Button setSelected:NO];
+    }];
 }
 
 - (IBAction)placeUnsupportedAction:(id)sender {
-    [[BBConfig sharedConfig] setPlaceIdentifierInBackground:@"apple-campus-2"];
+    [self setSpinner];
+    [[BBConfig sharedConfig] setupWithPlaceIdentifier:@"apple-campus-2" withCompletion:^(NSString *placeIdentifier, NSError *error) {
+        [self removeSpinner];
+        [self.place1Button setSelected:NO];
+        [self.place2Button setSelected:NO];
+        [self.place3Button setSelected:YES];
+    }];
 }
 
 - (IBAction)mapAction:(id)sender {
@@ -77,11 +115,12 @@
 
 - (IBAction)mapWayfindingAction:(id)sender {
     
+    [self setSpinner];
     BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"50631494"];
-
+//    BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"HEST"];
     [[BBDataManager sharedInstance] requestFindIMSSubject:requstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
         if (error == nil) {
-            if (result != nil && [result isSubjectFound]) {
+            if (result != nil ) {
                 // Material is found for way finding
                 mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
                 
@@ -90,13 +129,22 @@
                 result.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];
                 
                 mapViewController.foundSubject = result;
-                
+                [self removeSpinner];
+
                 [self presentViewController:mapViewController animated:true completion:nil];
-            } else {
-                // No material found for way finding
+                
             }
         } else {
-            // An error occurred
+            [self removeSpinner];
+            if (error.code == BB_ERROR_CODE_SUBJECT_NOT_FOUND) {
+                // No material found for way finding
+                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
+
+            } else {
+                // Eg. Check for other error codes
+                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
+            }
+            
         }
     }];
     

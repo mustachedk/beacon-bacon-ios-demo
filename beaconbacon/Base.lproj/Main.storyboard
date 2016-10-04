@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="doL-qE-j9Z">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -15,21 +16,20 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2XI-nK-ldf">
-                                <rect key="frame" x="20" y="285" width="560" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="2HE-dN-MyT"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Show Map without wayfinding"/>
                                 <connections>
                                     <action selector="mapAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mwe-0V-zdX"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Configuration / Styling" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uo5-UJ-oDy">
-                                <rect key="frame" x="20" y="20" width="560" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="cr0-Y0-O66"/>
                                 </constraints>
@@ -38,27 +38,26 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rho-PM-61q">
-                                <rect key="frame" x="200" y="49" width="200" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="bzS-zi-oir"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="STYLE 1"/>
                                 <connections>
                                     <action selector="style1Action:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9Db-Mk-dTj"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xLw-v6-wt8">
-                                <rect key="frame" x="400" y="49" width="200" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="ra6-59-wct"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="STYLE 2"/>
                                 <connections>
                                     <action selector="style2Action:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NhR-dn-duS"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c0X-ed-zU3">
-                                <rect key="frame" x="20" y="99" width="560" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="1aO-F6-sLr"/>
                                 </constraints>
@@ -67,27 +66,26 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5YK-nG-jEm">
-                                <rect key="frame" x="20" y="128" width="560" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="KiJ-Q9-hwm"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Københavns Bibliotek"/>
                                 <connections>
                                     <action selector="placeKBHaction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5Lv-Hx-eOA"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Db-cF-09N">
-                                <rect key="frame" x="20" y="166" width="560" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="IPi-Ef-PCp"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Mustache Office"/>
                                 <connections>
                                     <action selector="placeMustacheAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hmK-Zk-nvn"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSU-bk-Qep">
-                                <rect key="frame" x="20" y="254" width="560" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="6hq-S2-QTF"/>
                                 </constraints>
@@ -96,38 +94,37 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDk-4C-PVf">
-                                <rect key="frame" x="20" y="321" width="560" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="KoC-Cj-Ue8"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Show Map with wayfinding (IMS+Faust)"/>
                                 <connections>
                                     <action selector="mapWayfindingAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kun-86-Cb8"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a2A-4I-f1y">
-                                <rect key="frame" x="20" y="204" width="560" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="TAJ-BT-g6Y"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Unsupported place (fake place id)"/>
                                 <connections>
-                                    <action selector="placeMustacheAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ViA-ol-EnR"/>
-                                    <action selector="placeUnsupportedAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3CX-GL-HF0"/>
+                                    <action selector="placeUnsupportedAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tX6-6A-kAL"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0AB-3l-Xcz">
-                                <rect key="frame" x="0.0" y="49" width="200" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="q9s-xC-GQ2"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="NO STYLE"/>
                                 <connections>
                                     <action selector="noStyleAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0U8-Nv-2nG"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="a2A-4I-f1y" firstAttribute="top" secondItem="1Db-cF-09N" secondAttribute="bottom" constant="8" id="0wK-iU-zNN"/>
                             <constraint firstItem="xLw-v6-wt8" firstAttribute="leading" secondItem="Rho-PM-61q" secondAttribute="trailing" id="2jh-BX-aJP"/>
@@ -141,7 +138,7 @@
                             <constraint firstItem="ZSU-bk-Qep" firstAttribute="top" secondItem="a2A-4I-f1y" secondAttribute="bottom" constant="20" id="JmK-wh-khV"/>
                             <constraint firstItem="2XI-nK-ldf" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="Ncv-qK-rHc"/>
                             <constraint firstAttribute="trailing" secondItem="2XI-nK-ldf" secondAttribute="trailing" constant="20" id="Q6W-uh-el2"/>
-                            <constraint firstItem="uo5-UJ-oDy" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Tre-wa-iH2"/>
+                            <constraint firstItem="uo5-UJ-oDy" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="Tre-wa-iH2"/>
                             <constraint firstAttribute="trailing" secondItem="5YK-nG-jEm" secondAttribute="trailing" constant="20" id="VBV-Du-Ebg"/>
                             <constraint firstItem="1Db-cF-09N" firstAttribute="top" secondItem="5YK-nG-jEm" secondAttribute="bottom" constant="8" id="WnB-gd-3sL"/>
                             <constraint firstItem="0AB-3l-Xcz" firstAttribute="top" secondItem="uo5-UJ-oDy" secondAttribute="bottom" constant="8" id="c83-sE-pli"/>
@@ -166,10 +163,39 @@
                             <constraint firstItem="1Db-cF-09N" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="xsr-e7-YuP"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="ssY-13-PwW"/>
+                    <connections>
+                        <outlet property="map1Button" destination="2XI-nK-ldf" id="M9y-oY-qDg"/>
+                        <outlet property="map2Button" destination="KDk-4C-PVf" id="fRg-u0-qVU"/>
+                        <outlet property="place1Button" destination="5YK-nG-jEm" id="JMH-Is-g0T"/>
+                        <outlet property="place2Button" destination="1Db-cF-09N" id="ajR-kh-ykp"/>
+                        <outlet property="place3Button" destination="a2A-4I-f1y" id="Xla-NA-VHi"/>
+                        <outlet property="style1Button" destination="0AB-3l-Xcz" id="dAF-fb-J3n"/>
+                        <outlet property="style2Button" destination="Rho-PM-61q" id="xrS-dR-odr"/>
+                        <outlet property="style3Button" destination="xLw-v6-wt8" id="244-4X-KMF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="305" y="415"/>
+            <point key="canvasLocation" x="1244" y="413.3433283358321"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kS4-cJ-kdC">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="doL-qE-j9Z" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Zk7-eR-8fy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="wEX-iQ-QSL"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Q6k-t4-4lV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="304.80000000000001" y="414.24287856071965"/>
         </scene>
     </scenes>
 </document>

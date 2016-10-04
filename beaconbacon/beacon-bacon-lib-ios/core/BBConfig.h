@@ -48,6 +48,6 @@
 -(UIFont *)regularFontWithSize:(CGFloat)size;
 -(UIFont *)lightFontWithSize:(CGFloat)size;
 
-- (void) setPlaceIdentifierInBackground:(NSString *)identifier;
+- (void) setupWithPlaceIdentifier:(NSString *)identifier withCompletion:(void (^)(NSString *placeIdentifier, NSError *error))completionBlock;
 
 @end

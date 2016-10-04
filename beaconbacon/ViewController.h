@@ -26,6 +26,17 @@
 
 @interface ViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *style1Button;
+@property (weak, nonatomic) IBOutlet UIButton *style2Button;
+@property (weak, nonatomic) IBOutlet UIButton *style3Button;
+
+@property (weak, nonatomic) IBOutlet UIButton *place1Button;
+@property (weak, nonatomic) IBOutlet UIButton *place2Button;
+@property (weak, nonatomic) IBOutlet UIButton *place3Button;
+
+@property (weak, nonatomic) IBOutlet UIButton *map1Button;
+@property (weak, nonatomic) IBOutlet UIButton *map2Button;
+
 
 @end
 

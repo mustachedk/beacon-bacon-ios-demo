@@ -562,6 +562,21 @@
     fabs(a1 - a2) <= tolerance;
 }
 
+- (BBFloor *) floorForFloorID:(NSInteger) floorId {
+
+    if (place == nil || place.floors == nil) {
+        return nil;
+    }
+    
+    for (BBFloor *floor in place.floors) {
+        if (floor.floor_id == floorId) {
+            return floor;
+        }
+    }
+    
+    return nil;
+}
+
 #pragma mark - Pop Down
 
 - (void) showMyPositionView:(BOOL)shouldShow animated:(BOOL)animated {
@@ -588,12 +603,18 @@
     CGFloat animationDuration = animated ? 0.35 : 0;
     showMaterialView = shouldShow;
     
+    BBFloor *materialFloor = [self floorForFloorID:self.foundSubject.floor_id];
+    if (materialFloor == nil) {
+        // Don't show when floor isn't found.
+        shouldShow = NO;
+    }
+    
     if (rangedBeconsFloorRef == nil || rangedBeconsFloorRef.name == nil) {
         self.materialPopDownLabel.text = nil;
     } else {
         self.materialPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.at", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
     }
-    self.materialPopDownText.text = [NSString stringWithFormat:@"%@: %ld. %@", NSLocalizedStringFromTable(@"your.material.is.at", @"BBLocalizable", nil), (long)self.foundSubject.floor_id, NSLocalizedStringFromTable(@"floor", @"BBLocalizable", nil)].uppercaseString;
+    self.materialPopDownText.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"your.material.is.at", @"BBLocalizable", nil), materialFloor.name].uppercaseString;
     
     if (shouldShow) {
         self.materialPopDownTopConstraint.constant = 0;
@@ -641,7 +662,6 @@
     
     [self layoutPOI];
     [self layoutMyLocationAnimated:YES];
-
 }
 
 - (double) minScale {
