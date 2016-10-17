@@ -30,9 +30,15 @@
     static BBAPIClient *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[BBAPIClient alloc] initWithBaseURL:[NSURL URLWithString:BB_BASE_URL]];
-        _sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
-        [_sharedClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", BB_API_KEY] forHTTPHeaderField:@"Authorization"];
+        _sharedClient = [[BBAPIClient alloc] initWithBaseURL:[NSURL URLWithString: [BBConfig sharedConfig].apiBaseURL]];
+        
+        if ([BBConfig sharedConfig].SSLPinningMode == BBSSLPinningModePublicKey) {
+            _sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModePublicKey];
+        } else {
+            _sharedClient.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+        }
+        
+        [_sharedClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [BBConfig sharedConfig].apiKey] forHTTPHeaderField:@"Authorization"];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         _sharedClient.responseSerializer = [AFHTTPResponseSerializer serializer];
     });

@@ -32,7 +32,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+
+    [BBConfig sharedConfig].apiBaseURL      = @"INSERT_YOUR_API_BASE_URL";
+    [BBConfig sharedConfig].apiKey          = @"INSERT_YOUR_API_KEY";
+    [BBConfig sharedConfig].SSLPinningMode  = BBSSLPinningModeNone;
 }
 
 - (void) setSpinner {
@@ -48,7 +51,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)noStyleAction:(id)sender {
