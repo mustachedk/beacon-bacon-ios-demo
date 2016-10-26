@@ -193,7 +193,7 @@
             
         } else {
             [self.spinner stopAnimating];
-            self.navBarTitleLabel.text = NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil).uppercaseString;
+            self.navBarTitleLabel.text = @"";
             [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
         }
         
@@ -306,7 +306,13 @@
                     floorplanImageView = [[UIImageView alloc] initWithImage:image];
                     floorplanImageView.tag = BB_MAP_TAG_FLOORPLAN;
                 }
-                self.mapScrollView.backgroundColor = [self colorAtImage:image xCoordinate:0 yCoordinate:0];
+                
+                if (currentDisplayFloorRef.map_background_color != nil) {
+                    self.mapScrollView.backgroundColor = currentDisplayFloorRef.map_background_color;
+                } else {
+                    self.mapScrollView.backgroundColor = [self colorAtImage:image xCoordinate:0 yCoordinate:0];
+                }
+                
                 floorplanImageView.image = image;
                 scaleRatio = [self minScale];
                 floorplanImageView.frame = CGRectMake(0, 0, image.size.width * scaleRatio, image.size.height * scaleRatio);
@@ -340,6 +346,7 @@
     self.navBarTitleLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"showing", @"BBLocalizable", nil).uppercaseString, currentDisplayFloorRef.name.uppercaseString];
     [self updateNavBarNextPrevButtons];
 }
+
 
 - (void) layoutPOI {
     
@@ -530,8 +537,7 @@
 - (BOOL)isWalkablePixel:(UIImage *)image xCoordinate:(int)x yCoordinate:(int)y {
     
     UIColor *pixel_color = [self colorAtImage:image xCoordinate:x yCoordinate:y];
-    UIColor *walkable_color = [UIColor colorFromHexString:currentDisplayFloorRef.map_walkable_color];
-    return [self color:pixel_color isEqualToColor:walkable_color withTolerance:0.05];
+    return [self color:pixel_color isEqualToColor:currentDisplayFloorRef.map_walkable_color withTolerance:0.05];
 }
 
 
