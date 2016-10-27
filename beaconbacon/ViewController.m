@@ -33,8 +33,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [BBConfig sharedConfig].apiBaseURL      = @"INSERT_YOUR_API_BASE_URL";
-    [BBConfig sharedConfig].apiKey          = @"INSERT_YOUR_API_KEY";
+    [BBConfig sharedConfig].apiBaseURL      = @"https://beaconbacon.nosuchagency.com/api";
+    [BBConfig sharedConfig].apiKey          = @"$2y$10$lpD9xuqslNQ2LRl0VJ/.5eENMzieo5Tj5F0mKv3xCUiHeLLlKVvY.";
     [BBConfig sharedConfig].SSLPinningMode  = BBSSLPinningModeNone;
 }
 

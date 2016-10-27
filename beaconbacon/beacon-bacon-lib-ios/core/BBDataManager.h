@@ -42,6 +42,8 @@
 
 + (BBDataManager *)sharedInstance;
 
+- (void) fetchAllPlacesWithCompletion:(void (^)(NSArray *places, NSError *error))completionBlock;
+
 - (void) fetchPlaceIdFromIdentifier:(NSString *)identifier withCompletion:(void (^)(NSString *placeIdentifier, NSError *error))completionBlock;
 
 - (void) requestPOIMenuItemsWithCompletion:(void (^)(NSArray *result, NSError *error))completionBlock;

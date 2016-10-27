@@ -25,6 +25,8 @@
 
 @interface BBPlace : NSObject
 
+@property (nonatomic, strong) NSString *identifier;
+
 @property (nonatomic, assign) NSInteger place_id;
 @property (nonatomic, assign) NSInteger team_id;
 

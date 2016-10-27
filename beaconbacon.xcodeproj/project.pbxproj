@@ -51,9 +51,9 @@
 		775CE11F1D92C1BC0066C905 /* BBLoadingIndicatorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0E91D92C1BC0066C905 /* BBLoadingIndicatorCell.m */; };
 		775CE1201D92C1BC0066C905 /* BBLoadingIndicatorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 775CE0EA1D92C1BC0066C905 /* BBLoadingIndicatorCell.xib */; };
 		775CE1211D92C1BC0066C905 /* BBMyPositionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0EC1D92C1BC0066C905 /* BBMyPositionView.m */; };
-		775CE1221D92C1BC0066C905 /* BBPOIDatasourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0EE1D92C1BC0066C905 /* BBPOIDatasourceDelegate.m */; };
-		775CE1231D92C1BC0066C905 /* BBPOIEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0F01D92C1BC0066C905 /* BBPOIEmptyTableViewCell.m */; };
-		775CE1241D92C1BC0066C905 /* BBPOIEmptyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 775CE0F11D92C1BC0066C905 /* BBPOIEmptyTableViewCell.xib */; };
+		775CE1221D92C1BC0066C905 /* BBLibraryMapPOIDatasourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0EE1D92C1BC0066C905 /* BBLibraryMapPOIDatasourceDelegate.m */; };
+		775CE1231D92C1BC0066C905 /* BBEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0F01D92C1BC0066C905 /* BBEmptyTableViewCell.m */; };
+		775CE1241D92C1BC0066C905 /* BBEmptyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 775CE0F11D92C1BC0066C905 /* BBEmptyTableViewCell.xib */; };
 		775CE1251D92C1BC0066C905 /* BBPOIMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0F31D92C1BC0066C905 /* BBPOIMapView.m */; };
 		775CE1261D92C1BC0066C905 /* BBPOISectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 775CE0F51D92C1BC0066C905 /* BBPOISectionHeaderView.m */; };
 		775CE1271D92C1BC0066C905 /* BBPOISectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 775CE0F61D92C1BC0066C905 /* BBPOISectionHeaderView.xib */; };
@@ -66,6 +66,9 @@
 		775CE1311D92C33A0066C905 /* BBAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 775CE1301D92C33A0066C905 /* BBAssets.xcassets */; };
 		775D2CEE1D9BC641004FB07C /* BBPOIAreaMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D2CED1D9BC641004FB07C /* BBPOIAreaMapView.m */; };
 		775D2CF11D9BD4ED004FB07C /* BBIMSRequstSubject.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D2CF01D9BD4ED004FB07C /* BBIMSRequstSubject.m */; };
+		7767E4CD1DC0D966005D0A0A /* BBLibrarySelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7767E4CB1DC0D966005D0A0A /* BBLibrarySelectViewController.m */; };
+		7767E4CE1DC0D966005D0A0A /* BBLibrarySelectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7767E4CC1DC0D966005D0A0A /* BBLibrarySelectViewController.xib */; };
+		7767E4D11DC0DA4C005D0A0A /* BBLibrarySelectDatasourceDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7767E4D01DC0DA4C005D0A0A /* BBLibrarySelectDatasourceDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -155,11 +158,11 @@
 		775CE0EA1D92C1BC0066C905 /* BBLoadingIndicatorCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BBLoadingIndicatorCell.xib; sourceTree = "<group>"; };
 		775CE0EB1D92C1BC0066C905 /* BBMyPositionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBMyPositionView.h; sourceTree = "<group>"; };
 		775CE0EC1D92C1BC0066C905 /* BBMyPositionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBMyPositionView.m; sourceTree = "<group>"; };
-		775CE0ED1D92C1BC0066C905 /* BBPOIDatasourceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBPOIDatasourceDelegate.h; sourceTree = "<group>"; };
-		775CE0EE1D92C1BC0066C905 /* BBPOIDatasourceDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBPOIDatasourceDelegate.m; sourceTree = "<group>"; };
-		775CE0EF1D92C1BC0066C905 /* BBPOIEmptyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBPOIEmptyTableViewCell.h; sourceTree = "<group>"; };
-		775CE0F01D92C1BC0066C905 /* BBPOIEmptyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBPOIEmptyTableViewCell.m; sourceTree = "<group>"; };
-		775CE0F11D92C1BC0066C905 /* BBPOIEmptyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BBPOIEmptyTableViewCell.xib; sourceTree = "<group>"; };
+		775CE0ED1D92C1BC0066C905 /* BBLibraryMapPOIDatasourceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBLibraryMapPOIDatasourceDelegate.h; sourceTree = "<group>"; };
+		775CE0EE1D92C1BC0066C905 /* BBLibraryMapPOIDatasourceDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBLibraryMapPOIDatasourceDelegate.m; sourceTree = "<group>"; };
+		775CE0EF1D92C1BC0066C905 /* BBEmptyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBEmptyTableViewCell.h; sourceTree = "<group>"; };
+		775CE0F01D92C1BC0066C905 /* BBEmptyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBEmptyTableViewCell.m; sourceTree = "<group>"; };
+		775CE0F11D92C1BC0066C905 /* BBEmptyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BBEmptyTableViewCell.xib; sourceTree = "<group>"; };
 		775CE0F21D92C1BC0066C905 /* BBPOIMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBPOIMapView.h; sourceTree = "<group>"; };
 		775CE0F31D92C1BC0066C905 /* BBPOIMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBPOIMapView.m; sourceTree = "<group>"; };
 		775CE0F41D92C1BC0066C905 /* BBPOISectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBPOISectionHeaderView.h; sourceTree = "<group>"; };
@@ -178,6 +181,11 @@
 		775D2CED1D9BC641004FB07C /* BBPOIAreaMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBPOIAreaMapView.m; sourceTree = "<group>"; };
 		775D2CEF1D9BD4ED004FB07C /* BBIMSRequstSubject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBIMSRequstSubject.h; sourceTree = "<group>"; };
 		775D2CF01D9BD4ED004FB07C /* BBIMSRequstSubject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBIMSRequstSubject.m; sourceTree = "<group>"; };
+		7767E4CA1DC0D966005D0A0A /* BBLibrarySelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBLibrarySelectViewController.h; sourceTree = "<group>"; };
+		7767E4CB1DC0D966005D0A0A /* BBLibrarySelectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBLibrarySelectViewController.m; sourceTree = "<group>"; };
+		7767E4CC1DC0D966005D0A0A /* BBLibrarySelectViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BBLibrarySelectViewController.xib; sourceTree = "<group>"; };
+		7767E4CF1DC0DA4C005D0A0A /* BBLibrarySelectDatasourceDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBLibrarySelectDatasourceDelegate.h; sourceTree = "<group>"; };
+		7767E4D01DC0DA4C005D0A0A /* BBLibrarySelectDatasourceDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBLibrarySelectDatasourceDelegate.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,22 +354,27 @@
 		775CE0E11D92C1BC0066C905 /* wayfinding */ = {
 			isa = PBXGroup;
 			children = (
+				775CE0ED1D92C1BC0066C905 /* BBLibraryMapPOIDatasourceDelegate.h */,
+				775CE0EE1D92C1BC0066C905 /* BBLibraryMapPOIDatasourceDelegate.m */,
 				775CE0E21D92C1BC0066C905 /* BBLibraryMapPOIViewController.h */,
 				775CE0E31D92C1BC0066C905 /* BBLibraryMapPOIViewController.m */,
 				775CE0E41D92C1BC0066C905 /* BBLibraryMapPOIViewController.xib */,
 				775CE0E51D92C1BC0066C905 /* BBLibraryMapViewController.h */,
 				775CE0E61D92C1BC0066C905 /* BBLibraryMapViewController.m */,
 				775CE0E71D92C1BC0066C905 /* BBLibraryMapViewController.xib */,
+				7767E4CF1DC0DA4C005D0A0A /* BBLibrarySelectDatasourceDelegate.h */,
+				7767E4D01DC0DA4C005D0A0A /* BBLibrarySelectDatasourceDelegate.m */,
+				7767E4CA1DC0D966005D0A0A /* BBLibrarySelectViewController.h */,
+				7767E4CB1DC0D966005D0A0A /* BBLibrarySelectViewController.m */,
+				7767E4CC1DC0D966005D0A0A /* BBLibrarySelectViewController.xib */,
 				775CE0E81D92C1BC0066C905 /* BBLoadingIndicatorCell.h */,
 				775CE0E91D92C1BC0066C905 /* BBLoadingIndicatorCell.m */,
 				775CE0EA1D92C1BC0066C905 /* BBLoadingIndicatorCell.xib */,
 				775CE0EB1D92C1BC0066C905 /* BBMyPositionView.h */,
 				775CE0EC1D92C1BC0066C905 /* BBMyPositionView.m */,
-				775CE0ED1D92C1BC0066C905 /* BBPOIDatasourceDelegate.h */,
-				775CE0EE1D92C1BC0066C905 /* BBPOIDatasourceDelegate.m */,
-				775CE0EF1D92C1BC0066C905 /* BBPOIEmptyTableViewCell.h */,
-				775CE0F01D92C1BC0066C905 /* BBPOIEmptyTableViewCell.m */,
-				775CE0F11D92C1BC0066C905 /* BBPOIEmptyTableViewCell.xib */,
+				775CE0EF1D92C1BC0066C905 /* BBEmptyTableViewCell.h */,
+				775CE0F01D92C1BC0066C905 /* BBEmptyTableViewCell.m */,
+				775CE0F11D92C1BC0066C905 /* BBEmptyTableViewCell.xib */,
 				775CE0F21D92C1BC0066C905 /* BBPOIMapView.h */,
 				775CE0F31D92C1BC0066C905 /* BBPOIMapView.m */,
 				775D2CEC1D9BC641004FB07C /* BBPOIAreaMapView.h */,
@@ -442,12 +455,13 @@
 				775CE12B1D92C1BC0066C905 /* BBPopupView.xib in Resources */,
 				775CE0951D92C1B20066C905 /* LaunchScreen.storyboard in Resources */,
 				775CE11E1D92C1BC0066C905 /* BBLibraryMapViewController.xib in Resources */,
-				775CE1241D92C1BC0066C905 /* BBPOIEmptyTableViewCell.xib in Resources */,
+				775CE1241D92C1BC0066C905 /* BBEmptyTableViewCell.xib in Resources */,
 				775CE0921D92C1B20066C905 /* Assets.xcassets in Resources */,
 				775CE1201D92C1BC0066C905 /* BBLoadingIndicatorCell.xib in Resources */,
 				775CE0901D92C1B20066C905 /* Main.storyboard in Resources */,
 				775CE11C1D92C1BC0066C905 /* BBLibraryMapPOIViewController.xib in Resources */,
 				775CE11A1D92C1BC0066C905 /* BBLocalizable.strings in Resources */,
+				7767E4CE1DC0D966005D0A0A /* BBLibrarySelectViewController.xib in Resources */,
 				775CE1291D92C1BC0066C905 /* BBPOITableViewCell.xib in Resources */,
 				775CE1271D92C1BC0066C905 /* BBPOISectionHeaderView.xib in Resources */,
 				775CE1311D92C33A0066C905 /* BBAssets.xcassets in Resources */,
@@ -461,17 +475,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				775CE1231D92C1BC0066C905 /* BBPOIEmptyTableViewCell.m in Sources */,
+				775CE1231D92C1BC0066C905 /* BBEmptyTableViewCell.m in Sources */,
 				775CE1081D92C1BC0066C905 /* BBPOIMenuItem.m in Sources */,
 				775D2CF11D9BD4ED004FB07C /* BBIMSRequstSubject.m in Sources */,
 				775CE08D1D92C1B20066C905 /* ViewController.m in Sources */,
 				775CE11F1D92C1BC0066C905 /* BBLoadingIndicatorCell.m in Sources */,
 				775CE1151D92C1BC0066C905 /* UIButton+AFNetworking.m in Sources */,
 				775CE11D1D92C1BC0066C905 /* BBLibraryMapViewController.m in Sources */,
-				775CE1221D92C1BC0066C905 /* BBPOIDatasourceDelegate.m in Sources */,
+				775CE1221D92C1BC0066C905 /* BBLibraryMapPOIDatasourceDelegate.m in Sources */,
 				775CE1041D92C1BC0066C905 /* BBLocation.m in Sources */,
 				775CE1191D92C1BC0066C905 /* UIWebView+AFNetworking.m in Sources */,
 				775CE1171D92C1BC0066C905 /* UIProgressView+AFNetworking.m in Sources */,
+				7767E4D11DC0DA4C005D0A0A /* BBLibrarySelectDatasourceDelegate.m in Sources */,
 				775CE10B1D92C1BC0066C905 /* AFHTTPSessionManager.m in Sources */,
 				775CE10F1D92C1BC0066C905 /* AFURLResponseSerialization.m in Sources */,
 				775CE1251D92C1BC0066C905 /* BBPOIMapView.m in Sources */,
@@ -483,6 +498,7 @@
 				775CE0FE1D92C1BC0066C905 /* BBBeacon.m in Sources */,
 				775D2CEE1D9BC641004FB07C /* BBPOIAreaMapView.m in Sources */,
 				775CE1011D92C1BC0066C905 /* BBDataManager.m in Sources */,
+				7767E4CD1DC0D966005D0A0A /* BBLibrarySelectViewController.m in Sources */,
 				775CE1051D92C1BC0066C905 /* BBPlace.m in Sources */,
 				775CE08A1D92C1B20066C905 /* AppDelegate.m in Sources */,
 				775CE1021D92C1BC0066C905 /* BBFoundSubject.m in Sources */,

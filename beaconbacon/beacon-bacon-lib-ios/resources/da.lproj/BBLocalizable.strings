@@ -49,3 +49,5 @@
 "error.unsupported.place" = "Sted ikke understøttet";
 "error.invalid.server.response" = "Fejl i svar fra server";
 "error.subject.not.found" = "Materialet blev ikke fundet";
+
+"change.map" = "Skift bibliotek";

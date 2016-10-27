@@ -35,6 +35,7 @@
 #import "BBTrilateration.h"
 #import "BBBeacon.h"
 #import "BBLibraryMapPOIViewController.h"
+#import "BBLibrarySelectViewController.h"
 #import "BBDataManager.h"
 #import "BBFloor.h"
 #import "BBMyPositionView.h"
@@ -49,6 +50,8 @@
 
 #define BB_POPUP_HEIGHT 170
 #define BB_POPUP_WIDTH 280
+
+#define BB_NOTIFICATION_MAP_NEEDS_LAYOUT @"BB_NOTIFICATION_MAP_NEEDS_LAYOUT"
 
 // Wayfinding Item
 @property (nonatomic, strong) BBFoundSubject *foundSubject;
@@ -77,10 +80,13 @@
 
 
 // Bottom Right Cornor Views
-
 @property (weak, nonatomic) IBOutlet UIButton *myLocationButton;
-
 @property (weak, nonatomic) IBOutlet UIButton *pointsOfInterestButton;
+
+
+// Bottom Left Conor Views
+@property (weak, nonatomic) IBOutlet UIButton *changeMapButton;
+
 
 // Other Views
 @property (weak, nonatomic) IBOutlet UIScrollView *mapScrollView;
@@ -106,8 +112,9 @@
 - (IBAction)navBarPreviousAction:(id)sender;
 
 - (IBAction)pointsOfInterestAction:(id)sender;
-
 - (IBAction)myLocationAction:(id)sender;
+
+- (IBAction)changeMapAction:(id)sender;
 
 - (IBAction)myPositionPopDownButtonAction:(id)sender;
 - (IBAction)materialPopDownButtonAction:(id)sender;

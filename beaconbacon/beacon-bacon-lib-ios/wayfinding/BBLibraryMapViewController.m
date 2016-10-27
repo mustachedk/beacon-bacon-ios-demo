@@ -48,7 +48,8 @@
     BBFloor *rangedBeconsFloorRef;
     
     BBLibraryMapPOIViewController *currentPOIViewController;
-    
+    BBLibrarySelectViewController *currentSelectLibraryViewController;
+
     BOOL zoomToUserPosition;
     
     BOOL showMaterialView;
@@ -56,7 +57,8 @@
     
     BBPopupView *popupView;
     BOOL foundSubjectPopopViewDisplayed;
-
+    
+    BOOL shouldLayoutMap;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -80,124 +82,20 @@
     [view.layer setShadowPath: [[UIBezierPath bezierPathWithRoundedRect:[view bounds] cornerRadius:view.frame.size.width/2] CGPath]];
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
+    shouldLayoutMap = true;
     
-    scaleRatio = 1.00f;
-    zoomToUserPosition = false;
-    foundSubjectPopopViewDisplayed = NO;
-    
-    [self showMyPositionView:NO animated:NO];
-    [self showMaterialView:NO animated:NO];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mapNeedsLayout) name:BB_NOTIFICATION_MAP_NEEDS_LAYOUT object:nil];
+}
 
-    self.topLineView.backgroundColor            = [[BBConfig sharedConfig] customColor];
-    self.myPositionPopDownView.backgroundColor  = [[BBConfig sharedConfig] customColor];
-    self.materialPopDownView.backgroundColor    = [[BBConfig sharedConfig] customColor];
-    
-    self.navBarTitleLabel.font          = [[BBConfig sharedConfig] lightFontWithSize:16];
-    self.myPositionPopDownLabel.font    = [[BBConfig sharedConfig] lightFontWithSize:14];
-    self.materialPopDownLabel.font      = [[BBConfig sharedConfig] lightFontWithSize:12];
-    self.materialTopSubtitleLabel.font  = [[BBConfig sharedConfig] lightFontWithSize:10];
-    
-    self.materialTopTitleLabel.font     = [[BBConfig sharedConfig] regularFontWithSize:12];
-
-    [self.navBarTitleLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.myPositionPopDownLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.materialPopDownLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.materialPopDownText setAdjustsFontSizeToFitWidth:YES];
-
-    self.navBarTitleLabel.text = @"";
-    self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
-    
-    self.myPositionPopDownLabel.text = @"";
-    self.myPositionPopDownLabel.textColor = [UIColor whiteColor];
-    
-    self.materialPopDownLabel.text = @"";
-    self.materialPopDownLabel.textColor = [UIColor whiteColor];
-    
-    self.materialPopDownText.text = @"";
-    self.materialPopDownText.textColor = [UIColor whiteColor];
-
-    [self.myPositionPopDownButton setTitle:NSLocalizedStringFromTable(@"show.my.position", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-    [self.materialPopDownButton setTitle:NSLocalizedStringFromTable(@"show.material", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-    
-    [self applyRoundAndShadow:self.myLocationButton];
-    [self applyRoundAndShadow:self.pointsOfInterestButton];
-    
-    myCurrentLocationView = [[BBMyPositionView alloc] initWithFrame:CGRectMake(0, 0, BB_MY_POSITION_WIDTH, BB_MY_POSITION_WIDTH)];
-    myCurrentLocationView.tag = BB_MAP_TAG_MY_POSITION;
-    myCurrentLocationView.hidden = YES;
-    
-    [self.myLocationButton setImage:[UIImage imageNamed:@"location-icon"] forState:UIControlStateNormal];
-    [self.pointsOfInterestButton setImage:[UIImage imageNamed:@"marker-icon"] forState:UIControlStateNormal];
-    
-    [self.mapScrollView addSubview:myCurrentLocationView];
-    
-    self.mapScrollView.bounces = YES;
-    self.mapScrollView.alwaysBounceVertical = YES;
-    self.mapScrollView.alwaysBounceHorizontal = YES;
-
-    [self updateMapScrollViewContentInsets];
-    
-    pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
-    [self.view addGestureRecognizer:pinchGestureRecognizer];
- 
-    self.navBarNextButton.enabled = NO;
-    self.navBarPreviousButton.enabled = NO;
-
-    if (self.foundSubject != nil) {
-        self.materialTopTitleLabel.text = self.foundSubject.subject_name.uppercaseString;
-        self.materialTopSubtitleLabel.text = self.foundSubject.subject_subtitle.uppercaseString;
-        self.materialTopImageView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        self.materialTopImageView.tintColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
-
-        self.materialTopBar.hidden = false;
-        
-    } else {
-        self.materialTopBar.hidden = true;
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (shouldLayoutMap) {
+        shouldLayoutMap = false;
+        [self setLoadingMap];
+        [self layoutMap];
     }
-    
-    [self.spinner startAnimating];
-    [[BBDataManager sharedInstance] requestCurrentPlaceSetupWithCompletion:^(BBPlace *result, NSError *error) {
-        if (error == nil) {
-            place = result;
-            
-            if (place == nil) {
-                return;
-            }
-            
-            if (place.floors != nil && place.floors.count > 0) {
-
-                currentDisplayFloorRef = place.floors.firstObject;
-
-                if (self.foundSubject != nil) {
-                    for (BBFloor *floor in place.floors) {
-                        if (floor.floor_id == self.foundSubject.floor_id) {
-                            currentDisplayFloorRef = floor;
-                            break;
-                        }
-                    }
-                }
-                
-                [currentDisplayFloorRef clearAllAccuracyDataPoints];
-                myCoordinate = CGPointZero;
-                [self layoutCurrentFloorplan];
-                [self layoutMyLocationAnimated:false];
-                [self startLookingForBeacons];
-                
-            } else {
-                NSLog(@"No floors available for this configuration");
-                [self.spinner stopAnimating];
-            }
-            
-        } else {
-            [self.spinner stopAnimating];
-            self.navBarTitleLabel.text = @"";
-            [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
-        }
-        
-    }];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
@@ -347,6 +245,134 @@
     [self updateNavBarNextPrevButtons];
 }
 
+- (void) setLoadingMap {
+    
+    for (UIView *view in self.mapScrollView.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    scaleRatio = 1.00f;
+    zoomToUserPosition = false;
+    foundSubjectPopopViewDisplayed = NO;
+    
+    [self showMyPositionView:NO animated:NO];
+    [self showMaterialView:NO animated:NO];
+    
+    self.topLineView.backgroundColor            = [[BBConfig sharedConfig] customColor];
+    self.myPositionPopDownView.backgroundColor  = [[BBConfig sharedConfig] customColor];
+    self.materialPopDownView.backgroundColor    = [[BBConfig sharedConfig] customColor];
+    
+    self.navBarTitleLabel.font          = [[BBConfig sharedConfig] lightFontWithSize:16];
+    self.myPositionPopDownLabel.font    = [[BBConfig sharedConfig] lightFontWithSize:14];
+    self.materialPopDownLabel.font      = [[BBConfig sharedConfig] lightFontWithSize:12];
+    self.materialTopSubtitleLabel.font  = [[BBConfig sharedConfig] lightFontWithSize:10];
+    
+    self.materialTopTitleLabel.font     = [[BBConfig sharedConfig] regularFontWithSize:12];
+    
+    [self.navBarTitleLabel setAdjustsFontSizeToFitWidth:YES];
+    [self.myPositionPopDownLabel setAdjustsFontSizeToFitWidth:YES];
+    [self.materialPopDownLabel setAdjustsFontSizeToFitWidth:YES];
+    [self.materialPopDownText setAdjustsFontSizeToFitWidth:YES];
+    
+    self.navBarTitleLabel.text = @"";
+    self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
+    
+    self.myPositionPopDownLabel.text = @"";
+    self.myPositionPopDownLabel.textColor = [UIColor whiteColor];
+    
+    self.materialPopDownLabel.text = @"";
+    self.materialPopDownLabel.textColor = [UIColor whiteColor];
+    
+    self.materialPopDownText.text = @"";
+    self.materialPopDownText.textColor = [UIColor whiteColor];
+    
+    [self.myPositionPopDownButton setTitle:NSLocalizedStringFromTable(@"show.my.position", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+    [self.materialPopDownButton setTitle:NSLocalizedStringFromTable(@"show.material", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+    
+    [self applyRoundAndShadow:self.myLocationButton];
+    [self applyRoundAndShadow:self.pointsOfInterestButton];
+    
+    myCurrentLocationView = [[BBMyPositionView alloc] initWithFrame:CGRectMake(0, 0, BB_MY_POSITION_WIDTH, BB_MY_POSITION_WIDTH)];
+    myCurrentLocationView.tag = BB_MAP_TAG_MY_POSITION;
+    myCurrentLocationView.hidden = YES;
+    
+    [self.myLocationButton setImage:[UIImage imageNamed:@"location-icon"] forState:UIControlStateNormal];
+    [self.pointsOfInterestButton setImage:[UIImage imageNamed:@"marker-icon"] forState:UIControlStateNormal];
+    
+    self.changeMapButton.tintColor = [BBConfig sharedConfig].customColor;
+    [self.changeMapButton setTitle:NSLocalizedStringFromTable(@"change.map", @"BBLocalizable", nil) forState:UIControlStateNormal];
+    
+    [self.mapScrollView addSubview:myCurrentLocationView];
+    
+    self.mapScrollView.bounces = YES;
+    self.mapScrollView.alwaysBounceVertical = YES;
+    self.mapScrollView.alwaysBounceHorizontal = YES;
+    
+    [self updateMapScrollViewContentInsets];
+    
+    pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinch:)];
+    [self.view addGestureRecognizer:pinchGestureRecognizer];
+    
+    self.navBarNextButton.enabled = NO;
+    self.navBarPreviousButton.enabled = NO;
+    
+    if (self.foundSubject != nil) {
+        self.materialTopTitleLabel.text = self.foundSubject.subject_name.uppercaseString;
+        self.materialTopSubtitleLabel.text = self.foundSubject.subject_subtitle.uppercaseString;
+        self.materialTopImageView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        self.materialTopImageView.tintColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
+        
+        self.materialTopBar.hidden = false;
+        
+    } else {
+        self.materialTopBar.hidden = true;
+    }
+    
+    [self.spinner startAnimating];
+}
+
+- (void) layoutMap {
+    
+    [[BBDataManager sharedInstance] requestCurrentPlaceSetupWithCompletion:^(BBPlace *result, NSError *error) {
+        if (error == nil) {
+            place = result;
+            
+            if (place == nil) {
+                return;
+            }
+            
+            if (place.floors != nil && place.floors.count > 0) {
+                
+                currentDisplayFloorRef = place.floors.firstObject;
+                
+                if (self.foundSubject != nil) {
+                    for (BBFloor *floor in place.floors) {
+                        if (floor.floor_id == self.foundSubject.floor_id) {
+                            currentDisplayFloorRef = floor;
+                            break;
+                        }
+                    }
+                }
+                
+                [currentDisplayFloorRef clearAllAccuracyDataPoints];
+                myCoordinate = CGPointZero;
+                [self layoutCurrentFloorplan];
+                [self layoutMyLocationAnimated:false];
+                [self startLookingForBeacons];
+                
+            } else {
+                NSLog(@"No floors available for this configuration");
+                [self.spinner stopAnimating];
+            }
+            
+        } else {
+            [self.spinner stopAnimating];
+            self.navBarTitleLabel.text = @"";
+            [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
+        }
+        
+    }];
+}
 
 - (void) layoutPOI {
     
@@ -389,22 +415,30 @@
             }
         }
         
-//        // DEBUG !!!!!!
-//        for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
-//            
-//            CGFloat beaconWidth = 12.f;
-//            CGPoint position = [beaconLocation coordinate];
-//            UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
-//            poiView.backgroundColor = [UIColor whiteColor];
-//            
-//            poiView.layer.cornerRadius = beaconWidth/2;
-//            poiView.layer.masksToBounds = YES;
-//            poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-//            poiView.layer.borderWidth = 2.f;
-//            [self.mapScrollView addSubview:poiView];
-//        }
-//        // DEBUG END !!!
-        
+        // DEBUG !!!!!!
+#if defined DEBUG
+        for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
+            CGFloat beaconWidth = 12.f;
+            CGPoint position = [beaconLocation coordinate];
+            UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
+            poiView.backgroundColor = [UIColor whiteColor];
+            
+            poiView.layer.cornerRadius = beaconWidth/2;
+            poiView.layer.masksToBounds = YES;
+            poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+            poiView.layer.borderWidth = 2.f;
+            [self.mapScrollView addSubview:poiView];
+
+            UILabel *distanceLabel = [[UILabel alloc] initWithFrame:(CGRectMake(poiView.frame.origin.x - 10, poiView.frame.origin.y + poiView.frame.size.height, poiView.frame.size.width + 20, 20))];
+            distanceLabel.textColor = [UIColor darkGrayColor];
+            distanceLabel.font = [UIFont systemFontOfSize:8.0];
+            distanceLabel.textAlignment = NSTextAlignmentCenter;
+            distanceLabel.text = [NSString stringWithFormat:@"%.2f", [[[BBTrilateration new] optimizeDistanceAverage:beaconLocation.beacon.accuracyDataPoints] doubleValue] * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio];
+            [self.mapScrollView addSubview:distanceLabel];
+        }
+#endif
+        // DEBUG END !!!
+    
         [[BBDataManager sharedInstance] requestSelectedPOIMenuItemsWithCompletion:^(NSArray *result, NSError *error) {
             
             if (result == nil || result.count == 0) {
@@ -733,6 +767,12 @@
     }
 }
 
+- (IBAction)changeMapAction:(id)sender {
+    currentSelectLibraryViewController = nil;
+    currentSelectLibraryViewController = [[BBLibrarySelectViewController alloc] initWithNibName:@"BBLibrarySelectViewController" bundle:nil];
+    [self presentViewController:currentSelectLibraryViewController animated:true completion:nil];
+}
+
 - (IBAction)popupViewOkButtonAction:(id)sender {
     foundSubjectPopopViewDisplayed = YES;
     [popupView removeFromSuperview];
@@ -852,9 +892,12 @@
 //        NSLog(@"%@", trilateration.description);
         [self layoutMyLocationAnimated:true];
     }
-    
-    
 }
 
+#pragma mark - Key Value Observers
+
+- (void) mapNeedsLayout {
+    shouldLayoutMap = true;
+}
 
 @end

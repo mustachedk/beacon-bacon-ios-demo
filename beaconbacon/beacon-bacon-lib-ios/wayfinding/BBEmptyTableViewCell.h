@@ -1,5 +1,5 @@
 //
-// BBPOIEmptyTableViewCell.h
+// BBEmptyTableViewCell.h
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -25,7 +25,7 @@
 #import <UIKit/UIKit.h>
 #import "BBConfig.h"
 
-@interface BBPOIEmptyTableViewCell : UITableViewCell
+@interface BBEmptyTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *emptyImageView;
 

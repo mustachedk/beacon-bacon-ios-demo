@@ -30,6 +30,7 @@
         return nil;
     }
     
+    self.identifier     = [attributes valueForKeyPath:@"identifier"];
     self.place_id       = (NSUInteger)[[attributes valueForKeyPath:@"id"] integerValue];
     self.team_id        = (NSUInteger)[[attributes valueForKeyPath:@"team_id"] integerValue];
     self.name           = [attributes valueForKeyPath:@"name"];

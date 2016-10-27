@@ -1,5 +1,5 @@
 //
-// BBLibraryMapPOIViewController.h
+// BBLibraryMapPOIDatasourceDelegate.h
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -22,25 +22,20 @@
 // THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
-#import "BBLibraryMapPOIDatasourceDelegate.h"
+#import <Foundation/Foundation.h>
 #import "BBPOISection.h"
-#import "BBDataManager.h"
-#import "BBConfig.h"
+#import "BBPOI.h"
+#import "BBPOITableViewCell.h"
+#import "BBEmptyTableViewCell.h"
+#import "BBPOISectionHeaderView.h"
+#import "BBPOIMenuItem.h"
+#import "BBLoadingIndicatorCell.h"
 
-@interface BBLibraryMapPOIViewController: UIViewController
+@interface BBLibraryMapPOIDatasourceDelegate : NSObject <UITableViewDelegate, UITableViewDataSource>
 
-// Custom Navigation/Top Bar
-@property (weak, nonatomic) IBOutlet UIView *fakeNavigationBar;
-@property (weak, nonatomic) IBOutlet UIView *topLineView;
+// Contains an array of BBPOISection objects
+@property (nonatomic, strong) NSArray *datasource; // <BBPOISection>
 
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
-- (IBAction)closeButtonAction:(id)sender;
-
-@property (weak, nonatomic) IBOutlet UILabel *navBarTitleLabel;
-
-// Other Views
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (nonatomic, weak) UITableView *tableViewRef;
 
 @end
