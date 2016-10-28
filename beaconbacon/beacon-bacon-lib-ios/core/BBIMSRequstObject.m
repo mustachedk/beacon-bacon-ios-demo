@@ -1,5 +1,5 @@
 //
-// BBFoundSubject.h
+// BBIMSRequstObject.m
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -22,25 +22,18 @@
 // THE SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#import "BBIMSRequstObject.h"
 
-@interface BBFoundSubject : NSObject
+@implementation BBIMSRequstObject
 
-#define BBStatus_NotFound @"Not Found"
-#define BBStatus_Found @"Found"
-
-@property (nonatomic, assign) NSInteger floor_id;
-
-@property (nonatomic, strong) NSString *status;
-
-@property (nonatomic, assign) NSInteger location_id;
-@property (nonatomic, assign) NSInteger location_posX;
-@property (nonatomic, assign) NSInteger location_posY;
-
-// Returns nil, if json is invalid
-- (instancetype)initWithAttributes:(NSDictionary *)attributes;
-
-- (BOOL)isSubjectFound;
+- (instancetype)initWithFaustId:(NSString *)faust {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    
+    self.faust = faust;
+      return self;
+}
 
 @end

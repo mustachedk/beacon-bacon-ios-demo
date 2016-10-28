@@ -49,6 +49,7 @@
     self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
     
     datasourceDelegate = [BBLibrarySelectDatasourceDelegate new];
+    datasourceDelegate.delegate = self;
     
     self.tableView.dataSource = datasourceDelegate;
     self.tableView.delegate = datasourceDelegate;
@@ -77,8 +78,10 @@
 //            for (BBPlace *place in places) {
 //                // TODO: SORT THESE FUCKERS!
 //            }
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+            NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+            datasourceDelegate.datasource = [places sortedArrayUsingDescriptors:sortDescriptors];
             
-            datasourceDelegate.datasource = places;
             [self.tableView reloadData];
         } else {
             
@@ -93,8 +96,33 @@
 #pragma mark - Actions
 
 - (IBAction)closeButtonAction:(id)sender {
-    
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - BBLibrarySelectDelegate
+
+- (void) didSelectPlace:(BBPlace *)place {
+    
+    [[BBConfig sharedConfig] setupWithPlaceIdentifier:place.identifier withCompletion:^(NSString *placeIdentifier, NSError *error) {
+        [self.tableView reloadData];
+        [[NSNotificationCenter defaultCenter] postNotificationName:BB_NOTIFICATION_MAP_NEEDS_LAYOUT object:nil];
+        
+        if (self.dismissAsSubview) {
+            [UIView animateWithDuration:0.35 animations:^{
+                [self.view setFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height, self.view.frame.size.width, self.view.frame.size.height)];
+                
+            } completion:^(BOOL finished) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:BB_NOTIFICATION_MAP_LAYOUT_NOW object:nil];
+                [self.view removeFromSuperview];
+                [self removeFromParentViewController];
+                
+            }];
+        } else {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+    }];
+
+    
 }
 
 @end

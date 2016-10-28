@@ -26,8 +26,11 @@
 #import "BBLibrarySelectDatasourceDelegate.h"
 #import "BBDataManager.h"
 #import "BBConfig.h"
+#import "BBLibrarySelectDelegate.h"
 
-@interface BBLibrarySelectViewController: UIViewController
+@interface BBLibrarySelectViewController: UIViewController <BBLibrarySelectDelegate>
+
+@property (nonatomic, assign) BOOL dismissAsSubview;
 
 // Custom Navigation/Top Bar
 @property (weak, nonatomic) IBOutlet UIView *fakeNavigationBar;

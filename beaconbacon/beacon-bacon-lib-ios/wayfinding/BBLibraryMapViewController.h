@@ -51,9 +51,11 @@
 #define BB_POPUP_HEIGHT 170
 #define BB_POPUP_WIDTH 280
 
-#define BB_NOTIFICATION_MAP_NEEDS_LAYOUT @"BB_NOTIFICATION_MAP_NEEDS_LAYOUT"
+#define BB_NOTIFICATION_MAP_NEEDS_LAYOUT    @"BB_NOTIFICATION_MAP_NEEDS_LAYOUT"
+#define BB_NOTIFICATION_MAP_LAYOUT_NOW      @"BB_NOTIFICATION_MAP_LAYOUT_NOW"
 
 // Wayfinding Item
+@property (nonatomic, strong) BBIMSRequstObject *wayfindingRequstObject;
 @property (nonatomic, strong) BBFoundSubject *foundSubject;
 
 // Custom Navigation/Top Bar

@@ -88,7 +88,7 @@
         BBPlace *place = self.datasource[indexPath.row];
         cell.textLabel.text = place.name;
         
-        if ([[NSString stringWithFormat:@"%ld", place.place_id] isEqualToString:[BBConfig sharedConfig].currentPlaceId]) {
+        if ([[NSString stringWithFormat:@"%ld", (long)place.place_id] isEqualToString:[BBConfig sharedConfig].currentPlaceId]) {
             [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
         } else {
             [cell setAccessoryType:UITableViewCellAccessoryNone];
@@ -129,12 +129,9 @@
     } else {
         // TODO: FIX!!!
         BBPlace *place = self.datasource[indexPath.row];
-        [[BBConfig sharedConfig] setupWithPlaceIdentifier:place.identifier withCompletion:^(NSString *placeIdentifier, NSError *error) {
-            [tableView reloadData];
-            [[NSNotificationCenter defaultCenter] postNotificationName:BB_NOTIFICATION_MAP_NEEDS_LAYOUT object:nil];
-
-        }];
-
+        if ([self.delegate respondsToSelector:@selector(didSelectPlace:)]){
+            [self.delegate didSelectPlace:place];
+        }
     }
 }
 

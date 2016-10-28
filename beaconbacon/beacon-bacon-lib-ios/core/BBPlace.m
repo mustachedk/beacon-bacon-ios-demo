@@ -39,6 +39,8 @@
     self.zipcode        = [attributes valueForKeyPath:@"zipcode"];
     self.city           = [attributes valueForKeyPath:@"city"];
 
+    self.order           = (NSUInteger)[[attributes valueForKeyPath:@"order"] integerValue];
+
     NSMutableArray *tmpFloors = [NSMutableArray new];
     for (NSDictionary *floorDict in [attributes valueForKeyPath:@"floors"]) {
         BBFloor *floor = [[BBFloor alloc] initWithAttributes:floorDict];

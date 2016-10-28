@@ -94,7 +94,11 @@
                 [places addObject:[[BBPlace alloc] initWithAttributes:placeDict]];
             }
             
-            self.cachedPlaces = places;
+            // Apply Sort by 'order'
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+            NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+            
+            self.cachedPlaces = [places sortedArrayUsingDescriptors:sortDescriptors];
             completionBlock(self.cachedPlaces, nil);
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -285,7 +289,7 @@
     }] resume];
 }
 
-- (void) requestFindIMSSubject:(BBIMSRequstSubject *)requstObject withCompletion:(void (^)(BBFoundSubject *result, NSError *error))completionBlock {
+- (void) requestFindIMSSubject:(BBIMSRequstObject *)requstObject withCompletion:(void (^)(BBFoundSubject *result, NSError *error))completionBlock {
     
     NSMutableDictionary *requestDict = [NSMutableDictionary new];
     [requestDict setObject:@"IMS" forKey:@"find_identifier"];

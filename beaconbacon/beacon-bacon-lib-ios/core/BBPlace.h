@@ -35,6 +35,8 @@
 @property (nonatomic, strong) NSString *zipcode;
 @property (nonatomic, strong) NSString *city;
 
+@property (nonatomic, assign) NSInteger order;
+
 @property (nonatomic, strong) NSArray *floors; // <BBPOIFloor>
 
 - (instancetype)initWithAttributes:(NSDictionary *)attributes;

@@ -117,40 +117,16 @@
 
 - (IBAction)mapWayfindingAction:(id)sender {
     
-    [self setSpinner];
-    BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"50631494"];
-//    BBIMSRequstSubject *requstObject = [[BBIMSRequstSubject alloc] initWithFaustId:@"HEST"];
-    [[BBDataManager sharedInstance] requestFindIMSSubject:requstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
-        if (error == nil) {
-            if (result != nil ) {
-                // Material is found for way finding
-                mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
-                
-                result.subject_name     = @"En mand der hedder Ove";
-                result.subject_subtitle = @"SK";
-                result.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];
-                
-                mapViewController.foundSubject = result;
-                [self removeSpinner];
+//    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"HEST"];
 
-                [self presentViewController:mapViewController animated:true completion:nil];
-            } else {
-                [self removeSpinner];
-            }
-        } else {
-            [self removeSpinner];
-            if (error.code == BB_ERROR_CODE_SUBJECT_NOT_FOUND) {
-                // No material found for way finding
-                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
-
-            } else {
-                // Eg. Check for other error codes
-                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
-            }
-            
-        }
-    }];
+    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"50631494"];
+    requstObject.subject_name     = @"En mand der hedder Ove";
+    requstObject.subject_subtitle = @"SK";
+    requstObject.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];
     
+    mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
+    mapViewController.wayfindingRequstObject = requstObject;
+    [self presentViewController:mapViewController animated:true completion:nil];
 }
 
 @end

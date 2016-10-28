@@ -84,17 +84,44 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    shouldLayoutMap = true;
     
+    [self setLoadingMap];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mapNeedsLayout) name:BB_NOTIFICATION_MAP_NEEDS_LAYOUT object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mapLayoutNow) name:BB_NOTIFICATION_MAP_LAYOUT_NOW object:nil];
+
+    if ([BBConfig sharedConfig].currentPlaceId == nil) {
+        currentSelectLibraryViewController = nil;
+        currentSelectLibraryViewController = [[BBLibrarySelectViewController alloc] initWithNibName:@"BBLibrarySelectViewController" bundle:nil];
+        currentSelectLibraryViewController.dismissAsSubview = true;
+        [self.view addSubview:currentSelectLibraryViewController.view];
+        [self addChildViewController:currentSelectLibraryViewController];
+        return;
+    }
+
+    shouldLayoutMap = true;
+
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
     if (shouldLayoutMap) {
         shouldLayoutMap = false;
-        [self setLoadingMap];
+        [self mapLayoutNow];
+    }
+}
+
+- (void) mapLayoutNow {
+    [self setLoadingMap];
+    
+    if (self.wayfindingRequstObject == nil) {
+        // Wayfinding Object not set - go straight to Layout Map
         [self layoutMap];
+    } else {
+        // We need to check if there is a wayfinding result Object for this Map!
+        [self lookForIMS];
+        
     }
 }
 
@@ -134,6 +161,38 @@
     } else {
         [self showAlert:NSLocalizedStringFromTable(@"invalid.current.location.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"invalid.current.location.message", @"BBLocalizable", nil)];
     }
+}
+
+- (void) lookForIMS {
+    
+    self.materialTopTitleLabel.text = @"";
+    self.materialTopSubtitleLabel.text = @"";
+    self.materialTopImageView.image = nil;
+    
+    if (self.wayfindingRequstObject == nil || self.wayfindingRequstObject.faust == nil) {
+        self.foundSubject = nil;
+        [self layoutMap];
+        return;
+    }
+    
+    [[BBDataManager sharedInstance] requestFindIMSSubject:self.wayfindingRequstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
+        if (error == nil) {
+            self.foundSubject = result;
+            [self layoutMap];
+
+        } else {
+
+            if (error.code == BB_ERROR_CODE_SUBJECT_NOT_FOUND) {
+                // No material found for way finding
+                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
+                
+            } else {
+                // Eg. Check for other error codes
+                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
+            }
+            
+        }
+    }];
 
 }
 
@@ -254,9 +313,12 @@
     scaleRatio = 1.00f;
     zoomToUserPosition = false;
     foundSubjectPopopViewDisplayed = NO;
-    
+    self.materialTopBar.hidden = true;
+
     [self showMyPositionView:NO animated:NO];
     [self showMaterialView:NO animated:NO];
+    
+    self.mapScrollView.backgroundColor = [UIColor clearColor];
     
     self.topLineView.backgroundColor            = [[BBConfig sharedConfig] customColor];
     self.myPositionPopDownView.backgroundColor  = [[BBConfig sharedConfig] customColor];
@@ -316,18 +378,6 @@
     self.navBarNextButton.enabled = NO;
     self.navBarPreviousButton.enabled = NO;
     
-    if (self.foundSubject != nil) {
-        self.materialTopTitleLabel.text = self.foundSubject.subject_name.uppercaseString;
-        self.materialTopSubtitleLabel.text = self.foundSubject.subject_subtitle.uppercaseString;
-        self.materialTopImageView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        self.materialTopImageView.tintColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
-        
-        self.materialTopBar.hidden = false;
-        
-    } else {
-        self.materialTopBar.hidden = true;
-    }
-    
     [self.spinner startAnimating];
 }
 
@@ -345,13 +395,32 @@
                 
                 currentDisplayFloorRef = place.floors.firstObject;
                 
+                BOOL isFoundSubjectOnThisPlace = false;
                 if (self.foundSubject != nil) {
                     for (BBFloor *floor in place.floors) {
                         if (floor.floor_id == self.foundSubject.floor_id) {
                             currentDisplayFloorRef = floor;
+                            isFoundSubjectOnThisPlace = true;
                             break;
                         }
                     }
+                }
+                
+                if (isFoundSubjectOnThisPlace) {
+                    self.materialTopTitleLabel.text = self.wayfindingRequstObject.subject_name.uppercaseString;
+                    self.materialTopSubtitleLabel.text = self.wayfindingRequstObject.subject_subtitle.uppercaseString;
+                    self.materialTopImageView.image = [self.wayfindingRequstObject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    self.materialTopImageView.tintColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
+                    
+                    self.materialTopBar.hidden = false;
+                    
+                } else {
+                    if (self.wayfindingRequstObject != nil) {
+                        NSString *message = [NSString stringWithFormat:NSLocalizedStringFromTable(@"error.wayfinding.subject.not.found.for.place", @"BBLocalizable", nil), self.wayfindingRequstObject.subject_name, place.name];
+                        [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"error.subject.not.found", @"BBLocalizable", nil) message:message delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
+                    }
+                    self.foundSubject = nil;
+                    self.materialTopBar.hidden = true;
                 }
                 
                 [currentDisplayFloorRef clearAllAccuracyDataPoints];
@@ -359,10 +428,12 @@
                 [self layoutCurrentFloorplan];
                 [self layoutMyLocationAnimated:false];
                 [self startLookingForBeacons];
-                
+           
             } else {
-                NSLog(@"No floors available for this configuration");
+                
                 [self.spinner stopAnimating];
+                self.navBarTitleLabel.text = @"";
+                [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
             }
             
         } else {
@@ -396,7 +467,7 @@
                 
                 BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POI_WIDTH/2, self.foundSubject.location_posY * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
                 
-                foundMaterialPOIView.poiIconView.image = [self.foundSubject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                foundMaterialPOIView.poiIconView.image = [self.wayfindingRequstObject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 foundMaterialPOIView.poiIconView.tintColor = [UIColor whiteColor];
                 [self.mapScrollView addSubview:foundMaterialPOIView];
                 
@@ -415,29 +486,29 @@
             }
         }
         
-        // DEBUG !!!!!!
-#if defined DEBUG
-        for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
-            CGFloat beaconWidth = 12.f;
-            CGPoint position = [beaconLocation coordinate];
-            UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
-            poiView.backgroundColor = [UIColor whiteColor];
-            
-            poiView.layer.cornerRadius = beaconWidth/2;
-            poiView.layer.masksToBounds = YES;
-            poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-            poiView.layer.borderWidth = 2.f;
-            [self.mapScrollView addSubview:poiView];
-
-            UILabel *distanceLabel = [[UILabel alloc] initWithFrame:(CGRectMake(poiView.frame.origin.x - 10, poiView.frame.origin.y + poiView.frame.size.height, poiView.frame.size.width + 20, 20))];
-            distanceLabel.textColor = [UIColor darkGrayColor];
-            distanceLabel.font = [UIFont systemFontOfSize:8.0];
-            distanceLabel.textAlignment = NSTextAlignmentCenter;
-            distanceLabel.text = [NSString stringWithFormat:@"%.2f", [[[BBTrilateration new] optimizeDistanceAverage:beaconLocation.beacon.accuracyDataPoints] doubleValue] * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio];
-            [self.mapScrollView addSubview:distanceLabel];
-        }
-#endif
-        // DEBUG END !!!
+//        // DEBUG !!!!!!
+//#if defined DEBUG
+//        for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
+//            CGFloat beaconWidth = 12.f;
+//            CGPoint position = [beaconLocation coordinate];
+//            UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
+//            poiView.backgroundColor = [UIColor whiteColor];
+//            
+//            poiView.layer.cornerRadius = beaconWidth/2;
+//            poiView.layer.masksToBounds = YES;
+//            poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
+//            poiView.layer.borderWidth = 2.f;
+//            [self.mapScrollView addSubview:poiView];
+//
+//            UILabel *distanceLabel = [[UILabel alloc] initWithFrame:(CGRectMake(poiView.frame.origin.x - 10, poiView.frame.origin.y + poiView.frame.size.height, poiView.frame.size.width + 20, 20))];
+//            distanceLabel.textColor = [UIColor darkGrayColor];
+//            distanceLabel.font = [UIFont systemFontOfSize:8.0];
+//            distanceLabel.textAlignment = NSTextAlignmentCenter;
+//            distanceLabel.text = [NSString stringWithFormat:@"%.2f", [[[BBTrilateration new] optimizeDistanceAverage:beaconLocation.beacon.accuracyDataPoints] doubleValue] * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio];
+//            [self.mapScrollView addSubview:distanceLabel];
+//        }
+//#endif
+//        // DEBUG END !!!
     
         [[BBDataManager sharedInstance] requestSelectedPOIMenuItemsWithCompletion:^(NSArray *result, NSError *error) {
             
@@ -770,6 +841,7 @@
 - (IBAction)changeMapAction:(id)sender {
     currentSelectLibraryViewController = nil;
     currentSelectLibraryViewController = [[BBLibrarySelectViewController alloc] initWithNibName:@"BBLibrarySelectViewController" bundle:nil];
+    currentSelectLibraryViewController.dismissAsSubview = false;
     [self presentViewController:currentSelectLibraryViewController animated:true completion:nil];
 }
 

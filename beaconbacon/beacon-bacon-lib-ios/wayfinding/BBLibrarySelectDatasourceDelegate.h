@@ -27,10 +27,14 @@
 #import "BBLoadingIndicatorCell.h"
 #import "BBEmptyTableViewCell.h"
 #import "BBLibraryMapViewController.h"
+#import "BBLibrarySelectDelegate.h"
 
 @interface BBLibrarySelectDatasourceDelegate : NSObject <UITableViewDelegate, UITableViewDataSource>
 
 // Contains an array of BBPlace objects
 @property (nonatomic, strong) NSArray *datasource; // <BBPlace>
+
+//@property (nonatomic, weak) id <BBLibrarySelectDelegate> delegate;
+@property (nonatomic, weak) id <BBLibrarySelectDelegate> delegate;
 
 @end
