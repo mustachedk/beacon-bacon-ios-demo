@@ -176,22 +176,8 @@
     }
     
     [[BBDataManager sharedInstance] requestFindIMSSubject:self.wayfindingRequstObject withCompletion:^(BBFoundSubject *result, NSError *error) {
-        if (error == nil) {
-            self.foundSubject = result;
-            [self layoutMap];
-
-        } else {
-
-            if (error.code == BB_ERROR_CODE_SUBJECT_NOT_FOUND) {
-                // No material found for way finding
-                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
-                
-            } else {
-                // Eg. Check for other error codes
-                [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
-            }
-            
-        }
+        self.foundSubject = result;
+        [self layoutMap];
     }];
 
 }
