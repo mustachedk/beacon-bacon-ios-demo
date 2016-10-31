@@ -633,7 +633,7 @@
         
         CGPoint center = CGPointMake(position.origin.x + position.size.width/2, position.origin.y + position.size.height/2);
         
-        [self.mapScrollView setContentOffset:CGPointMake(center.x - roundf(self.mapScrollView.frame.size.width/2.),center.y - roundf(self.mapScrollView.frame.size.height/2)) animated:YES];
+        [self.mapScrollView setContentOffset:CGPointMake(center.x - roundf(self.mapScrollView.frame.size.width/2), center.y - roundf(self.mapScrollView.frame.size.height/2)) animated:YES];
         
         zoomToUserPosition = NO;
     }
@@ -760,19 +760,28 @@
         return;
     }
     
-    myCurrentLocationView.hidden = YES;
-
-    double maxScale = 1.0;
-    double minScale = [self minScale];
-    
-    double newScaleRatio = scaleRatio * (1.0 - ((1.0 - sender.scale) / 10));
-    scaleRatio = newScaleRatio >= maxScale ? maxScale : newScaleRatio <= minScale ? minScale : newScaleRatio;
-
-    floorplanImageView.frame = CGRectMake(0, 0, floorplanImageView.image.size.width * scaleRatio, floorplanImageView.image.size.height * scaleRatio);
-    self.mapScrollView.contentSize = floorplanImageView.bounds.size;
-    
-    [self layoutPOI];
-    [self layoutMyLocationAnimated:YES];
+    if ([sender numberOfTouches] >1) {
+        CGRect oldSize = floorplanImageView.bounds;
+        
+        myCurrentLocationView.hidden = YES;
+        
+        double maxScale = 1.0;
+        double minScale = [self minScale];
+        
+        double newScaleRatio = scaleRatio * (1.0 - ((1.0 - sender.scale) / 10));
+        scaleRatio = newScaleRatio >= maxScale ? maxScale : newScaleRatio <= minScale ? minScale : newScaleRatio;
+        
+        floorplanImageView.frame = CGRectMake(0, 0, floorplanImageView.image.size.width * scaleRatio, floorplanImageView.image.size.height * scaleRatio);
+        self.mapScrollView.contentSize = floorplanImageView.bounds.size;
+        
+        float deltaWidth = floorplanImageView.frame.size.width - oldSize.size.width;
+        float deltaHeight = floorplanImageView.frame.size.height - oldSize.size.height;
+        
+        [self.mapScrollView setContentOffset:CGPointMake(self.mapScrollView.contentOffset.x + deltaWidth/2, self.mapScrollView.contentOffset.y + deltaHeight/2) animated:NO];
+        
+        [self layoutPOI];
+        [self layoutMyLocationAnimated:YES];
+    }
 }
 
 - (double) minScale {
@@ -922,7 +931,6 @@
         } else {
             [self showMyPositionView:NO animated:NO];
         }
-
     }
     
     NSMutableArray *rangedBBBeacons = [NSMutableArray new];
