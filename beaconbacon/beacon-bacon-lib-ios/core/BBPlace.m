@@ -30,14 +30,30 @@
         return nil;
     }
     
-    if ([attributes isEqual:[NSNull null]]) {
+    if ([attributes isEqual:[NSNull null]] || ![attributes isKindOfClass:[NSDictionary class]]) {
         return nil;
     }
     
-    if ([attributes valueForKeyPath:@"identifier"]) {
-        self.identifier = [attributes valueForKeyPath:@"identifier"];
+    if ([attributes valueForKeyPath:@"identifier_one"]) {
+        self.identifier1 = [attributes valueForKeyPath:@"identifier_one"];
     }
-    
+
+    if ([attributes valueForKeyPath:@"identifier_two"]) {
+        self.identifier2 = [attributes valueForKeyPath:@"identifier_two"];
+    }
+
+    if ([attributes valueForKeyPath:@"identifier_three"]) {
+        self.identifier3 = [attributes valueForKeyPath:@"identifier_three"];
+    }
+
+    if ([attributes valueForKeyPath:@"identifier_four"]) {
+        self.identifier4 = [attributes valueForKeyPath:@"identifier_four"];
+    }
+
+    if ([attributes valueForKeyPath:@"identifier_five"]) {
+        self.identifier5 = [attributes valueForKeyPath:@"identifier_five"];
+    }
+
     if ([attributes valueForKeyPath:@"id"]) {
         self.place_id = (NSUInteger)[[attributes valueForKeyPath:@"id"] integerValue];
     }
@@ -72,7 +88,6 @@
             BBFloor *floor = [[BBFloor alloc] initWithAttributes:floorDict];
             [tmpFloors addObject:floor];
         }
-        
         
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
         NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];

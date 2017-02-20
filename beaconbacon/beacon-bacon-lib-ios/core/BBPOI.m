@@ -32,7 +32,7 @@
         return nil;
     }
     
-    if ([attributes isEqual:[NSNull null]]) {
+    if ([attributes isEqual:[NSNull null]] || ![attributes isKindOfClass:[NSDictionary class]]) {
         return nil;
     }
     
@@ -55,6 +55,7 @@
     if ([attributes valueForKeyPath:@"icon"]) {
         self.icon_url = [attributes valueForKeyPath:@"icon"];
     }
+//    self.icon_url = [NSString stringWithFormat:@"https://app.beaconbacon.io/api/v2/pois/%ld/icon", self.poi_id];
     
     if ([attributes valueForKeyPath:@"type"]) {
         self.type = [attributes valueForKeyPath:@"type"];
@@ -64,7 +65,7 @@
         self.hex_color = [attributes valueForKeyPath:@"color"];
     }
     
-    self.selected       = NO;
+    self.selected = NO;
     return self;
 }
 

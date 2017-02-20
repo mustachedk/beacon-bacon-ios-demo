@@ -33,8 +33,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [BBConfig sharedConfig].apiBaseURL      = @"https://beaconbacon.nosuchagency.com/api";
-    [BBConfig sharedConfig].apiKey          = @"$2y$10$lpD9xuqslNQ2LRl0VJ/.5eENMzieo5Tj5F0mKv3xCUiHeLLlKVvY.";
+    [BBConfig sharedConfig].apiBaseURL      = @"https://app.beaconbacon.io/api";
+    [BBConfig sharedConfig].apiKey          = @"$2y$10$xNbv82pkfvDT7t4I2cwkLu4csCtd75PIZ/G06LylcMnjwdj/vmJtm";
     [BBConfig sharedConfig].SSLPinningMode  = BBSSLPinningModeNone;
 }
 
@@ -117,9 +117,9 @@
 
 - (IBAction)mapWayfindingAction:(id)sender {
     
-//    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"HEST"];
+    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"29715394"];
 
-    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"50631494"];
+//    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"50631494"];
     requstObject.subject_name     = @"En mand der hedder Ove";
     requstObject.subject_subtitle = @"SK";
     requstObject.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];

@@ -45,18 +45,20 @@
 
 -(void) touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     
+    [self layoutIfNeeded];
+    
     if (nameLabel == nil && !self.titleVisible) {
         self.titleVisible = YES;
         
-        CGRect labelRect = [self.title boundingRectWithSize:self.bounds.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : [[BBConfig sharedConfig] lightFontWithSize:14] } context:nil];
-
-        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, labelRect.size.width + 32, labelRect.size.height + 16)];
+        nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 32, 16)];
         nameLabel.text = self.title;
-        nameLabel.font = [[BBConfig sharedConfig] lightFontWithSize:14];
         nameLabel.textAlignment = NSTextAlignmentCenter;
         nameLabel.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
-        
         nameLabel.clipsToBounds = NO;
+        nameLabel.font = [[BBConfig sharedConfig] lightFontWithSize:14];
+        
+        [nameLabel sizeToFit];
+        nameLabel.frame = CGRectMake(0, 0, nameLabel.frame.size.width + 32, nameLabel.frame.size.height + 16);
         
         [nameLabel.layer setShadowOffset:CGSizeMake(0, 5)];
         [nameLabel.layer setShadowOpacity:0.1f];
@@ -67,16 +69,15 @@
         UIImageView *triangle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrowtriangle"]];
         triangle.frame = CGRectMake(nameLabel.frame.size.width/2 - triangle.frame.size.width/2, nameLabel.frame.size.height, triangle.frame.size.width, triangle.frame.size.height);
         [nameLabel addSubview:triangle];
-
-        CGPoint touchPoint = [[touches anyObject] locationInView:self];
-        nameLabel.center = CGPointMake(touchPoint.x, touchPoint.y - labelRect.size.height/2 - triangle.frame.size.height);
+        
+        nameLabel.frame = CGRectMake(self.frame.size.width/2 - nameLabel.frame.size.width/2, 0 - nameLabel.frame.size.height - triangle.frame.size.height + 8, nameLabel.frame.size.width, nameLabel.frame.size.height);
         
         nameLabel.alpha = 0;
         [self addSubview:nameLabel];
         [UIView animateWithDuration:0.3 animations:^{
             nameLabel.alpha = 1;
         }];
-    
+        
     } else {
         self.titleVisible = NO;
         if (nameLabel != nil) {

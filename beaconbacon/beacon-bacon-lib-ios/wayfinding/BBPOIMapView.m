@@ -84,6 +84,18 @@
     }
 }
 
+- (void) applyFoundClusterSubjcetStyle {
+    
+    [self layoutIfNeeded];
+    
+    self.backgroundColor =[[[BBConfig sharedConfig] customColor] colorWithAlphaComponent:0.4];
+    
+    self.layer.cornerRadius = self.frame.size.width/2;
+    self.layer.borderColor = nil;
+    self.poiIconView = nil;
+}
+
+
 -(void) touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     
     [self layoutIfNeeded];

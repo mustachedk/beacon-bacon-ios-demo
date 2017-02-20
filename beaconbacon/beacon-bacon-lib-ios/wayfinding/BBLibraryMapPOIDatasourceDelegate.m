@@ -78,7 +78,6 @@
             cell = [[[NSBundle mainBundle] loadNibNamed:@"BBEmptyTableViewCell" owner:self options:nil] firstObject];
         }
         
-//        [cell setEmptyImageWithTintColor:[UIImage imageNamed:@"empty-icon-poi"]];
         [cell setTitle:NSLocalizedStringFromTable(@"no.points.of.interest.title", @"BBLocalizable", nil).uppercaseString description:NSLocalizedStringFromTable(@"no.points.of.interest.description", @"BBLocalizable", nil)];
         
         return cell;

@@ -117,7 +117,7 @@
     [self fetchAllPlacesWithCompletion:^(NSArray *places, NSError *error) {
         if (error == nil) {
             for (BBPlace *place in places) {
-                if ([place.identifier isEqualToString:identifier]) {
+                if ([place.identifier1 isEqualToString:identifier]) {
                     NSString *currentPlaceId = [NSString stringWithFormat:@"%ld", place.place_id];
                     
                     [self clearAllChacedData];

@@ -74,10 +74,6 @@
     [[BBDataManager sharedInstance] fetchAllPlacesWithCompletion:^(NSArray *places, NSError *error) {
         if (error == nil) {
             
-//            NSMutableArray *menuSections = [NSMutableArray new];
-//            for (BBPlace *place in places) {
-//                // TODO: SORT THESE FUCKERS!
-//            }
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
             NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
             datasourceDelegate.datasource = [places sortedArrayUsingDescriptors:sortDescriptors];
@@ -103,7 +99,7 @@
 
 - (void) didSelectPlace:(BBPlace *)place {
     
-    [[BBConfig sharedConfig] setupWithPlaceIdentifier:place.identifier withCompletion:^(NSString *placeIdentifier, NSError *error) {
+    [[BBConfig sharedConfig] setupWithPlaceIdentifier:place.identifier1 withCompletion:^(NSString *placeIdentifier, NSError *error) {
         [self.tableView reloadData];
         [[NSNotificationCenter defaultCenter] postNotificationName:BB_NOTIFICATION_MAP_NEEDS_LAYOUT object:nil];
         

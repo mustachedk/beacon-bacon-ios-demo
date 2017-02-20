@@ -32,7 +32,7 @@
         return nil;
     }
     
-    if ([attributes isEqual:[NSNull null]]) {
+    if ([attributes isEqual:[NSNull null]] || ![attributes isKindOfClass:[NSDictionary class]]) {
         return nil;
     }
     

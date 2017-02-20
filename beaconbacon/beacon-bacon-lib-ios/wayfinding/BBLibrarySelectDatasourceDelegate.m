@@ -64,18 +64,13 @@
             cell = [[[NSBundle mainBundle] loadNibNamed:@"BBEmptyTableViewCell" owner:self options:nil] firstObject];
         }
         
-        // TODO: FIX!!!
         cell.emptyImageView.image = [UIImage imageNamed:@"empty-icon-poi"];
         [cell setTitle:NSLocalizedStringFromTable(@"no.points.of.interest.title", @"BBLocalizable", nil).uppercaseString description:NSLocalizedStringFromTable(@"no.points.of.interest.description", @"BBLocalizable", nil)];
         
         return cell;
 
     } else {
-        // TODO: FIX!!!
-        
-//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-//        if (cell == nil){
-            UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
+        UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -127,7 +122,6 @@
     } else if ([self isEmpty]) {
 
     } else {
-        // TODO: FIX!!!
         BBPlace *place = self.datasource[indexPath.row];
         if ([self.delegate respondsToSelector:@selector(didSelectPlace:)]){
             [self.delegate didSelectPlace:place];

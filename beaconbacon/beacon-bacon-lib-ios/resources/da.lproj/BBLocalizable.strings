@@ -25,9 +25,12 @@
 "points.of.interest" = "Interessepunkter";
 "showing" = "viser";
 "here.is.your.material" = "Her er dit materiale";
-"your.material.is.at.x" = "Dit materiale befinder sig på %@. Klik på knappen for at få din placering.";
-"your.material.is.at.x.without.positioning" = "Dit materiale befinder sig på %@.";
-"ok.find.me" = "Ok, find mig";
+
+"your.material.is.at.x" = "Dit materiale befinder sig her. Hvis det ikke er tilfældet, kan du som altid reservere materialet her i app’en.\nHusk at biblioteket opstiller materialer efter DK5-numre og forfatteres efternavne.";
+"your.material.is.around" = "Dit materiale bør befinde sig indenfor dette område. Vi er dog lidt usikre på netop dette materiales placering. Hvis du ikke kan finde det, kan du som altid reservere materialet her i app’en\nHusk biblioteket opstiller materialer efter DK5-numre og forfatterens efternavn.";
+"your.material.is.in.area" = "Dit materiale befinder sig indenfor dette område. Hvis det ikke er tilfældet, kan du som altid reservere materialet her i app’en.\nHusk biblioteket opstiller materialer efter DK5-numre og forfatteres efternavn.";
+
+"ok.find.me" = "Vis hvor jeg selv befinder mig";
 "you.are.here" = "Du er her";
 "you.are.at" = "Du er på";
 "your.material.is.at" = "Dit materiale findes på";

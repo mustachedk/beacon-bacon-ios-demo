@@ -69,6 +69,8 @@
 		779A44B81DDB6A3A00AD9A0C /* BBPOITableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779A44811DDB6A3A00AD9A0C /* BBPOITableViewCell.xib */; };
 		779A44B91DDB6A3A00AD9A0C /* BBPopupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779A44831DDB6A3A00AD9A0C /* BBPopupView.m */; };
 		779A44BA1DDB6A3A00AD9A0C /* BBPopupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 779A44841DDB6A3A00AD9A0C /* BBPopupView.xib */; };
+		77CAF4E81E55E0C5001BD7B6 /* BBFoundSubjectLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 77CAF4E71E55E0C5001BD7B6 /* BBFoundSubjectLocation.m */; };
+		77CAF4EB1E56022B001BD7B6 /* UIImageView+BeaconBacon.m in Sources */ = {isa = PBXBuildFile; fileRef = 77CAF4EA1E56022B001BD7B6 /* UIImageView+BeaconBacon.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -187,6 +189,10 @@
 		779A44821DDB6A3A00AD9A0C /* BBPopupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBPopupView.h; sourceTree = "<group>"; };
 		779A44831DDB6A3A00AD9A0C /* BBPopupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBPopupView.m; sourceTree = "<group>"; };
 		779A44841DDB6A3A00AD9A0C /* BBPopupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BBPopupView.xib; sourceTree = "<group>"; };
+		77CAF4E61E55E0C5001BD7B6 /* BBFoundSubjectLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBFoundSubjectLocation.h; sourceTree = "<group>"; };
+		77CAF4E71E55E0C5001BD7B6 /* BBFoundSubjectLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBFoundSubjectLocation.m; sourceTree = "<group>"; };
+		77CAF4E91E56022B001BD7B6 /* UIImageView+BeaconBacon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+BeaconBacon.h"; sourceTree = "<group>"; };
+		77CAF4EA1E56022B001BD7B6 /* UIImageView+BeaconBacon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+BeaconBacon.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,6 +276,8 @@
 				779A44221DDB6A3A00AD9A0C /* BBDataManager.m */,
 				779A44231DDB6A3A00AD9A0C /* BBFloor.h */,
 				779A44241DDB6A3A00AD9A0C /* BBFloor.m */,
+				77CAF4E61E55E0C5001BD7B6 /* BBFoundSubjectLocation.h */,
+				77CAF4E71E55E0C5001BD7B6 /* BBFoundSubjectLocation.m */,
 				779A44251DDB6A3A00AD9A0C /* BBFoundSubject.h */,
 				779A44261DDB6A3A00AD9A0C /* BBFoundSubject.m */,
 				779A44271DDB6A3A00AD9A0C /* BBIMSRequstObject.h */,
@@ -290,6 +298,8 @@
 				779A44361DDB6A3A00AD9A0C /* BBTrilateration.m */,
 				779A44371DDB6A3A00AD9A0C /* UIColor+Hex.h */,
 				779A44381DDB6A3A00AD9A0C /* UIColor+Hex.m */,
+				77CAF4E91E56022B001BD7B6 /* UIImageView+BeaconBacon.h */,
+				77CAF4EA1E56022B001BD7B6 /* UIImageView+BeaconBacon.m */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -489,6 +499,7 @@
 				779A44851DDB6A3A00AD9A0C /* BBAPIClient.m in Sources */,
 				779A44A31DDB6A3A00AD9A0C /* UIWebView+AFNetworking.m in Sources */,
 				779A44861DDB6A3A00AD9A0C /* BBBeacon.m in Sources */,
+				77CAF4EB1E56022B001BD7B6 /* UIImageView+BeaconBacon.m in Sources */,
 				779A44951DDB6A3A00AD9A0C /* AFHTTPSessionManager.m in Sources */,
 				779A448E1DDB6A3A00AD9A0C /* BBPlace.m in Sources */,
 				779A448C1DDB6A3A00AD9A0C /* BBIMSRequstObject.m in Sources */,
@@ -514,6 +525,7 @@
 				779A449E1DDB6A3A00AD9A0C /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				779A44B91DDB6A3A00AD9A0C /* BBPopupView.m in Sources */,
 				775CE0871D92C1B20066C905 /* main.m in Sources */,
+				77CAF4E81E55E0C5001BD7B6 /* BBFoundSubjectLocation.m in Sources */,
 				779A449B1DDB6A3A00AD9A0C /* AFAutoPurgingImageCache.m in Sources */,
 				779A44981DDB6A3A00AD9A0C /* AFURLRequestSerialization.m in Sources */,
 				779A449F1DDB6A3A00AD9A0C /* UIButton+AFNetworking.m in Sources */,

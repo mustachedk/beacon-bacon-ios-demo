@@ -29,7 +29,7 @@
 
 @interface BBConfig : NSObject
 
-#define BB_API_VERSION                  @"v1"
+#define BB_API_VERSION                  @"v2"
 
 #define BB_STORE_KEY_API_KEY            @"BB_STORE_KEY_API_KEY"
 #define BB_STORE_KEY_API_BASE_URL       @"BB_STORE_KEY_API_BASE_URL"

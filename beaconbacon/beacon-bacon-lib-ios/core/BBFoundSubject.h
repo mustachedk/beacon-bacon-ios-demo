@@ -24,23 +24,35 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "BBFoundSubjectLocation.h"
 
 @interface BBFoundSubject : NSObject
 
 #define BBStatus_NotFound @"Not Found"
 #define BBStatus_Found @"Found"
 
-@property (nonatomic, assign) NSInteger floor_id;
+// Centimeters
+#define BB_MINIMUM_DISTANCE_MULTIPLE_LOCATIONS 400
+
+typedef NS_ENUM(NSInteger, BBFoundSubjectLocationDisplayType) {
+    None,
+    Single,
+    Cluster
+};
 
 @property (nonatomic, strong) NSString *status;
+@property (nonatomic, strong) NSArray  *locations;
 
-@property (nonatomic, assign) NSInteger location_id;
-@property (nonatomic, assign) NSInteger location_posX;
-@property (nonatomic, assign) NSInteger location_posY;
+@property (nonatomic, assign) BBFoundSubjectLocationDisplayType displayType;
+@property (nonatomic, assign) float maxDistLocations; // In centimeters
 
 // Returns nil, if json is invalid
 - (instancetype)initWithAttributes:(NSDictionary *)attributes;
 
 - (BOOL)isSubjectFound;
+
+- (NSInteger) floor_id;
+
+- (CGPoint) center;
 
 @end

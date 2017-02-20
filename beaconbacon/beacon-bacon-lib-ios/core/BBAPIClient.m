@@ -40,6 +40,7 @@
         
         [_sharedClient.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [BBConfig sharedConfig].apiKey] forHTTPHeaderField:@"Authorization"];
         [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [_sharedClient.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
         _sharedClient.responseSerializer = [AFHTTPResponseSerializer serializer];
     });
     

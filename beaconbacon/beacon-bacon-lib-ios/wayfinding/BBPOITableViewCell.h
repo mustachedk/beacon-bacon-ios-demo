@@ -24,7 +24,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BBPOI.h"
-#import "UIImageView+AFNetworking.h"
+#import "UIImageView+BeaconBacon.h"
 #import "BBConfig.h"
 #import "UIColor+Hex.h"
 

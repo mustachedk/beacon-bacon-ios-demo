@@ -1,5 +1,5 @@
 //
-// BBPopupView.m
+// BBFoundSubjectLocation.h
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -20,33 +20,32 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-///
+//
 
-#import "BBPopupView.h"
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-#define HEIGHTOFPOPUPTRIANGLE 20
-#define WIDTHOFPOPUPTRIANGLE 40
+@interface BBFoundSubjectLocation : NSObject
 
-@implementation BBPopupView
+typedef NS_ENUM(NSInteger, BBLocationType) {
+    BBLocationTypePoint,
+    BBLocationTypeArea,
+};
 
--(void)awakeFromNib {
-    
-    [super awakeFromNib];
-    
-    [self layoutIfNeeded];
-    
-    self.labelTitle.font = [[BBConfig sharedConfig] lightFontWithSize:14];
-    self.labelText.font = [[BBConfig sharedConfig] lightFontWithSize:12];
-    self.labelText.numberOfLines = 0;
-    self.buttonOK.titleLabel.font = [[BBConfig sharedConfig] regularFontWithSize:12];
-    [self.buttonOK setContentEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 10)];
-    
-    [self.opacityViewWithShadow.layer setShadowOffset:CGSizeMake(0, 5)];
-    [self.opacityViewWithShadow.layer setShadowOpacity:0.1f];
-    [self.opacityViewWithShadow.layer setShadowRadius:2.5f];
-    [self.opacityViewWithShadow.layer setShouldRasterize:NO];
-    [self.opacityViewWithShadow.layer setShadowColor:[[UIColor blackColor] CGColor]];
-}
+@property (nonatomic, assign) NSInteger floor_id;
+@property (nonatomic, assign) NSInteger location_id;
+@property (nonatomic, assign) NSInteger location_posX;
+@property (nonatomic, assign) NSInteger location_posY;
+@property (nonatomic, strong) NSArray   *area; // NSValue <CGPoint>
 
+@property (nonatomic, assign) double map_pixel_to_centimeter_ratio;
+
+@property (nonatomic, assign) BBLocationType type;
+
+
+// Returns nil, if json is invalid
+- (instancetype)initWithAttributes:(NSDictionary *)attributes;
+
+- (CGPoint) coordinate;
 
 @end

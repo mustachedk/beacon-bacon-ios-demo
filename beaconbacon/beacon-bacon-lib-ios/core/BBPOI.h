@@ -33,7 +33,7 @@
 @property (nonatomic, assign) NSInteger team_id;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *internal_name;
-@property (nonatomic, strong) NSString *icon_url;
+@property (nonatomic, strong) NSString *icon_url; // https://app.beaconbacon.io/api/v2/pois/26/icon
 @property (nonatomic, strong) NSString *type; // "area", "icon"
 @property (nonatomic, strong) NSString *hex_color;
 

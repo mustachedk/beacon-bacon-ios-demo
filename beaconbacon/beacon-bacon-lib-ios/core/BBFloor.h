@@ -44,14 +44,12 @@
 @property (nonatomic, assign) NSInteger map_width_in_pixels;
 @property (nonatomic, assign) NSInteger map_height_in_pixels;
 
-@property (nonatomic, assign) NSInteger map_pixel_to_centimeter_ratio;
+@property (nonatomic, assign) double map_pixel_to_centimeter_ratio;
 
 @property (nonatomic, strong) UIColor  *map_walkable_color;
 @property (nonatomic, strong) UIColor  *map_background_color;
 
 - (instancetype)initWithAttributes:(NSDictionary *)attributes;
-
-- (void) getFloorplanImage:(void (^)(UIImage* result, NSError* error))completionBlock;
 
 - (BBBeaconLocation *) matchingBBBeacon:(CLBeacon *)clbeacon;
 

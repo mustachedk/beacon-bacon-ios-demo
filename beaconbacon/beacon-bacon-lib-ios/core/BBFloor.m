@@ -21,6 +21,7 @@
 //
 
 #import "BBFloor.h"
+#import "BBConfig.h"
 
 @implementation BBFloor
 
@@ -30,10 +31,9 @@
         return nil;
     }
     
-    if ([attributes isEqual:[NSNull null]]) {
+    if ([attributes isEqual:[NSNull null]] || ![attributes isKindOfClass:[NSDictionary class]]) {
         return nil;
     }
-    
 
     if ([attributes valueForKeyPath:@"id"]) {
         self.floor_id = (NSUInteger)[[attributes valueForKeyPath:@"id"] integerValue];
@@ -93,7 +93,14 @@
         self.map_height_in_pixels = (NSUInteger)[[attributes valueForKeyPath:@"map_height_in_pixels"] integerValue];
     }
     
-    self.map_pixel_to_centimeter_ratio = self.map_width_in_pixels / self.map_width_in_centimeters;
+//    if ([attributes valueForKeyPath:@"map_pixel_to_centimeter_ratio"]) {
+//        self.map_pixel_to_centimeter_ratio = (NSUInteger)[[attributes valueForKeyPath:@"map_pixel_to_centimeter_ratio"] integerValue];
+//    }
+    
+    // Make the calculation ourselves instead.
+    double wp = self.map_width_in_pixels;
+    double wc = self.map_width_in_centimeters;
+    self.map_pixel_to_centimeter_ratio = wp / wc;
     
     if ([attributes valueForKeyPath:@"map_walkable_color"]) {
         NSString *map_walkable_color = [attributes valueForKeyPath:@"map_walkable_color"];
@@ -109,28 +116,6 @@
         }
     }
     return self;
-}
-
-- (void) getFloorplanImage:(void (^)(UIImage* result, NSError* error))completionBlock {
-    if (self.image_url == nil) {
-        completionBlock(nil, nil);
-        return;
-    }
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:self.image_url]];
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        if (error == nil){
-            UIImage *image = [[UIImage alloc] initWithData:data];
-            if (image == nil) {
-                completionBlock(nil, nil);
-            } else {
-                completionBlock(image, nil);
-            }
-
-        } else {
-            completionBlock(nil, error);
-        }
-    }];
 }
 
 - (BBBeaconLocation *) matchingBBBeacon:(CLBeacon *)clbeacon {

@@ -284,7 +284,7 @@
     
     __weak __typeof__(self) weakSelf = self;
 
-    [currentDisplayFloorRef getFloorplanImage:^(UIImage *image, NSError *error) {
+    [UIImageView loadImageFromURL:[NSURL URLWithString:currentDisplayFloorRef.image_url] completionBlock:^(UIImage *image, NSError *error) {
         if (error == nil) {
             if (image == nil) {
                 NSLog(@"An error occured: %@", @"No Image");
@@ -437,13 +437,14 @@
                 currentDisplayFloorRef = place.floors.firstObject;
                 
                 BOOL isFoundSubjectOnThisPlace = false;
-                if (self.foundSubject != nil) {
+                if (self.foundSubject != nil && self.foundSubject.displayType != None) {
                     for (BBFloor *floor in place.floors) {
                         if (floor.floor_id == self.foundSubject.floor_id) {
                             currentDisplayFloorRef = floor;
                             isFoundSubjectOnThisPlace = true;
                             break;
                         }
+                        
                     }
                 }
                 
@@ -499,30 +500,6 @@
         if (place == nil) {
             return;
         }
-    
-//        // DEBUG !!!!!!
-//#if defined DEBUG
-//        for (BBBeaconLocation *beaconLocation in currentDisplayFloorRef.beaconLocations) {
-//            CGFloat beaconWidth = 12.f;
-//            CGPoint position = [beaconLocation coordinate];
-//            UIView *poiView = [[UIView alloc] initWithFrame:(CGRectMake(position.x * scaleRatio - beaconWidth/2, position.y * scaleRatio - beaconWidth/2, beaconWidth, beaconWidth))];
-//            poiView.backgroundColor = [UIColor whiteColor];
-//            
-//            poiView.layer.cornerRadius = beaconWidth/2;
-//            poiView.layer.masksToBounds = YES;
-//            poiView.layer.borderColor = [[UIColor darkGrayColor] CGColor];
-//            poiView.layer.borderWidth = 2.f;
-//            [self.mapScrollView addSubview:poiView];
-//
-//            UILabel *distanceLabel = [[UILabel alloc] initWithFrame:(CGRectMake(poiView.frame.origin.x - 10, poiView.frame.origin.y + poiView.frame.size.height, poiView.frame.size.width + 20, 20))];
-//            distanceLabel.textColor = [UIColor darkGrayColor];
-//            distanceLabel.font = [UIFont systemFontOfSize:8.0];
-//            distanceLabel.textAlignment = NSTextAlignmentCenter;
-//            distanceLabel.text = [NSString stringWithFormat:@"%.2f", [[[BBTrilateration new] optimizeDistanceAverage:beaconLocation.beacon.accuracyDataPoints] doubleValue] * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio];
-//            [self.mapScrollView addSubview:distanceLabel];
-//        }
-//#endif
-//        // DEBUG END !!!
     
     [[BBDataManager sharedInstance] requestSelectedPOIMenuItemsWithCompletion:^(NSArray *result, NSError *error) {
         
@@ -599,13 +576,9 @@
                             poiView.titleVisible = false;
                             poiView.title = poi.name;
                             [poiView applyPOIStyle];
-                            __weak UIImageView* weakPOIIconView = poiView.poiIconView;
-                            NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:poiLocation.poi.icon_url]];
-                            [poiView.poiIconView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                weakPOIIconView.image = image;
-                            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                NSLog(@"An error occured: %@",error.localizedDescription);
-                            }];
+                            
+                            [poiView.poiIconView loadImageFromURL:[NSURL URLWithString:poiLocation.poi.icon_url] completionBlock:nil];
+
                             [self.mapScrollView addSubview:poiView]; // (Index 2 + areaViews.count) + poiViews.count
                         }
                 }
@@ -618,30 +591,139 @@
                 
                 [self showMaterialView:NO animated:YES];
                 
-                BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POI_WIDTH/2, self.foundSubject.location_posY * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
+                if (self.foundSubject.displayType == Single) {
+                    
+                    BBFoundSubjectLocation *location = self.foundSubject.locations[0];
+                    
+                    if (location.type == BBLocationTypePoint) {
+                        // Show a single point for the found subject
+                        BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.foundSubject.center.x * scaleRatio - BB_POI_WIDTH/2, self.foundSubject.center.y * scaleRatio - BB_POI_WIDTH/2, BB_POI_WIDTH, BB_POI_WIDTH)];
+                        
+                        [foundMaterialPOIView applyFoundSubjcetStyle];
+                        foundMaterialPOIView.poiIconView.image = [self.wayfindingRequstObject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                        foundMaterialPOIView.poiIconView.tintColor = [UIColor whiteColor];
+                        foundMaterialPOIView.titleVisible = false;
+                        foundMaterialPOIView.title = self.wayfindingRequstObject.subject_name;
+                        
+                        [self.mapScrollView addSubview:foundMaterialPOIView];
+                        
+                    } else if (location.type == BBLocationTypeArea) {
+                        
+                        // Show a Area for the found subject
+                        CGMutablePathRef p = CGPathCreateMutable() ;
+                        CGPoint startingPoint = [location.area.firstObject CGPointValue];
+                        
+                        CGFloat minX = startingPoint.x;
+                        CGFloat maxX = startingPoint.x;
+                        
+                        CGFloat minY = startingPoint.y;
+                        CGFloat maxY = startingPoint.y;
+                        
+                        for (NSValue *pointValue in location.area) {
+                            CGPoint point = [pointValue CGPointValue];
+                            
+                            minX = fmin(point.x, minX);
+                            maxX = fmax(point.x, maxX);
+                            
+                            minY = fmin(point.y, minY);
+                            maxY = fmax(point.y, maxY);
+                        }
+                        
+                        CGSize size = CGSizeMake(fabs(minX - maxX), fabs(minY - maxY));
+                        
+                        
+                        for (NSValue *pointValue in location.area) {
+                            CGPoint point = [pointValue CGPointValue];
+                            
+                            if (pointValue == location.area.firstObject) {
+                                CGPathMoveToPoint(p, NULL, floor((point.x - minX) * scaleRatio), floor((point.y - minY) * scaleRatio));
+                            } else {
+                                CGPathAddLineToPoint(p, NULL, floor((point.x - minX) * scaleRatio), floor((point.y - minY) * scaleRatio));
+                            }
+                        }
+                        
+                        CGPathCloseSubpath(p) ;
+                        
+                        CAShapeLayer *layer = [CAShapeLayer layer];
+                        layer.path = p;
+                        
+                        layer.fillColor = [[[BBConfig sharedConfig] customColor] colorWithAlphaComponent:0.4].CGColor;
+                        
+                        BBPOIAreaMapView *areaView = [[BBPOIAreaMapView alloc] initWithFrame:CGRectMake(minX * scaleRatio, minY * scaleRatio, size.width * scaleRatio, size.height * scaleRatio)];
+
+                        areaView.titleVisible = false;
+                        areaView.title = self.wayfindingRequstObject.subject_name;
+                        [areaView.layer addSublayer:layer];
+
+                        [self.mapScrollView addSubview:areaView];
+                    }
+                    
+                } else if (self.foundSubject.displayType == Cluster) {
+                    // Show a Cluster for the found subject
+
+                    BBFoundSubjectLocation *location = self.foundSubject.locations[0];
+                    
+                    // Add 100cm to make sure we encapsule the area
+                    double width = ((self.foundSubject.maxDistLocations + 100) / location.map_pixel_to_centimeter_ratio) * scaleRatio;
+                    
+                    BBPOIMapView *foundMaterialPOIView = [[BBPOIMapView alloc] initWithFrame:CGRectMake(self.foundSubject.center.x * scaleRatio - width/2 , self.foundSubject.center.y * scaleRatio - width/2 , width , width )];
+                     
+                    [foundMaterialPOIView applyFoundClusterSubjcetStyle];
+                    foundMaterialPOIView.titleVisible = false;
+                    foundMaterialPOIView.title = self.wayfindingRequstObject.subject_name;
+                    
+                    [self.mapScrollView addSubview:foundMaterialPOIView];
+                    
+                }
                 
-                [foundMaterialPOIView applyFoundSubjcetStyle];
-                foundMaterialPOIView.poiIconView.image = [self.wayfindingRequstObject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                foundMaterialPOIView.poiIconView.tintColor = [UIColor whiteColor];
-                foundMaterialPOIView.titleVisible = false;
-                foundMaterialPOIView.title = self.wayfindingRequstObject.subject_name;
-                
-                [self.mapScrollView addSubview:foundMaterialPOIView];
                 
                 if (!foundSubjectPopopViewDisplayed) {
                     popupView = [[[NSBundle mainBundle] loadNibNamed:@"BBPopupView" owner:self options:nil] firstObject];
-                    [popupView setFrame:CGRectMake(self.foundSubject.location_posX * scaleRatio - BB_POPUP_WIDTH / 2, self.foundSubject.location_posY * scaleRatio - BB_POPUP_HEIGHT, BB_POPUP_WIDTH, BB_POPUP_HEIGHT)];
                     popupView.labelTitle.text = NSLocalizedStringFromTable(@"here.is.your.material", @"BBLocalizable", nil).uppercaseString;
+
+                    
+                    CGFloat height = BB_POPUP_HEIGHT_NORMAL;
+                    
+                    if (self.foundSubject.displayType == Single) {
+                        
+                        BBFoundSubjectLocation *location = self.foundSubject.locations[0];
+                        
+                        if (location.type == BBLocationTypePoint) {
+                            // Show a single point for the found subject
+                            
+                            if (self.foundSubject.locations.count > 1) {
+                                popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.around", @"BBLocalizable", nil), currentDisplayFloorRef.name];
+                                height = BB_POPUP_HEIGHT_LARGE;
+                                
+                            } else {
+                                popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.at.x", @"BBLocalizable", nil), currentDisplayFloorRef.name];
+                            }
+                            
+                            
+                        } else if (location.type == BBLocationTypeArea) {
+                            // Show a Area for the found subject
+                            popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.in.area", @"BBLocalizable", nil), currentDisplayFloorRef.name];
+                            
+                        }
+                        
+                    } else if (self.foundSubject.displayType == Cluster) {
+                        // Show a Cluster for the found subject
+                        popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.in.area", @"BBLocalizable", nil), currentDisplayFloorRef.name];
+                        
+                    }
+                    
                     if ([self userPositioningAvailable]) {
                         [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok.find.me", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-                        popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.at.x", @"BBLocalizable", nil), currentDisplayFloorRef.name];
-
+                        
                     } else {
                         [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-                        popupView.labelText.text = [NSString stringWithFormat:NSLocalizedStringFromTable(@"your.material.is.at.x.without.positioning", @"BBLocalizable", nil), currentDisplayFloorRef.name];
-
+                        
                     }
+                    
+                    [popupView setFrame:CGRectMake(self.foundSubject.center.x * scaleRatio - BB_POPUP_WIDTH / 2, self.foundSubject.center.y * scaleRatio - height, BB_POPUP_WIDTH, height)];
+
                     [popupView.buttonOK addTarget:self action:@selector(popupViewOkButtonAction:) forControlEvents: UIControlEventTouchUpInside];
+                    [popupView layoutIfNeeded];
                     [self.mapScrollView addSubview:popupView]; // (Index 2 + areaViews.count + poiViews.count) + popupView (last)
                     [self zoomToFoundSubject];
                 }
@@ -703,7 +785,7 @@
 
 - (void) zoomToFoundSubject {
     if (self.foundSubject) {
-        CGPoint center = CGPointMake(self.foundSubject.location_posX * scaleRatio, self.foundSubject.location_posY * scaleRatio);
+        CGPoint center = CGPointMake(self.foundSubject.center.x * scaleRatio, self.foundSubject.center.y * scaleRatio);
         [self.mapScrollView setContentOffset:CGPointMake(center.x - roundf(self.mapScrollView.frame.size.width/2), center.y - roundf(self.mapScrollView.frame.size.height/2)) animated:YES];
     }
 }
@@ -896,11 +978,11 @@
 - (void) updateMapScrollViewContentInsets {
     
     if (showMaterialView) {
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT + self.materialPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2);
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT_LARGE + self.materialPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2);
     } else if (showMyPositionView) {
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT + self.myPositionPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2);
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT_LARGE + self.myPositionPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2);
     } else {
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT, BB_POPUP_WIDTH/2);
+        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2);
     }
 }
 
@@ -1096,19 +1178,18 @@
         rangedBeconsFloorRef = nil;
     } else if (((BBFloor *)rangedFloors[0]).floor_id == ((BBFloor *)rangedFloors[1]).floor_id == ((BBFloor *)rangedFloors[2]).floor_id) {
         rangedBeconsFloorRef = rangedFloors[0];
-//        NSLog(@"Range complete: %ld", (long)rangedBeconsFloorRef.floor_id);
+
     } else if (((BBFloor *)rangedFloors[0]).floor_id == ((BBFloor *)rangedFloors[1]).floor_id || ((BBFloor *)rangedFloors[0]).floor_id == ((BBFloor *)rangedFloors[2]).floor_id) {
         rangedBeconsFloorRef = rangedFloors[0];
-//        NSLog(@"Range complete: %ld", (long)rangedBeconsFloorRef.floor_id);
+
     } else if (((BBFloor *)rangedFloors[1]).floor_id == ((BBFloor *)rangedFloors[0]).floor_id || ((BBFloor *)rangedFloors[1]).floor_id == ((BBFloor *)rangedFloors[2]).floor_id) {
         rangedBeconsFloorRef = rangedFloors[1];
-//        NSLog(@"Range complete: %ld", (long)rangedBeconsFloorRef.floor_id);
+        
     } else if (((BBFloor *)rangedFloors[2]).floor_id == ((BBFloor *)rangedFloors[0]).floor_id || ((BBFloor *)rangedFloors[2]).floor_id == ((BBFloor *)rangedFloors[1]).floor_id) {
         rangedBeconsFloorRef = rangedFloors[2];
-//        NSLog(@"Range complete: %ld", (long)rangedBeconsFloorRef.floor_id);
+        
     } else {
         rangedBeconsFloorRef = nil;
-//        NSLog(@"Range incomplete");
     }
     
     if (rangedBeconsFloorRef == nil) {
@@ -1162,16 +1243,10 @@
         double avgDistBeaconB = [[trilateration optimizeDistanceAverage:beaconB.beacon.accuracyDataPoints] doubleValue];
         double avgDistBeaconC = [[trilateration optimizeDistanceAverage:beaconC.beacon.accuracyDataPoints] doubleValue];
 
-        // TEST WITH AVG DIST (3 & 5 DATASET)
         trilateration.distA = avgDistBeaconA * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio; // Accuracy is in Meters - Convert to pixels!
         trilateration.distB = avgDistBeaconB * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio; // Accuracy is in Meters - Convert to pixels!
         trilateration.distC = avgDistBeaconC * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio; // Accuracy is in Meters - Convert to pixels!
         
-        // TEST WITH ONE ACCURACY DATAPOINT
-//        trilateration.distA = beaconA.beacon.accuracy * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio; // Accuracy is in Meters - Convert to pixels!
-//        trilateration.distB = beaconB.beacon.accuracy * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio; // Accuracy is in Meters - Convert to pixels!
-//        trilateration.distC = beaconC.beacon.accuracy * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio; // Accuracy is in Meters - Convert to pixels!
-
         double max = fmax(fmax(avgDistBeaconA, avgDistBeaconB), avgDistBeaconC);
         currentUserPrecision = max * 100 * currentDisplayFloorRef.map_pixel_to_centimeter_ratio;
         

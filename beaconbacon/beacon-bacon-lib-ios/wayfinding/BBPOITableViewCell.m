@@ -55,7 +55,7 @@
     self.iconImageView.layer.sublayers = nil;
 
     if ([poi.type isEqualToString:BB_POI_TYPE_ICON]) {
-        [self.iconImageView setImageWithURL:[NSURL URLWithString:poi.icon_url]];
+        [self.iconImageView loadImageFromURL:[NSURL URLWithString:poi.icon_url] completionBlock:nil];
         
     } else if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
         
@@ -76,5 +76,9 @@
     }];
 
 }
+
+
+
+
 
 @end

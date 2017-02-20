@@ -24,7 +24,6 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "UIImageView+AFNetworking.h"
 #import "BBFoundSubject.h"
 #import "BBConfig.h"
 

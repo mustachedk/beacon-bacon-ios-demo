@@ -29,7 +29,6 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "AFNetworking.h"
 #import "UIColor+Hex.h"
 
 #import "BBTrilateration.h"
@@ -42,13 +41,15 @@
 #import "BBPOIMapView.h"
 #import "BBPopupView.h"
 #import "BBPOIAreaMapView.h"
+#import "UIImageView+BeaconBacon.h"
 
 @interface BBLibraryMapViewController : UIViewController <CLLocationManagerDelegate>
 
 #define BB_MAP_TAG_FLOORPLAN   999
 #define BB_MAP_TAG_MY_POSITION 666
 
-#define BB_POPUP_HEIGHT 170
+#define BB_POPUP_HEIGHT_NORMAL 220
+#define BB_POPUP_HEIGHT_LARGE 250
 #define BB_POPUP_WIDTH 280
 
 #define BB_NOTIFICATION_MAP_NEEDS_LAYOUT    @"BB_NOTIFICATION_MAP_NEEDS_LAYOUT"

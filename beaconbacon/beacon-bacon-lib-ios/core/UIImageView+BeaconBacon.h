@@ -1,5 +1,5 @@
 //
-// BBPopupView.m
+// UIImageView+BeaconBacon.h
 //
 // Copyright (c) 2016 Mustache ApS
 //
@@ -20,33 +20,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-///
+//
 
-#import "BBPopupView.h"
+#import <UIKit/UIKit.h>
 
-#define HEIGHTOFPOPUPTRIANGLE 20
-#define WIDTHOFPOPUPTRIANGLE 40
+@interface UIImageView (BeaconBacon)
 
-@implementation BBPopupView
+- (void) loadImageFromURL:(NSURL *)url completionBlock:(void (^)(UIImage* image, NSError* error))completionBlock;
 
--(void)awakeFromNib {
-    
-    [super awakeFromNib];
-    
-    [self layoutIfNeeded];
-    
-    self.labelTitle.font = [[BBConfig sharedConfig] lightFontWithSize:14];
-    self.labelText.font = [[BBConfig sharedConfig] lightFontWithSize:12];
-    self.labelText.numberOfLines = 0;
-    self.buttonOK.titleLabel.font = [[BBConfig sharedConfig] regularFontWithSize:12];
-    [self.buttonOK setContentEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 10)];
-    
-    [self.opacityViewWithShadow.layer setShadowOffset:CGSizeMake(0, 5)];
-    [self.opacityViewWithShadow.layer setShadowOpacity:0.1f];
-    [self.opacityViewWithShadow.layer setShadowRadius:2.5f];
-    [self.opacityViewWithShadow.layer setShouldRasterize:NO];
-    [self.opacityViewWithShadow.layer setShadowColor:[[UIColor blackColor] CGColor]];
-}
-
++ (void) loadImageFromURL:(NSURL *)url completionBlock:(void (^)(UIImage* image, NSError* error))completionBlock;
 
 @end
