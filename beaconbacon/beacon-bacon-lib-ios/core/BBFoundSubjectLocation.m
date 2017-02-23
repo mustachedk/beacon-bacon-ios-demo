@@ -79,7 +79,7 @@
         }
         
         if ([locationDict valueForKeyPath:@"area"]) {
-            NSString *areaStr = [attributes valueForKeyPath:@"area"];
+            NSString *areaStr = [locationDict valueForKeyPath:@"area"];
             NSArray *areaValues = [areaStr componentsSeparatedByString:@","];
             
             NSMutableArray *areaResult = [NSMutableArray new];
