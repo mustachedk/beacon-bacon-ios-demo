@@ -28,6 +28,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <QuartzCore/QuartzCore.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 #import "UIColor+Hex.h"
 
@@ -75,6 +76,7 @@
 // Default Top Bar
 @property (weak, nonatomic) IBOutlet UIView *defaultTopBar;
 @property (weak, nonatomic) IBOutlet UILabel *navBarTitleLabel;
+//@property (weak, nonatomic) IBOutlet UILabel *navBarSubtitleLabel;
 
 
 // Navigate To Material Top Bar
@@ -85,6 +87,7 @@
 
 
 // Bottom Right Cornor Views
+@property (weak, nonatomic) IBOutlet UIButton *myFoundMaterialButton;
 @property (weak, nonatomic) IBOutlet UIButton *myLocationButton;
 @property (weak, nonatomic) IBOutlet UIButton *pointsOfInterestButton;
 
@@ -100,17 +103,17 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
 
-// My Position Pop Down
-@property (weak, nonatomic) IBOutlet UIView *myPositionPopDownView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *myPositionPopDownTopConstraint;
-@property (weak, nonatomic) IBOutlet UILabel *myPositionPopDownLabel;
-@property (weak, nonatomic) IBOutlet UIButton *myPositionPopDownButton;
+//// My Position Pop Down
+//@property (weak, nonatomic) IBOutlet UIView *myPositionPopDownView;
+//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *myPositionPopDownTopConstraint;
+//@property (weak, nonatomic) IBOutlet UILabel *myPositionPopDownLabel;
+//@property (weak, nonatomic) IBOutlet UIButton *myPositionPopDownButton;
 
 // Material Position Pop Down
 @property (weak, nonatomic) IBOutlet UIView *materialPopDownView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *materialPopDownTopConstraint;
-@property (weak, nonatomic) IBOutlet UILabel *materialPopDownLabel;
-@property (weak, nonatomic) IBOutlet UILabel *materialPopDownText;
+//@property (weak, nonatomic) IBOutlet UILabel *materialPopDownLabel;
+//@property (weak, nonatomic) IBOutlet UILabel *materialPopDownText;
 @property (weak, nonatomic) IBOutlet UIButton *materialPopDownButton;
 
 - (IBAction)navBarNextAction:(id)sender;
@@ -118,10 +121,11 @@
 
 - (IBAction)pointsOfInterestAction:(id)sender;
 - (IBAction)myLocationAction:(id)sender;
+- (IBAction)myFoundMaterialButtonAction:(id)sender;
 
 - (IBAction)changeMapAction:(id)sender;
 
-- (IBAction)myPositionPopDownButtonAction:(id)sender;
+//- (IBAction)myPositionPopDownButtonAction:(id)sender;
 - (IBAction)materialPopDownButtonAction:(id)sender;
 
 @end

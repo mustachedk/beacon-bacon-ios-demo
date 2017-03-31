@@ -52,9 +52,9 @@
     BBLibrarySelectViewController *currentSelectLibraryViewController;
 
     BOOL zoomToUserPosition;
-    
+    BOOL zoomToMaterialPosition;
+
     BOOL showMaterialView;
-    BOOL showMyPositionView;
     
     BBPopupView *popupView;
     BOOL foundSubjectPopopViewDisplayed;
@@ -64,6 +64,7 @@
     
     BOOL invalidLocationAlertShown;
     
+    int beaconsAnotherFloorCount;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -132,7 +133,7 @@
     currentDisplayFloorRef = nil;
     rangedBeconsFloorRef = nil;
     myCoordinate = CGPointZero;
-    
+   
     [self setLoadingMap];
     
     if (self.wayfindingRequstObject == nil) {
@@ -317,6 +318,7 @@
                         self.mapScrollView.backgroundColor = [self colorAtImage:image xCoordinate:0 yCoordinate:0];
                     }
                     self.mapScrollView.alpha = 1.0f;
+                    
                 } completion:^(BOOL finished) {
                     if (currentDisplayFloorRef.map_background_color != nil) {
                         self.view.backgroundColor = currentDisplayFloorRef.map_background_color;
@@ -324,6 +326,11 @@
                         self.view.backgroundColor = [self colorAtImage:image xCoordinate:0 yCoordinate:0];
                     }
                 }];
+                
+                if (zoomToMaterialPosition) {
+                    [self zoomToFoundSubject];
+                    zoomToMaterialPosition = NO;
+                }
                 
                 [self layoutPOI];
             }
@@ -335,12 +342,16 @@
     
     if (currentDisplayFloorRef == nil) {
         self.navBarTitleLabel.text = @"";
+//        self.navBarSubtitleLabel.text = @"";
         self.navBarNextButton.enabled = NO;
         self.navBarPreviousButton.enabled = NO;
         return;
     }
     
     self.navBarTitleLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"showing", @"BBLocalizable", nil).uppercaseString, currentDisplayFloorRef.name.uppercaseString];
+//    self.navBarSubtitleLabel.text = [NSString stringWithFormat:@"%@: -", NSLocalizedStringFromTable(@"you.are.here", @"BBLocalizable", nil)].uppercaseString;
+
+
     [self updateNavBarNextPrevButtons];
 }
 
@@ -353,48 +364,92 @@
     
     scaleRatio = 1.00f;
     zoomToUserPosition = NO;
+    zoomToMaterialPosition = NO;
     foundSubjectPopopViewDisplayed = NO;
-    self.materialTopBar.hidden = YES;
+    self.materialTopBar.hidden = true;
 
-    [self showMyPositionView:NO animated:NO];
+//    [self showMyPositionView:NO animated:NO];
     [self showMaterialView:NO animated:NO];
     
     self.mapScrollView.backgroundColor = [UIColor clearColor];
     
     self.topLineView.backgroundColor            = [[BBConfig sharedConfig] customColor];
-    self.myPositionPopDownView.backgroundColor  = [[BBConfig sharedConfig] customColor];
+//    self.myPositionPopDownView.backgroundColor  = [[BBConfig sharedConfig] customColor];
     self.materialPopDownView.backgroundColor    = [[BBConfig sharedConfig] customColor];
     
-    self.navBarTitleLabel.font          = [[BBConfig sharedConfig] lightFontWithSize:16];
-    self.myPositionPopDownLabel.font    = [[BBConfig sharedConfig] lightFontWithSize:14];
-    self.materialPopDownLabel.font      = [[BBConfig sharedConfig] lightFontWithSize:12];
+    self.navBarTitleLabel.font          = [[BBConfig sharedConfig] lightFontWithSize:14];
+//    self.navBarSubtitleLabel.font       = [[BBConfig sharedConfig] lightFontWithSize:14];
+//    self.myPositionPopDownLabel.font    = [[BBConfig sharedConfig] lightFontWithSize:14];
+//    self.materialPopDownLabel.font      = [[BBConfig sharedConfig] lightFontWithSize:12];
     self.materialTopSubtitleLabel.font  = [[BBConfig sharedConfig] lightFontWithSize:10];
     
     self.materialTopTitleLabel.font     = [[BBConfig sharedConfig] regularFontWithSize:12];
     
     [self.navBarTitleLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.myPositionPopDownLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.materialPopDownLabel setAdjustsFontSizeToFitWidth:YES];
-    [self.materialPopDownText setAdjustsFontSizeToFitWidth:YES];
+//    [self.navBarSubtitleLabel setAdjustsFontSizeToFitWidth:YES];
+//    [self.myPositionPopDownLabel setAdjustsFontSizeToFitWidth:YES];
+//    [self.materialPopDownLabel setAdjustsFontSizeToFitWidth:YES];
+//    [self.materialPopDownText setAdjustsFontSizeToFitWidth:YES];
     
     self.navBarTitleLabel.text = @"";
     self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
     
-    self.myPositionPopDownLabel.text = @"";
-    self.myPositionPopDownLabel.textColor = [UIColor whiteColor];
+//    self.navBarSubtitleLabel.text = @"";
+//    self.navBarSubtitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
     
-    self.materialPopDownLabel.text = @"";
-    self.materialPopDownLabel.textColor = [UIColor whiteColor];
+//    self.myPositionPopDownLabel.text = @"";
+//    self.myPositionPopDownLabel.textColor = [UIColor whiteColor];
+//    
+//    self.materialPopDownLabel.text = @"";
+//    self.materialPopDownLabel.textColor = [UIColor whiteColor];
+//    
+//    self.materialPopDownText.text = @"";
+//    self.materialPopDownText.textColor = [UIColor whiteColor];
     
-    self.materialPopDownText.text = @"";
-    self.materialPopDownText.textColor = [UIColor whiteColor];
+    self.materialTopTitleLabel.textColor = [UIColor whiteColor];
+    self.materialTopSubtitleLabel.textColor = [UIColor whiteColor];
     
-    [self.myPositionPopDownButton setTitle:NSLocalizedStringFromTable(@"show.my.position", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-    [self.materialPopDownButton setTitle:NSLocalizedStringFromTable(@"show.material", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+//    [self.myPositionPopDownButton setTitle:NSLocalizedStringFromTable(@"show.my.position", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+    [self.materialPopDownButton setTitle:NSLocalizedStringFromTable(@"end.find.material", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
     
+    [self applyRoundAndShadow:self.myFoundMaterialButton];
     [self applyRoundAndShadow:self.myLocationButton];
     [self applyRoundAndShadow:self.pointsOfInterestButton];
     
+    // Resize Subject Image to fit inside center of the button
+    CGSize size = CGSizeMake(25, 25);
+
+    UIGraphicsBeginImageContextWithOptions(size, false, 0.0);
+    
+    CGFloat ws = size.width/self.wayfindingRequstObject.subject_image.size.width;
+    CGFloat hs = size.height/self.wayfindingRequstObject.subject_image.size.height;
+    
+    if (ws > hs) {
+        ws = hs/ws;
+        hs = 1.0;
+    } else {
+        hs = ws/hs;
+        ws = 1.0;
+    }
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextTranslateCTM(context, 0.0, size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CGContextDrawImage(context, CGRectMake(size.width/2-(size.width*ws)/2,
+                                           size.height/2-(size.height*hs)/2, size.width*ws,
+                                           size.height*hs), self.wayfindingRequstObject.subject_image.CGImage);
+    
+    UIImage* scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+
+    
+    [self.myFoundMaterialButton setImage:[scaledImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    self.myFoundMaterialButton.tintColor = [UIColor colorFromHexString:@"#616161"];
+    
+    [self showMyFoundMaterialButton:false animated:false];
+
     myCurrentLocationView = [[BBMyPositionView alloc] initWithFrame:CGRectMake(0, 0, BB_MY_POSITION_WIDTH, BB_MY_POSITION_WIDTH)];
     myCurrentLocationView.tag = BB_MAP_TAG_MY_POSITION;
     myCurrentLocationView.hidden = YES;
@@ -421,6 +476,7 @@
     
     [self.spinner startAnimating];
 }
+
 
 - (void) layoutMap {
     
@@ -452,9 +508,11 @@
                     self.materialTopTitleLabel.text = self.wayfindingRequstObject.subject_name.uppercaseString;
                     self.materialTopSubtitleLabel.text = self.wayfindingRequstObject.subject_subtitle.uppercaseString;
                     self.materialTopImageView.image = [self.wayfindingRequstObject.subject_image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                    self.materialTopImageView.tintColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
+                    self.materialTopImageView.tintColor = [UIColor whiteColor];
                     
-                    self.materialTopBar.hidden = false;
+                    [self showMyFoundMaterialButton:true animated:true];
+
+//                    self.materialTopBar.hidden = false;
                     
                 } else {
                     if (self.wayfindingRequstObject != nil) {
@@ -462,7 +520,9 @@
                         [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"error.subject.not.found", @"BBLocalizable", nil) message:message delegate:nil cancelButtonTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString otherButtonTitles:nil] show];
                     }
                     self.foundSubject = nil;
-                    self.materialTopBar.hidden = true;
+//                    self.materialTopBar.hidden = true;
+                    [self showMyFoundMaterialButton:false animated:false];
+
                 }
                 
                 [currentDisplayFloorRef clearAllAccuracyDataPoints];
@@ -475,12 +535,14 @@
                 
                 [self.spinner stopAnimating];
                 self.navBarTitleLabel.text = @"";
+//                self.navBarSubtitleLabel.text = @"";
                 [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
             }
             
         } else {
             [self.spinner stopAnimating];
             self.navBarTitleLabel.text = @"";
+//            self.navBarSubtitleLabel.text = @"";
             [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
         }
         
@@ -589,7 +651,7 @@
             
             if (self.foundSubject.floor_id == currentDisplayFloorRef.floor_id) {
                 
-                [self showMaterialView:NO animated:YES];
+                [self showMaterialView:YES animated:YES];
                 
                 if (self.foundSubject.displayType == Single) {
                     
@@ -712,13 +774,8 @@
                         
                     }
                     
-                    if ([self userPositioningAvailable]) {
-                        [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok.find.me", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-                        
-                    } else {
+                    
                         [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
-                        
-                    }
                     
                     [popupView setFrame:CGRectMake(self.foundSubject.center.x * scaleRatio - BB_POPUP_WIDTH / 2, self.foundSubject.center.y * scaleRatio - height, BB_POPUP_WIDTH, height)];
 
@@ -737,31 +794,48 @@
     }];
 }
 
+BOOL isRunning;
+dispatch_queue_t dispatch_queue_nearest_pixel;
+
 - (void) layoutMyLocationAnimated:(Boolean) animated {
     
     CGFloat animationDuration = animated ? myCurrentLocationView.hidden ? 0 : 6.0 : 0;
     if (!CGPointEqualToPoint(myCoordinate, CGPointZero)) {
         if (myCoordinate.x > 0 && myCoordinate.x < floorplanImageView.image.size.width &&
             myCoordinate.y > 0 && myCoordinate.y < floorplanImageView.image.size.height) {
-            dispatch_async(dispatch_queue_create("scanning_pixels", nil), ^{
-                CGPoint walkablePixel = [self nearestWalkablePixel:floorplanImageView.image xCoordinate:myCoordinate.x yCoordinate:myCoordinate.y];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                        
+            
+            // TODO: nearestWalkablePixel Crashes the App! - It has been disabled
+            if (dispatch_queue_nearest_pixel == nil) {
+                dispatch_queue_nearest_pixel = dispatch_queue_create("scanning_pixels", nil);
+                isRunning = false;
+            }
+            __weak __typeof__(self) weakSelf = self;
+            
+            if (!isRunning) {
+                isRunning = true;
+                dispatch_async(dispatch_queue_nearest_pixel, ^{
+                    CGPoint walkablePixel = CGPointMake(myCoordinate.x, myCoordinate.y);
+                    walkablePixel = [weakSelf nearestWalkablePixel:floorplanImageView.image xCoordinate:walkablePixel.x yCoordinate:walkablePixel.y];
+                    dispatch_async(dispatch_get_main_queue(), ^{
                         if (CGPointEqualToPoint(walkablePixel, CGPointZero)) {
-                            [self zoomToMyPosition];
-                        } else {
+                            isRunning = false;
+                            return;
+                        }
+                        
+                        [UIView animateWithDuration:animationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                            
                             myCurrentLocationView.frame = CGRectMake(walkablePixel.x * scaleRatio - myCurrentLocationView.frame.size.width/2, walkablePixel.y * scaleRatio - myCurrentLocationView.frame.size.height/2, myCurrentLocationView.frame.size.height, myCurrentLocationView.frame.size.width);
                             [myCurrentLocationView.superview bringSubviewToFront:myCurrentLocationView];
                             myCurrentLocationView.hidden = NO;
                             [self zoomToMyPosition];
                             [myCurrentLocationView setPulsatingAnimationWithMaxWidth:currentUserPrecision * scaleRatio];
-                        }
-                    } completion:nil];
+                            
+                        } completion:nil];
+                        isRunning = false;
+                    });
                     
                 });
-                
-            });
+            }
             
         }
     } else {
@@ -792,18 +866,27 @@
 
 - (CGPoint)nearestWalkablePixel:(UIImage *)image xCoordinate:(int)x yCoordinate:(int)y {
     
-    CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
+    CGImageRef cgImage          = image.CGImage;
+    CGDataProviderRef provider  = CGImageGetDataProvider(cgImage);
+    CFDataRef pixelData         = CGDataProviderCopyData(provider);
+    CGPoint center              = CGPointMake(x, y);
+    int centerPixelInfo         = ((image.size.width  * y) + x ) * 4;
+    unsigned char *data         = (unsigned char *)CFDataGetBytePtr(pixelData);
     
-    int maxRadius = fmax(image.size.width, image.size.height) * 0.20;
-    CGPoint center = CGPointMake(x, y);
-    int centerPixelInfo = ((image.size.width  * y) + x ) * 4;
+    UIColor *center_color = [self colorFromPixelData:data pixelInfo:centerPixelInfo xCoordinate:center.x yCoordinate:center.y];
+    if (center_color == nil || ![center_color isKindOfClass:[UIColor class]]) {
+        CFRelease(pixelData);
+        return CGPointZero;
+    }
     
-    UIColor *center_color = [self colorFromPixelData:pixelData pixelInfo:centerPixelInfo xCoordinate:center.x yCoordinate:center.y];
     if ([self color:center_color isEqualToColor:currentDisplayFloorRef.map_walkable_color withTolerance:0.05]) {
         CFRelease(pixelData);
         return center;
     } else {
+        
         // Start looking around the center coordinate for color match
+        int maxRadius = fmin(fmin(image.size.width, image.size.height) * 0.10, 100);
+
         for (int offset = 1 ; offset < maxRadius; offset++) {
             int matrixSize = 1 + 2 * offset; // 3x3 - 5x5 - 7x7 ...
             
@@ -830,7 +913,10 @@
                         }
                     }
                     int pixelInfo = ((image.size.width  * coordinate.y) + coordinate.x ) * 4;
-                    UIColor *pixel_color = [self colorFromPixelData:pixelData pixelInfo:pixelInfo xCoordinate:coordinate.x yCoordinate:coordinate.y];
+                    UIColor *pixel_color = [self colorFromPixelData:data pixelInfo:pixelInfo xCoordinate:coordinate.x yCoordinate:coordinate.y];
+                    if (center_color == nil) {
+                        continue;
+                    }
                     if ([self color:pixel_color isEqualToColor:currentDisplayFloorRef.map_walkable_color withTolerance:0.05]) {
                         CFRelease(pixelData);
                         return coordinate;
@@ -847,25 +933,33 @@
 }
 
 
-- (UIColor *) colorFromPixelData:(CFDataRef)pixelData pixelInfo:(int)pixelInfo xCoordinate:(int)x yCoordinate:(int)y {
+- (UIColor *) colorFromPixelData:(unsigned char *)data pixelInfo:(int)pixelInfo xCoordinate:(int)x yCoordinate:(int)y {
 
-    const UInt8* data = CFDataGetBytePtr(pixelData);
-
-    UInt8 red = data[pixelInfo];
+    if (data == NULL || (data[0] == '\0')) {
+        NSLog(@"Data is empty");
+        return nil;
+    }
+    
+    UInt8 red   = data[pixelInfo];
     UInt8 green = data[(pixelInfo + 1)];
-    UInt8 blue = data[pixelInfo + 2];
-    UInt8 alpha = data[pixelInfo + 3];
+    UInt8 blue  = data[(pixelInfo + 2)];
+    UInt8 alpha = data[(pixelInfo + 3)];
     
     return [UIColor colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:alpha/255.0f];
+    
 }
 
 - (UIColor *) colorAtImage:(UIImage *)image xCoordinate:(int)x yCoordinate:(int)y {
     
     CFDataRef pixelData = CGDataProviderCopyData(CGImageGetDataProvider(image.CGImage));
-    int pixelInfo = ((image.size.width  * y) + x ) * 4;
+    int pixelInfo = ((image.size.width * y) + x ) * 4;
+    unsigned char *data =  (unsigned char *)CFDataGetBytePtr(pixelData);
     
-    UIColor *pixel_color = [self colorFromPixelData:pixelData pixelInfo:pixelInfo xCoordinate:x yCoordinate:y];
-    
+    UIColor *pixel_color = [self colorFromPixelData:data pixelInfo:pixelInfo xCoordinate:x yCoordinate:y];
+    if (pixel_color == nil) {
+        CFRelease(pixelData);
+        return [UIColor whiteColor];
+    }
     CFRelease(pixelData);
     
     return pixel_color;
@@ -907,6 +1001,20 @@
     }];
 }
 
+- (void) showMyFoundMaterialButton:(BOOL)show animated:(BOOL)animated {
+    
+    if (show) {
+        self.myFoundMaterialButton.transform = CGAffineTransformMakeScale(0, 0);
+    }
+    
+    [UIView animateWithDuration:animated ? 0.35 : 0.0 animations:^{
+        self.myFoundMaterialButton.alpha = show ? 1.0f : 0.0;
+        self.myFoundMaterialButton.transform = CGAffineTransformMakeScale(1, 1);
+
+    }];
+    
+}
+
 - (BBFloor *) floorForFloorID:(NSInteger) floorId {
 
     if (place == nil || place.floors == nil) {
@@ -924,25 +1032,33 @@
 
 #pragma mark - Pop Down
 
-- (void) showMyPositionView:(BOOL)shouldShow animated:(BOOL)animated {
-    CGFloat animationDuration = animated ? 0.35 : 0;
-    showMyPositionView = shouldShow;
-    
-    self.myPositionPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.here", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
-    
-    if (shouldShow) {
-        self.myPositionPopDownTopConstraint.constant = 0;
-    } else {
-        self.myPositionPopDownTopConstraint.constant = -self.myPositionPopDownView.frame.size.height;
-    }
-    
-    [self updateMapScrollViewContentInsets];
-    
-    [self.view needsUpdateConstraints];
-    [UIView animateWithDuration:animationDuration animations:^{
-        [self.view layoutIfNeeded];
-    }];
-}
+//- (void) showMyPositionView:(BOOL)shouldShow animated:(BOOL)animated {
+////    CGFloat animationDuration = animated ? 0.35 : 0;
+////    showMyPositionView = shouldShow;
+//    
+////    self.myPositionPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.here", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
+//    if (currentDisplayFloorRef == nil) {
+//        self.navBarSubtitleLabel.text = @"";
+//        return;
+//    }
+//    
+//    if (shouldShow) {
+////        self.myPositionPopDownTopConstraint.constant = 0;
+//        self.navBarSubtitleLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.here", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
+//
+//    } else {
+////        self.myPositionPopDownTopConstraint.constant = -self.myPositionPopDownView.frame.size.height;
+//        self.navBarSubtitleLabel.text = [NSString stringWithFormat:@"%@: -", NSLocalizedStringFromTable(@"you.are.here", @"BBLocalizable", nil)].uppercaseString;
+//
+//    }
+//    
+////    [self updateMapScrollViewContentInsets];
+////    
+////    [self.view needsUpdateConstraints];
+////    [UIView animateWithDuration:animationDuration animations:^{
+////        [self.view layoutIfNeeded];
+////    }];
+//}
 
 - (void) showMaterialView:(BOOL)shouldShow animated:(BOOL)animated {
     CGFloat animationDuration = animated ? 0.35 : 0;
@@ -954,13 +1070,13 @@
         shouldShow = NO;
     }
     
-    if (rangedBeconsFloorRef == nil || rangedBeconsFloorRef.name == nil) {
-        self.materialPopDownLabel.text = nil;
-    } else {
-        self.materialPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.at", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
-    }
-    self.materialPopDownText.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"your.material.is.at", @"BBLocalizable", nil), materialFloor.name].uppercaseString;
-    
+//    if (rangedBeconsFloorRef == nil || rangedBeconsFloorRef.name == nil) {
+//        self.materialPopDownLabel.text = nil;
+//    } else {
+//        self.materialPopDownLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"you.are.at", @"BBLocalizable", nil), rangedBeconsFloorRef.name].uppercaseString;
+//    }
+//    self.materialPopDownText.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"your.material.is.at", @"BBLocalizable", nil), materialFloor.name].uppercaseString;
+//    
     if (shouldShow) {
         self.materialPopDownTopConstraint.constant = 0;
     } else {
@@ -968,7 +1084,7 @@
     }
     
     [self updateMapScrollViewContentInsets];
-    
+//
     [self.view needsUpdateConstraints];
     [UIView animateWithDuration:animationDuration animations:^{
         [self.view layoutIfNeeded];
@@ -979,8 +1095,8 @@
     
     if (showMaterialView) {
         self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT_LARGE + self.materialPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2);
-    } else if (showMyPositionView) {
-        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT_LARGE + self.myPositionPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2);
+//    } else if (showMyPositionView) {
+//        self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT_LARGE + self.myPositionPopDownView.frame.size.height, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2);
     } else {
         self.mapScrollView.contentInset = UIEdgeInsetsMake(BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2, BB_POPUP_HEIGHT_LARGE, BB_POPUP_WIDTH/2);
     }
@@ -1107,6 +1223,33 @@
     }
 }
 
+- (IBAction)myFoundMaterialButtonAction:(id)sender {
+    if (currentDisplayFloorRef.floor_id != self.foundSubject.floor_id) {
+        [currentDisplayFloorRef clearAllAccuracyDataPoints];
+
+        if (self.foundSubject != nil) {
+            for (BBFloor *floor in place.floors) {
+                if (floor.floor_id == self.foundSubject.floor_id) {
+                    currentDisplayFloorRef = floor;
+                    break;
+                }
+            }
+        }
+        myCoordinate = CGPointZero;
+        [currentDisplayFloorRef clearAllAccuracyDataPoints];
+        myCurrentLocationView.hidden = YES;
+        zoomToMaterialPosition = YES;
+        
+        [self layoutCurrentFloorplan];
+
+    } else {
+        [self zoomToFoundSubject];
+        
+    }
+
+}
+
+
 - (IBAction)changeMapAction:(id)sender {
     currentSelectLibraryViewController = nil;
     currentSelectLibraryViewController = [[BBLibrarySelectViewController alloc] initWithNibName:@"BBLibrarySelectViewController" bundle:nil];
@@ -1118,9 +1261,9 @@
     foundSubjectPopopViewDisplayed = YES;
     [popupView removeFromSuperview];
     popupView = nil;
-    if ([self userPositioningAvailable]) {
-        [self myLocationAction:nil];
-    }
+    //if ([self userPositioningAvailable]) {
+    //    [self myLocationAction:nil];
+    //}
 }
 
 - (IBAction)myPositionPopDownButtonAction:(id)sender {
@@ -1128,26 +1271,12 @@
 }
 
 - (IBAction)materialPopDownButtonAction:(id)sender {
-    if (currentDisplayFloorRef.floor_id != self.foundSubject.floor_id) {
-        if (self.foundSubject != nil) {
-            for (BBFloor *floor in place.floors) {
-                if (floor.floor_id == self.foundSubject.floor_id) {
-                    currentDisplayFloorRef = floor;
-                    break;
-                }
-            }
-        }
-        myCoordinate = CGPointZero;
-        [currentDisplayFloorRef clearAllAccuracyDataPoints];
-        zoomToUserPosition = YES;
-        [self layoutCurrentFloorplan];
-        [self layoutMyLocationAnimated:NO];
-    } else {
-        zoomToUserPosition = YES;
-        [self layoutMyLocationAnimated:NO];
-        
-    }
-   
+
+    self.foundSubject = nil;
+    self.wayfindingRequstObject = nil;
+    shouldLayoutMap = true;
+    [self mapLayoutNow];
+    
 }
 
 #pragma mark - CLLocationManagerDelegate
@@ -1193,14 +1322,7 @@
     }
     
     if (rangedBeconsFloorRef == nil) {
-        [self showMyPositionView:NO animated:NO];
         return;
-    } else {
-        if (self.foundSubject == nil) {
-            [self showMyPositionView:(currentDisplayFloorRef.floor_id != rangedBeconsFloorRef.floor_id) animated:YES];
-        } else {
-            [self showMyPositionView:NO animated:NO];
-        }
     }
     
     CGFloat accuracyDataPointsCount = 3;
@@ -1257,6 +1379,14 @@
         } else {
             [self layoutMyLocationAnimated:true];
         }
+        beaconsAnotherFloorCount = 0;
+//        myCurrentLocationView.hidden = NO;
+
+    } else {
+        if (beaconsAnotherFloorCount > 5) {
+            myCurrentLocationView.hidden = YES;
+        }
+        beaconsAnotherFloorCount++;
     }
     [self updateMyLocationButtonEnabled];
 }

@@ -103,15 +103,6 @@
             [self addPulsation];
         }];
     }];
-//    NSLog(@"pulsationScaleToValue: %f",pulsationScaleToValue);
-//    CABasicAnimation *pulseViewScaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-//    pulseViewScaleAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-//    pulseViewScaleAnimation.duration = 1.6;
-//    pulseViewScaleAnimation.autoreverses = YES;
-//    pulseViewScaleAnimation.delegate = self;
-//    pulseViewScaleAnimation.fromValue = [NSNumber numberWithFloat:1.0];
-//    pulseViewScaleAnimation.toValue = [NSNumber numberWithFloat:pulsationScaleToValue];
-//    [pulseView.layer addAnimation:pulseViewScaleAnimation forKey:@"scale"];
 }
 
 

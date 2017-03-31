@@ -38,6 +38,7 @@
 
 "show.my.position" = "Vis min position";
 "show.material" = "Vis materiale";
+"end.find.material" = "Afslut";
 "invalid.current.location.title" = "Vi kan ikke finde din placering";
 "invalid.current.location.message" = "Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service";
 
