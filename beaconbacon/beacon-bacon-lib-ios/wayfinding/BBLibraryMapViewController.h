@@ -31,6 +31,7 @@
 #import <CoreGraphics/CoreGraphics.h>
 
 #import "UIColor+Hex.h"
+#import "UIImage+Resize.h"
 
 #import "BBTrilateration.h"
 #import "BBBeacon.h"
@@ -42,7 +43,11 @@
 #import "BBPOIMapView.h"
 #import "BBPopupView.h"
 #import "BBPOIAreaMapView.h"
+
 #import "UIImageView+BeaconBacon.h"
+#import "CBCentralManager+BeaconBacon.h"
+
+#import "BBCoordinateHelper.h"
 
 @interface BBLibraryMapViewController : UIViewController <CLLocationManagerDelegate>
 

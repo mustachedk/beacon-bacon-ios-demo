@@ -57,11 +57,11 @@
     if (myPosistionView == nil) {
         CGFloat insetXY = BB_MY_POSITION_WIDTH/2 - BB_MY_POSITION_INDICATOR_WIDTH/2;
         myPosistionView = [[UIView alloc] initWithFrame:CGRectMake(insetXY, insetXY, BB_MY_POSITION_INDICATOR_WIDTH, BB_MY_POSITION_INDICATOR_WIDTH)];
-        myPosistionView.backgroundColor = color;
+        myPosistionView.backgroundColor = UIColor.clearColor;
         myPosistionView.layer.cornerRadius = BB_MY_POSITION_INDICATOR_WIDTH/2;
         myPosistionView.layer.masksToBounds = YES;
-        myPosistionView.layer.borderColor = [[UIColor whiteColor] CGColor];
-        myPosistionView.layer.borderWidth = 2.f;
+//        myPosistionView.layer.borderColor = [[UIColor whiteColor] CGColor];
+//        myPosistionView.layer.borderWidth = 2.f;
         [self addSubview:myPosistionView];
     }
     
