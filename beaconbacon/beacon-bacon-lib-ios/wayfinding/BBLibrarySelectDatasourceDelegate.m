@@ -82,6 +82,7 @@
         
         BBPlace *place = self.data[indexPath.row];
         cell.textLabel.text = place.name;
+        cell.textLabel.font = [[BBConfig sharedConfig] lightFontWithSize:16];
         
         if ([[NSString stringWithFormat:@"%ld", (long)place.place_id] isEqualToString:[BBConfig sharedConfig].currentPlaceId]) {
             [cell setAccessoryType:UITableViewCellAccessoryCheckmark];

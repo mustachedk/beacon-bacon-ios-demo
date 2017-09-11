@@ -37,6 +37,8 @@
 #define BB_STORE_KEY_REGULAR_FONT       @"BB_STORE_KEY_REGULAR_FONT"
 #define BB_STORE_KEY_LIGHT_FONT         @"BB_STORE_KEY_LIGHT_FONT"
 
+#define BB_POPUP_DONT_SHOW              @"BB_POPUP_DONT_SHOW_2"
+
 typedef NS_ENUM(NSUInteger, BBSSLPinningMode) {
     BBSSLPinningModeNone,
     BBSSLPinningModePublicKey

@@ -294,7 +294,6 @@
 		773F35D61EBB0EF0000BB453 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		773F35D71EBB0EF0000BB453 /* BBAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = BBAssets.xcassets; sourceTree = "<group>"; };
 		773F35D91EBB0EF0000BB453 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/BBLocalizable.strings; sourceTree = "<group>"; };
-		773F35DA1EBB0EF0000BB453 /* nb-NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "nb-NO"; path = "nb-NO.lproj/BBLocalizable.strings"; sourceTree = "<group>"; };
 		773F35DC1EBB0EF0000BB453 /* BBEmptyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBEmptyTableViewCell.h; sourceTree = "<group>"; };
 		773F35DD1EBB0EF0000BB453 /* BBEmptyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBEmptyTableViewCell.m; sourceTree = "<group>"; };
 		773F35DE1EBB0EF0000BB453 /* BBEmptyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BBEmptyTableViewCell.xib; sourceTree = "<group>"; };
@@ -902,7 +901,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				773F35D91EBB0EF0000BB453 /* da */,
-				773F35DA1EBB0EF0000BB453 /* nb-NO */,
 			);
 			name = BBLocalizable.strings;
 			sourceTree = "<group>";

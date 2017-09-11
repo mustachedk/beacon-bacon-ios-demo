@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -35,14 +34,26 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0kH-hV-1m2">
-                    <rect key="frame" x="244" y="102" width="112" height="32"/>
+                    <rect key="frame" x="275" y="102" width="142" height="32"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="Jov-h1-4b7"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="900" constant="112" id="P22-gZ-a0v"/>
+                        <constraint firstAttribute="width" constant="142" id="P22-gZ-a0v"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                    <state key="normal">
+                    <state key="normal" title="Ok, vis ikke igen">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aoV-sf-wUQ">
+                    <rect key="frame" x="183" y="102" width="80" height="32"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="l8N-m9-tju"/>
+                        <constraint firstAttribute="height" constant="32" id="qCf-hG-ptb"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <state key="normal" title="Ok">
                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                 </button>
@@ -76,15 +87,18 @@
             <constraints>
                 <constraint firstItem="Ggd-y7-eqI" firstAttribute="top" secondItem="G3a-zT-BUd" secondAttribute="bottom" id="3sL-4n-ULq"/>
                 <constraint firstItem="0kH-hV-1m2" firstAttribute="top" secondItem="Tqz-rN-2tf" secondAttribute="bottom" constant="16" id="8aq-6F-05e"/>
+                <constraint firstItem="aoV-sf-wUQ" firstAttribute="bottom" secondItem="0kH-hV-1m2" secondAttribute="bottom" id="CD3-Xp-cai"/>
                 <constraint firstAttribute="trailing" secondItem="Ggd-y7-eqI" secondAttribute="trailing" id="IMy-7F-sfH"/>
                 <constraint firstItem="Tqz-rN-2tf" firstAttribute="leading" secondItem="ha9-bJ-Aax" secondAttribute="leading" constant="20" id="LeL-X0-nmB"/>
                 <constraint firstAttribute="bottom" secondItem="0kH-hV-1m2" secondAttribute="bottom" constant="20" id="M9X-M9-azx"/>
                 <constraint firstAttribute="trailing" secondItem="Tqz-rN-2tf" secondAttribute="trailing" constant="20" id="NZD-Dc-m7a"/>
                 <constraint firstItem="Ggd-y7-eqI" firstAttribute="leading" secondItem="ha9-bJ-Aax" secondAttribute="leading" id="O0x-DI-0cu"/>
+                <constraint firstItem="aoV-sf-wUQ" firstAttribute="top" secondItem="0kH-hV-1m2" secondAttribute="top" id="a6U-s4-mjm"/>
+                <constraint firstItem="aoV-sf-wUQ" firstAttribute="centerX" secondItem="ha9-bJ-Aax" secondAttribute="centerX" constant="-77" id="b90-Jb-EYP"/>
                 <constraint firstItem="G3a-zT-BUd" firstAttribute="leading" secondItem="ha9-bJ-Aax" secondAttribute="leading" id="c2V-B7-Ega"/>
                 <constraint firstAttribute="bottom" secondItem="Ggd-y7-eqI" secondAttribute="bottom" id="iIr-s0-X9C"/>
                 <constraint firstAttribute="trailing" secondItem="G3a-zT-BUd" secondAttribute="trailing" id="kEf-cj-aRP"/>
-                <constraint firstItem="0kH-hV-1m2" firstAttribute="centerX" secondItem="ha9-bJ-Aax" secondAttribute="centerX" id="oae-Gu-zAj"/>
+                <constraint firstItem="0kH-hV-1m2" firstAttribute="centerX" secondItem="ha9-bJ-Aax" secondAttribute="centerX" constant="46" id="oae-Gu-zAj"/>
                 <constraint firstItem="Ggd-y7-eqI" firstAttribute="top" secondItem="0kH-hV-1m2" secondAttribute="bottom" constant="16" id="vMr-97-kwc"/>
                 <constraint firstItem="Tqz-rN-2tf" firstAttribute="top" secondItem="C9g-f5-pV6" secondAttribute="bottom" constant="8" id="vTW-bj-RRn"/>
                 <constraint firstItem="G3a-zT-BUd" firstAttribute="top" secondItem="ha9-bJ-Aax" secondAttribute="top" id="xK5-bw-Dyj"/>
@@ -100,7 +114,8 @@
             </variation>
             <connections>
                 <outlet property="arrowContainer" destination="Ggd-y7-eqI" id="Cfj-qC-k3t"/>
-                <outlet property="buttonOK" destination="0kH-hV-1m2" id="LL0-Nh-Xa1"/>
+                <outlet property="buttonOK" destination="aoV-sf-wUQ" id="3Km-4h-ful"/>
+                <outlet property="buttonOKDontShowAgain" destination="0kH-hV-1m2" id="R8t-Y6-aOD"/>
                 <outlet property="labelText" destination="Tqz-rN-2tf" id="3qW-2h-Zg1"/>
                 <outlet property="labelTitle" destination="C9g-f5-pV6" id="3DM-NP-Bdi"/>
                 <outlet property="opacityViewWithShadow" destination="G3a-zT-BUd" id="uoT-rB-F4p"/>

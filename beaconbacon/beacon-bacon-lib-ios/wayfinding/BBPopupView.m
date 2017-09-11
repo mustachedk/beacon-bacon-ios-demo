@@ -38,8 +38,9 @@
     self.labelTitle.font = [[BBConfig sharedConfig] lightFontWithSize:14];
     self.labelText.font = [[BBConfig sharedConfig] lightFontWithSize:12];
     self.labelText.numberOfLines = 0;
+    
     self.buttonOK.titleLabel.font = [[BBConfig sharedConfig] regularFontWithSize:12];
-    [self.buttonOK setContentEdgeInsets:UIEdgeInsetsMake(0, 10, 0, 10)];
+    self.buttonOKDontShowAgain.titleLabel.font = [[BBConfig sharedConfig] regularFontWithSize:12];
     
     [self.opacityViewWithShadow.layer setShadowOffset:CGSizeMake(0, 5)];
     [self.opacityViewWithShadow.layer setShadowOpacity:0.1f];

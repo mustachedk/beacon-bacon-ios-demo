@@ -406,6 +406,8 @@
     self.materialTopTitleLabel.textColor = [UIColor whiteColor];
     self.materialTopSubtitleLabel.textColor = [UIColor whiteColor];
     
+    self.materialPopDownButton.titleLabel.font = [[BBConfig sharedConfig] lightFontWithSize:10];
+    
     [self.materialPopDownButton setTitle:NSLocalizedStringFromTable(@"end.find.material", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
     
     [self applyRoundAndShadow:self.myFoundMaterialButton];
@@ -709,7 +711,7 @@
                 }
                 
                 
-                if (!foundSubjectPopopViewDisplayed) {
+                if (!foundSubjectPopopViewDisplayed && ![[NSUserDefaults standardUserDefaults] boolForKey:BB_POPUP_DONT_SHOW]) {
                     popupView = [[[NSBundle mainBundle] loadNibNamed:@"BBPopupView" owner:self options:nil] firstObject];
                     popupView.labelTitle.text = NSLocalizedStringFromTable(@"here.is.your.material", @"BBLocalizable", nil).uppercaseString;
 
@@ -745,12 +747,18 @@
                     
                     
                         [popupView.buttonOK setTitle:NSLocalizedStringFromTable(@"ok", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+                    [popupView.buttonOKDontShowAgain setTitle:NSLocalizedStringFromTable(@"ok.dont.show.again", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+
                     
                     [popupView setFrame:CGRectMake(self.foundSubject.center.x * scaleRatio - BB_POPUP_WIDTH / 2, self.foundSubject.center.y * scaleRatio - height, BB_POPUP_WIDTH, height)];
 
-                    [popupView.buttonOK addTarget:self action:@selector(popupViewOkButtonAction:) forControlEvents: UIControlEventTouchUpInside];
+                    [popupView.buttonOK addTarget:self action:@selector(popupViewButtonOKAction:) forControlEvents: UIControlEventTouchUpInside];
+                    [popupView.buttonOKDontShowAgain addTarget:self action:@selector(popupViewButtonOKDontShowAgainAction:) forControlEvents: UIControlEventTouchUpInside];
+
                     [popupView layoutIfNeeded];
                     [self.mapScrollView addSubview:popupView]; // (Index 2 + areaViews.count + poiViews.count) + popupView (last)
+                    [self zoomToFoundSubject];
+                } else {
                     [self zoomToFoundSubject];
                 }
                 
@@ -1129,6 +1137,10 @@ dispatch_queue_t dispatch_queue_nearest_pixel;
 }
 
 - (IBAction)pointsOfInterestAction:(id)sender {
+    foundSubjectPopopViewDisplayed = YES;
+    [popupView removeFromSuperview];
+    popupView = nil;
+
     currentPOIViewController = nil;
     currentPOIViewController = [[BBLibraryMapPOIViewController alloc] initWithNibName:@"BBLibraryMapPOIViewController" bundle:nil];
     [self presentViewController:currentPOIViewController animated:true completion:nil];
@@ -1197,7 +1209,17 @@ dispatch_queue_t dispatch_queue_nearest_pixel;
 //    [self presentViewController:currentSelectLibraryViewController animated:true completion:nil];
 //}
 
-- (IBAction)popupViewOkButtonAction:(id)sender {
+- (IBAction)popupViewButtonOKAction:(id)sender {
+    [self hidePopupView];
+}
+
+- (IBAction)popupViewButtonOKDontShowAgainAction:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:BB_POPUP_DONT_SHOW];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self hidePopupView];
+}
+
+- (void) hidePopupView {
     foundSubjectPopopViewDisplayed = YES;
     [popupView removeFromSuperview];
     popupView = nil;

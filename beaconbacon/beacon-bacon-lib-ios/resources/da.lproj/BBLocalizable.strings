@@ -26,9 +26,9 @@
 "showing" = "viser";
 "here.is.your.material" = "Her er dit materiale";
 
-"your.material.is.at.x" = "Brug knapperne i de nederste to hjørner til at navigere med. Husk du altid kan reserve dit materiale her i app, hvis du mod forventning ikke kan finde den på biblioteket.";
-"your.material.is.around" = "Brug knapperne i de nederste to hjørner til at navigere med. Husk du altid kan reserve dit materiale her i app, hvis du mod forventning ikke kan finde den på biblioteket..";
-"your.material.is.in.area" = "Brug knapperne i de nederste to hjørner til at navigere med. Husk du altid kan reserve dit materiale her i app, hvis du mod forventning ikke kan finde den på biblioteket.";
+"your.material.is.at.x" = "Brug knapperne i nederste højre hjørner til at navigere med. Husk du altid kan reserve dit materiale her i app, hvis du mod forventning ikke kan finde den på biblioteket.";
+"your.material.is.around" = "Brug knapperne i nederste højre hjørner til at navigere med. Husk du altid kan reserve dit materiale her i app, hvis du mod forventning ikke kan finde den på biblioteket..";
+"your.material.is.in.area" = "Brug knapperne i nederste højre hjørner til at navigere med. Husk du altid kan reserve dit materiale her i app, hvis du mod forventniƒng ikke kan finde den på biblioteket.";
 
 "ok.find.me" = "Vis hvor jeg selv befinder mig";
 "you.are.here" = "Du er her";
@@ -43,6 +43,7 @@
 "invalid.current.location.message" = "Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service";
 
 "ok" = "Ok";
+"ok.dont.show.again" = "Ok, vis ikke igen";
 
 "no.points.of.interest.title" = "Ingen interessepunkter";
 "no.points.of.interest.description" = "Kom tilbage senere og se om vi har tilføjet nogle interessepunkter";

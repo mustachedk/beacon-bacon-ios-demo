@@ -161,7 +161,7 @@
     BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"29715394"];
     requstObject.subject_name     = @"En mand der hedder Ove";
     requstObject.subject_subtitle = @"SK";
-    requstObject.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];
+    requstObject.subject_image    = [UIImage imageNamed:@"96-book"];
     
     mapViewController = [BBLibraryMapViewController mapViewController];
     mapViewController.wayfindingRequstObject = requstObject;
