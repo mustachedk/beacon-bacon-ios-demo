@@ -69,7 +69,6 @@
 
 // Custom Navigation/Top Bar
 @property (weak, nonatomic) IBOutlet UIView *fakeNavigationBar;
-@property (weak, nonatomic) IBOutlet UIView *topLineView;
 
 @property (weak, nonatomic) IBOutlet UIButton *navBarNextButton;
 @property (weak, nonatomic) IBOutlet UIButton *navBarPreviousButton;

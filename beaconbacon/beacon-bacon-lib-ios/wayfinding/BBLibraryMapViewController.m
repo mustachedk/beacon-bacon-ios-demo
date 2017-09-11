@@ -356,7 +356,6 @@
     
     self.navBarTitleLabel.text = currentDisplayFloorRef.name;
     self.navBarSubtitleLabel.text = place.name;
-//    [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"showing", @"BBLocalizable", nil).uppercaseString, currentDisplayFloorRef.name.uppercaseString];
 
     [self updateNavBarNextPrevButtons];
 }
@@ -378,7 +377,6 @@
     
     self.mapScrollView.backgroundColor = [UIColor clearColor];
     
-    self.topLineView.backgroundColor            = [[BBConfig sharedConfig] customColor];
     self.materialPopDownView.backgroundColor    = [[BBConfig sharedConfig] customColor];
     
     self.navBarTitleLabel.font          = [[BBConfig sharedConfig] lightFontWithSize:14];
@@ -502,15 +500,15 @@
             } else {
                 
                 [self.spinner stopAnimating];
-                self.navBarTitleLabel.text = @"";
-                self.navBarSubtitleLabel.text = @"";
+                self.navBarTitleLabel.text = @"-";
+                self.navBarSubtitleLabel.text = NSLocalizedStringFromTable(@"change.map", @"BBLocalizable", nil);
                 [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
             }
             
         } else {
             [self.spinner stopAnimating];
-            self.navBarTitleLabel.text = @"";
-            self.navBarSubtitleLabel.text = @"";
+            self.navBarTitleLabel.text = @"-";
+            self.navBarSubtitleLabel.text = NSLocalizedStringFromTable(@"change.map", @"BBLocalizable", nil);
             [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
         }
         
