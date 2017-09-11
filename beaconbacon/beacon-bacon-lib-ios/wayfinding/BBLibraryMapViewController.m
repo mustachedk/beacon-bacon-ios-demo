@@ -1137,9 +1137,7 @@ dispatch_queue_t dispatch_queue_nearest_pixel;
 }
 
 - (IBAction)pointsOfInterestAction:(id)sender {
-    foundSubjectPopopViewDisplayed = YES;
-    [popupView removeFromSuperview];
-    popupView = nil;
+    [self hidePopupView];
 
     currentPOIViewController = nil;
     currentPOIViewController = [[BBLibraryMapPOIViewController alloc] initWithNibName:@"BBLibraryMapPOIViewController" bundle:nil];
@@ -1196,6 +1194,8 @@ dispatch_queue_t dispatch_queue_nearest_pixel;
 }
 
 - (void) changeMapTapGestureAction:(UITapGestureRecognizer *)recognizer {
+    [self hidePopupView];
+
     currentSelectLibraryViewController = nil;
     currentSelectLibraryViewController = [[BBLibrarySelectViewController alloc] initWithNibName:@"BBLibrarySelectViewController" bundle:nil];
     currentSelectLibraryViewController.dismissAsSubview = false;
