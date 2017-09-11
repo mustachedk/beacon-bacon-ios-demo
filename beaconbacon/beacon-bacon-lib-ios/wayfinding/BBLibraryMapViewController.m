@@ -76,6 +76,11 @@
     return self;
 }
 
++ (BBLibraryMapViewController *) mapViewController {
+    return [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
+}
+
+
 - (void) applyRoundAndShadow:(UIView *)view {
     
     [view layoutIfNeeded];

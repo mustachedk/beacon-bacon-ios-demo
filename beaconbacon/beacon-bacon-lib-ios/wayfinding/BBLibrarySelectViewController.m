@@ -49,7 +49,7 @@
     self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
     
     datasourceDelegate = [BBLibrarySelectDatasourceDelegate new];
-    datasourceDelegate.delegate = self;
+    datasourceDelegate.selectDelegate = self;
     
     self.tableView.dataSource = datasourceDelegate;
     self.tableView.delegate = datasourceDelegate;
@@ -76,12 +76,12 @@
             
             NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
             NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-            datasourceDelegate.datasource = [places sortedArrayUsingDescriptors:sortDescriptors];
+            datasourceDelegate.data = [places sortedArrayUsingDescriptors:sortDescriptors];
             
             [self.tableView reloadData];
         } else {
             
-            datasourceDelegate.datasource = [NSMutableArray new];
+            datasourceDelegate.data = [NSMutableArray new];
             [self.tableView reloadData];
             NSLog(@"An Error Occured: %@", error.localizedDescription);
         }

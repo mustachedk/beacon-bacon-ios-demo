@@ -121,6 +121,8 @@
 //@property (weak, nonatomic) IBOutlet UILabel *materialPopDownText;
 @property (weak, nonatomic) IBOutlet UIButton *materialPopDownButton;
 
++ (BBLibraryMapViewController *) mapViewController;
+
 - (IBAction)navBarNextAction:(id)sender;
 - (IBAction)navBarPreviousAction:(id)sender;
 
