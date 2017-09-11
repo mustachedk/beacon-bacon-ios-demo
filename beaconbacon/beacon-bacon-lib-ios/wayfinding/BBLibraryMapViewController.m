@@ -348,12 +348,15 @@
     
     if (currentDisplayFloorRef == nil) {
         self.navBarTitleLabel.text = @"";
+        self.navBarSubtitleLabel.text = @"";
         self.navBarNextButton.enabled = NO;
         self.navBarPreviousButton.enabled = NO;
         return;
     }
     
-    self.navBarTitleLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"showing", @"BBLocalizable", nil).uppercaseString, currentDisplayFloorRef.name.uppercaseString];
+    self.navBarTitleLabel.text = currentDisplayFloorRef.name;
+    self.navBarSubtitleLabel.text = place.name;
+//    [NSString stringWithFormat:@"%@: %@", NSLocalizedStringFromTable(@"showing", @"BBLocalizable", nil).uppercaseString, currentDisplayFloorRef.name.uppercaseString];
 
     [self updateNavBarNextPrevButtons];
 }
@@ -379,14 +382,28 @@
     self.materialPopDownView.backgroundColor    = [[BBConfig sharedConfig] customColor];
     
     self.navBarTitleLabel.font          = [[BBConfig sharedConfig] lightFontWithSize:14];
+    self.navBarSubtitleLabel.font       = [[BBConfig sharedConfig] lightFontWithSize:10];
+    
     self.materialTopSubtitleLabel.font  = [[BBConfig sharedConfig] lightFontWithSize:10];
     
     self.materialTopTitleLabel.font     = [[BBConfig sharedConfig] regularFontWithSize:12];
     
     [self.navBarTitleLabel setAdjustsFontSizeToFitWidth:YES];
-    
+    [self.navBarSubtitleLabel setAdjustsFontSizeToFitWidth:YES];
+
     self.navBarTitleLabel.text = @"";
+    self.navBarSubtitleLabel.text = @"";
     self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
+    self.navBarSubtitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:0.75];
+    
+    UITapGestureRecognizer *changeMapTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeMapTapGestureAction:)];
+    UITapGestureRecognizer *changeMapTapGesture1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeMapTapGestureAction:)];
+
+    [self.navBarTitleLabel setUserInteractionEnabled:YES];
+    [self.navBarSubtitleLabel setUserInteractionEnabled:YES];
+
+    [self.navBarTitleLabel addGestureRecognizer:changeMapTapGesture];
+    [self.navBarSubtitleLabel addGestureRecognizer:changeMapTapGesture1];
 
     self.materialTopTitleLabel.textColor = [UIColor whiteColor];
     self.materialTopSubtitleLabel.textColor = [UIColor whiteColor];
@@ -412,8 +429,8 @@
     [self.myLocationButton setImage:[[UIImage imageNamed:@"location-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.pointsOfInterestButton setImage:[UIImage imageNamed:@"marker-icon"] forState:UIControlStateNormal];
     
-    self.changeMapButton.tintColor = [BBConfig sharedConfig].customColor;
-    [self.changeMapButton setTitle:NSLocalizedStringFromTable(@"change.map", @"BBLocalizable", nil) forState:UIControlStateNormal];
+//    self.changeMapButton.tintColor = [BBConfig sharedConfig].customColor;
+//    [self.changeMapButton setTitle:NSLocalizedStringFromTable(@"change.map", @"BBLocalizable", nil) forState:UIControlStateNormal];
     
     [self.mapScrollView addSubview:myCurrentLocationView]; // Index 1
     
@@ -486,13 +503,14 @@
                 
                 [self.spinner stopAnimating];
                 self.navBarTitleLabel.text = @"";
+                self.navBarSubtitleLabel.text = @"";
                 [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
             }
             
         } else {
             [self.spinner stopAnimating];
             self.navBarTitleLabel.text = @"";
-//            self.navBarSubtitleLabel.text = @"";
+            self.navBarSubtitleLabel.text = @"";
             [self showAlert:NSLocalizedStringFromTable(@"unsupported.place.title", @"BBLocalizable", nil) message:NSLocalizedStringFromTable(@"unsupported.place.message", @"BBLocalizable", nil)];
         }
         
@@ -1167,13 +1185,19 @@ dispatch_queue_t dispatch_queue_nearest_pixel;
 
 }
 
-
-- (IBAction)changeMapAction:(id)sender {
+- (void) changeMapTapGestureAction:(UITapGestureRecognizer *)recognizer {
     currentSelectLibraryViewController = nil;
     currentSelectLibraryViewController = [[BBLibrarySelectViewController alloc] initWithNibName:@"BBLibrarySelectViewController" bundle:nil];
     currentSelectLibraryViewController.dismissAsSubview = false;
     [self presentViewController:currentSelectLibraryViewController animated:true completion:nil];
 }
+
+//- (IBAction)changeMapAction:(id)sender {
+//    currentSelectLibraryViewController = nil;
+//    currentSelectLibraryViewController = [[BBLibrarySelectViewController alloc] initWithNibName:@"BBLibrarySelectViewController" bundle:nil];
+//    currentSelectLibraryViewController.dismissAsSubview = false;
+//    [self presentViewController:currentSelectLibraryViewController animated:true completion:nil];
+//}
 
 - (IBAction)popupViewOkButtonAction:(id)sender {
     foundSubjectPopopViewDisplayed = YES;
