@@ -71,10 +71,7 @@
     
     [[BBDataManager sharedInstance] fetchAllPlacesWithCompletion:^(NSArray *places, NSError *error) {
         if (error == nil) {
-            
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
-            NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-            datasourceDelegate.data = [places sortedArrayUsingDescriptors:sortDescriptors];
+            datasourceDelegate.data = places;
             
             [self.tableView reloadData];
         } else {

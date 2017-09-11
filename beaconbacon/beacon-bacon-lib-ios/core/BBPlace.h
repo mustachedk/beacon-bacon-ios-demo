@@ -25,7 +25,7 @@
 
 @interface BBPlace : NSObject
 
-@property (nonatomic, strong) NSString *identifier1;
+@property (nonatomic, strong) NSString *identifier1; // Used by BeaconBacon
 @property (nonatomic, strong) NSString *identifier2;
 @property (nonatomic, strong) NSString *identifier3;
 @property (nonatomic, strong) NSString *identifier4;

@@ -99,6 +99,7 @@
             NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
             
             self.cachedPlaces = [places sortedArrayUsingDescriptors:sortDescriptors];
+            
             completionBlock(self.cachedPlaces, nil);
             
         } failure:^(NSURLSessionDataTask *task, NSError *error) {

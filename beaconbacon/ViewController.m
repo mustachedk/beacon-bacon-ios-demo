@@ -111,20 +111,59 @@
 }
 
 - (IBAction)mapAction:(id)sender {
-    mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
-    [self presentViewController:mapViewController animated:true completion:nil];
+    
+    // Returns a list of available places of the BBPlace class
+    [[BBDataManager sharedInstance] fetchAllPlacesWithCompletion:^(NSArray *places, NSError *error) {
+        if (error == nil) {
+            
+            // Use the custom identifiers keys to identify your place (library) - this example uses 'identifier1'
+            BBPlace *thePlaceWeAreLookingFor;
+            for (BBPlace *place in places) {
+                if ([place.identifier1 isEqualToString:@"museu22m1"]) {
+                    thePlaceWeAreLookingFor = place;
+                    break;
+                }
+            }
+            
+            // Setup with identifier1 (we use BBConfig because we'll remember the identifier for future usage)
+            [[BBConfig sharedConfig] setupWithPlaceIdentifier:thePlaceWeAreLookingFor.identifier1 withCompletion:^(NSString *placeIdentifier, NSError *error) {
+                if (error == nil) {
+                    // Beacon Bacon has been setup and configuerd to run on this Place (Library)
+                    // Now we're ready to initialise the UI.
+                    mapViewController = [BBLibraryMapViewController mapViewController];
+                    
+                    // If you want to add a wayfinding Object. Please use this part.
+//                    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"29715394"];
+//                    requstObject.subject_name     = @"En mand der hedder Ove";
+//                    requstObject.subject_subtitle = @"SK";
+//                    requstObject.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];
+//                    mapViewController.wayfindingRequstObject = requstObject;
+                    
+                    [self presentViewController:mapViewController animated:true completion:nil];
+                    
+                    
+                } else {
+                    NSLog(@"Gracefully handle error: %@", error.localizedDescription);
+                }
+            }];
+            
+            
+        } else {
+            NSLog(@"Gracefully handle error: %@", error.localizedDescription);
+        }
+        
+    }];
+    
 }
 
 - (IBAction)mapWayfindingAction:(id)sender {
     
     BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"29715394"];
-
-//    BBIMSRequstObject *requstObject = [[BBIMSRequstObject alloc] initWithFaustId:@"50631494"];
     requstObject.subject_name     = @"En mand der hedder Ove";
     requstObject.subject_subtitle = @"SK";
     requstObject.subject_image    = [UIImage imageNamed:@"menu-library-map-icon"];
     
-    mapViewController = [[BBLibraryMapViewController alloc] initWithNibName:@"BBLibraryMapViewController" bundle:nil];
+    mapViewController = [BBLibraryMapViewController mapViewController];
     mapViewController.wayfindingRequstObject = requstObject;
     [self presentViewController:mapViewController animated:true completion:nil];
 }
