@@ -45,7 +45,7 @@
     self.topLineView.backgroundColor = [[BBConfig sharedConfig] customColor];
     
     self.navBarTitleLabel.font = [[BBConfig sharedConfig] lightFontWithSize:18];
-    self.navBarTitleLabel.text = NSLocalizedStringFromTable(@"points.of.interest", @"BBLocalizable", nil).uppercaseString;
+    self.navBarTitleLabel.text = NSLocalizedStringFromTable(@"points.of.interest", @"BBLocalizable", nil);
     self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
     
     datasourceDelegate = [BBLibraryMapPOIDatasourceDelegate new];
