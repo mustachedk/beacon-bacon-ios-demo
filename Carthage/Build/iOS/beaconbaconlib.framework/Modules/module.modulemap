@@ -1,6 +1,0 @@
-framework module beaconbaconlib {
-  umbrella header "beaconbaconlib.h"
-
-  export *
-  module * { export * }
-}

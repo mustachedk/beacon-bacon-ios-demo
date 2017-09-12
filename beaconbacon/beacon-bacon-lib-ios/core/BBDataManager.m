@@ -47,22 +47,22 @@
 }
 
 - (NSError *) errorInvalidConfiguration {
-    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.invalid.configuration", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_INVALID_CONFIGURATION) };
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : @"Ugyldig opsætning", NSUnderlyingErrorKey : @(BB_ERROR_CODE_INVALID_CONFIGURATION) };
     return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_INVALID_CONFIGURATION userInfo:errorDictionary];
 }
 
 - (NSError *) errorUnsupportedPlace {
-    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.unsupported.place", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_UNSUPPORTED_PLACE) };
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : @"Sted ikke understøttet", NSUnderlyingErrorKey : @(BB_ERROR_CODE_UNSUPPORTED_PLACE) };
     return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_UNSUPPORTED_PLACE userInfo:errorDictionary];
 }
 
 - (NSError *) errorInvalidResponse {
-    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.invalid.server.response", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_INVALID_RESPONSE) };
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : @"Fejl i svar fra server", NSUnderlyingErrorKey : @(BB_ERROR_CODE_INVALID_RESPONSE) };
     return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_INVALID_RESPONSE userInfo:errorDictionary];
 }
 
 - (NSError *) errorSubjectNotFound {
-    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : NSLocalizedStringFromTable(@"error.subject.not.found", @"BBLocalizable", nil), NSUnderlyingErrorKey : @(BB_ERROR_CODE_SUBJECT_NOT_FOUND) };
+    NSDictionary *errorDictionary = @{ NSLocalizedDescriptionKey : @"Materialet blev ikke fundet", NSUnderlyingErrorKey : @(BB_ERROR_CODE_SUBJECT_NOT_FOUND) };
     return [[NSError alloc] initWithDomain:@"beaconbacon.nosuchagency.com" code:BB_ERROR_CODE_SUBJECT_NOT_FOUND userInfo:errorDictionary];
 }
 

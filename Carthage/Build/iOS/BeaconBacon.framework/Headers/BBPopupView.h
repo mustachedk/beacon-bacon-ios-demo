@@ -32,6 +32,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelTitle;
 @property (weak, nonatomic) IBOutlet UILabel *labelText;
 @property (weak, nonatomic) IBOutlet UIButton *buttonOK;
+@property (weak, nonatomic) IBOutlet UIButton *buttonOKDontShowAgain;
+
 @property (weak, nonatomic) IBOutlet UIView *arrowContainer;
 
 @end

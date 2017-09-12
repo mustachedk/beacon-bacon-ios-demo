@@ -32,9 +32,9 @@
 @interface BBLibrarySelectDatasourceDelegate : NSObject <UITableViewDelegate, UITableViewDataSource>
 
 // Contains an array of BBPlace objects
-@property (nonatomic, strong) NSArray *datasource; // <BBPlace>
+@property (nonatomic, strong) NSArray *data; // <BBPlace>
 
 //@property (nonatomic, weak) id <BBLibrarySelectDelegate> delegate;
-@property (nonatomic, weak) id <BBLibrarySelectDelegate> delegate;
+@property (nonatomic, weak) id <BBLibrarySelectDelegate> selectDelegate;
 
 @end

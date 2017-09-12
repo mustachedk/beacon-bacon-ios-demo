@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		773F36231EBB0EF0000BB453 /* BBAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 773F35D71EBB0EF0000BB453 /* BBAssets.xcassets */; };
-		773F36241EBB0EF0000BB453 /* BBLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 773F35D81EBB0EF0000BB453 /* BBLocalizable.strings */; };
 		773F36261EBB0EF0000BB453 /* BBEmptyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 773F35DE1EBB0EF0000BB453 /* BBEmptyTableViewCell.xib */; };
 		773F36291EBB0EF0000BB453 /* BBLibraryMapPOIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 773F35E31EBB0EF0000BB453 /* BBLibraryMapPOIViewController.xib */; };
 		773F362B1EBB0EF0000BB453 /* BBLibraryMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 773F35E61EBB0EF0000BB453 /* BBLibraryMapViewController.xib */; };
@@ -191,6 +189,7 @@
 		775CE0951D92C1B20066C905 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775CE0931D92C1B20066C905 /* LaunchScreen.storyboard */; };
 		775CE12D1D92C2310066C905 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775CE12C1D92C2310066C905 /* Foundation.framework */; };
 		775CE12F1D92C2940066C905 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775CE12E1D92C2940066C905 /* CoreLocation.framework */; };
+		777BD4FF1F67FBAE00C30DA8 /* BBAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 773F35D71EBB0EF0000BB453 /* BBAssets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -293,7 +292,6 @@
 		773F35D51EBB0EF0000BB453 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		773F35D61EBB0EF0000BB453 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		773F35D71EBB0EF0000BB453 /* BBAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = BBAssets.xcassets; sourceTree = "<group>"; };
-		773F35D91EBB0EF0000BB453 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/BBLocalizable.strings; sourceTree = "<group>"; };
 		773F35DC1EBB0EF0000BB453 /* BBEmptyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBEmptyTableViewCell.h; sourceTree = "<group>"; };
 		773F35DD1EBB0EF0000BB453 /* BBEmptyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBEmptyTableViewCell.m; sourceTree = "<group>"; };
 		773F35DE1EBB0EF0000BB453 /* BBEmptyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BBEmptyTableViewCell.xib; sourceTree = "<group>"; };
@@ -432,7 +430,6 @@
 			children = (
 				773F35B41EBB0EF0000BB453 /* AFNetworking */,
 				773F35D71EBB0EF0000BB453 /* BBAssets.xcassets */,
-				773F35D81EBB0EF0000BB453 /* BBLocalizable.strings */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -739,17 +736,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				773F362E1EBB0EF0000BB453 /* BBLibrarySelectViewController.xib in Resources */,
-				773F36231EBB0EF0000BB453 /* BBAssets.xcassets in Resources */,
 				773F36371EBB0EF0000BB453 /* BBPOITableViewCell.xib in Resources */,
 				773F36391EBB0EF0000BB453 /* BBPopupView.xib in Resources */,
 				773F36351EBB0EF0000BB453 /* BBPOISectionHeaderView.xib in Resources */,
 				775CE0951D92C1B20066C905 /* LaunchScreen.storyboard in Resources */,
 				775CE0921D92C1B20066C905 /* Assets.xcassets in Resources */,
+				777BD4FF1F67FBAE00C30DA8 /* BBAssets.xcassets in Resources */,
 				773F36291EBB0EF0000BB453 /* BBLibraryMapPOIViewController.xib in Resources */,
 				775CE0901D92C1B20066C905 /* Main.storyboard in Resources */,
 				773F36301EBB0EF0000BB453 /* BBLoadingIndicatorCell.xib in Resources */,
 				773F362B1EBB0EF0000BB453 /* BBLibraryMapViewController.xib in Resources */,
-				773F36241EBB0EF0000BB453 /* BBLocalizable.strings in Resources */,
 				773F36261EBB0EF0000BB453 /* BBEmptyTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -897,14 +893,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		773F35D81EBB0EF0000BB453 /* BBLocalizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				773F35D91EBB0EF0000BB453 /* da */,
-			);
-			name = BBLocalizable.strings;
-			sourceTree = "<group>";
-		};
 		775CE08E1D92C1B20066C905 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -938,7 +926,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = beaconbaconlib/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dk.mustache.beaconbaconlib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -963,7 +951,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = beaconbaconlib/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = dk.mustache.beaconbaconlib;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -42,6 +42,10 @@
     return _sharedConfig;
 }
 
++ (NSBundle *)libBundle {
+    return [NSBundle bundleWithIdentifier:@"dk.mustache.beaconbaconlib"];
+}
+
 -(UIFont *)regularFontWithSize:(CGFloat)size {
     return [self.regularFont fontWithSize:size];
 }

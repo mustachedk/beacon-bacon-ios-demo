@@ -119,7 +119,7 @@
         [nameLabel.layer setShouldRasterize:NO];
         [nameLabel.layer setShadowColor:[[UIColor blackColor] CGColor]];
         
-        UIImageView *triangle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrowtriangle"]];
+        UIImageView *triangle = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrowtriangle" inBundle:[BBConfig libBundle] compatibleWithTraitCollection:nil]];
         triangle.frame = CGRectMake(nameLabel.frame.size.width/2 - triangle.frame.size.width/2, nameLabel.frame.size.height, triangle.frame.size.width, triangle.frame.size.height);
         [nameLabel addSubview:triangle];
         

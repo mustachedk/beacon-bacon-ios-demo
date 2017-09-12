@@ -45,7 +45,7 @@
     self.topLineView.backgroundColor = [[BBConfig sharedConfig] customColor];
     
     self.navBarTitleLabel.font = [[BBConfig sharedConfig] lightFontWithSize:18];
-    self.navBarTitleLabel.text = NSLocalizedStringFromTable(@"points.of.interest", @"BBLocalizable", nil);
+    self.navBarTitleLabel.text = @"Interessepunkter";
     self.navBarTitleLabel.textColor = [UIColor colorWithRed:97.0f/255.0f green:97.0f/255.0f blue:97.0f/255.0f alpha:1.0];
     
     datasourceDelegate = [BBLibraryMapPOIDatasourceDelegate new];
@@ -53,9 +53,9 @@
     
     self.tableView.dataSource = datasourceDelegate;
     self.tableView.delegate = datasourceDelegate;
-    
-    [self.tableView registerNib:[UINib nibWithNibName:@"BBPOITableViewCell" bundle:nil] forCellReuseIdentifier:@"BBPOITableViewCell"];
-    [self.tableView registerNib:[UINib nibWithNibName:@"BBEmptyTableViewCell" bundle:nil] forCellReuseIdentifier:@"BBEmptyTableViewCell"];
+
+    [self.tableView registerNib:[UINib nibWithNibName:@"BBPOITableViewCell" bundle:[BBConfig libBundle]] forCellReuseIdentifier:@"BBPOITableViewCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"BBEmptyTableViewCell" bundle:[BBConfig libBundle]] forCellReuseIdentifier:@"BBEmptyTableViewCell"];
     
     [self.tableView reloadData];
     

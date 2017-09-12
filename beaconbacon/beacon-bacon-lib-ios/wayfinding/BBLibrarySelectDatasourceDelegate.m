@@ -52,7 +52,7 @@
     if ([self isLoading]) {
         BBLoadingIndicatorCell* cell = [tableView dequeueReusableCellWithIdentifier:@"BBLoadingIndicatorCell"];
         if(cell == nil){
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"BBLoadingIndicatorCell" owner:self options:nil] firstObject];
+            cell = [[[BBConfig libBundle] loadNibNamed:@"BBLoadingIndicatorCell" owner:self options:nil] firstObject];
         }
         
         [cell.loadingIndicator startAnimating];
@@ -61,11 +61,11 @@
     } else if ([self isEmpty]) {
         BBEmptyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BBEmptyTableViewCell" forIndexPath:indexPath];
         if (cell == nil){
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"BBEmptyTableViewCell" owner:self options:nil] firstObject];
+            cell = [[[BBConfig libBundle] loadNibNamed:@"BBEmptyTableViewCell" owner:self options:nil] firstObject];
         }
         
-        cell.emptyImageView.image = [UIImage imageNamed:@"empty-icon-poi"];
-        [cell setTitle:NSLocalizedStringFromTable(@"no.points.of.interest.title", @"BBLocalizable", nil).uppercaseString description:NSLocalizedStringFromTable(@"no.points.of.interest.description", @"BBLocalizable", nil)];
+        cell.emptyImageView.image = [UIImage imageNamed:@"empty-icon-poi" inBundle:[BBConfig libBundle] compatibleWithTraitCollection:nil];
+        [cell setTitle:@"Ingen interessepunkter" description:@"Kom tilbage senere og se om vi har tilføjet nogle interessepunkter"];
         
         return cell;
 

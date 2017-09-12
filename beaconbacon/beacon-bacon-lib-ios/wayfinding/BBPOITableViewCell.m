@@ -60,7 +60,7 @@
     } else if ([poi.type isEqualToString:BB_POI_TYPE_AREA]) {
         
         [self layoutIfNeeded];
-        [self.iconImageView setImage:[UIImage imageNamed:@"icon-area"]];
+        [self.iconImageView setImage:[UIImage imageNamed:@"icon-area" inBundle:[BBConfig libBundle] compatibleWithTraitCollection:nil]];
         CAShapeLayer *dotLayer = [CAShapeLayer layer];
         dotLayer.fillColor = [[UIColor colorFromHexString:poi.hex_color] colorWithAlphaComponent:0.4].CGColor;
         dotLayer.path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(self.iconImageView.bounds.size.width/2 - 3, self.iconImageView.bounds.size.height/2 - 3, 6, 6)].CGPath;
@@ -71,7 +71,7 @@
 - (void) setCheckmarkSelected:(BOOL)selected animated:(BOOL)animated {
     
     [UIView animateWithDuration:animated ? 0.3 : 0 animations:^{
-        self.selectedImageView.image = selected ? [[UIImage imageNamed:@"checkmark-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
+        self.selectedImageView.image = selected ? [[UIImage imageNamed:@"checkmark-icon" inBundle:[BBConfig libBundle] compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : nil;
         self.selectedImageView.tintColor = [[BBConfig sharedConfig] customColor];
     }];
 

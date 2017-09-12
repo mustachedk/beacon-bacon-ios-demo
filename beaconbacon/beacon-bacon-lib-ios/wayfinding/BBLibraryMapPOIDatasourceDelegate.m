@@ -66,7 +66,7 @@
     if ([self isLoading]) {
         BBLoadingIndicatorCell* cell = [tableView dequeueReusableCellWithIdentifier:@"BBLoadingIndicatorCell"];
         if(cell == nil){
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"BBLoadingIndicatorCell" owner:self options:nil] firstObject];
+            cell = [[[BBConfig libBundle] loadNibNamed:@"BBLoadingIndicatorCell" owner:self options:nil] firstObject];
         }
         
         [cell.loadingIndicator startAnimating];
@@ -75,17 +75,17 @@
     } else if ([self isEmpty]) {
         BBEmptyTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BBEmptyTableViewCell" forIndexPath:indexPath];
         if (cell == nil){
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"BBEmptyTableViewCell" owner:self options:nil] firstObject];
+            cell = [[[BBConfig libBundle] loadNibNamed:@"BBEmptyTableViewCell" owner:self options:nil] firstObject];
         }
-        
-        [cell setTitle:NSLocalizedStringFromTable(@"no.points.of.interest.title", @"BBLocalizable", nil).uppercaseString description:NSLocalizedStringFromTable(@"no.points.of.interest.description", @"BBLocalizable", nil)];
+    
+        [cell setTitle:@"Interessepunkter" description:@"Kom tilbage senere og se om vi har tilføjet nogle interessepunkter"];
         
         return cell;
 
     } else {
         BBPOITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"BBPOITableViewCell" forIndexPath:indexPath];
         if (cell == nil){
-            cell = [[[NSBundle mainBundle] loadNibNamed:@"BBPOITableViewCell" owner:self options:nil] firstObject];
+            cell = [[[BBConfig libBundle] loadNibNamed:@"BBPOITableViewCell" owner:self options:nil] firstObject];
         }
         [cell applyPointOfInterst:[self menuItemsForIndexPath:indexPath].poi atIndex:indexPath];
         return cell;
@@ -99,11 +99,11 @@
     } else if ([self isEmpty]) {
         return nil;
     } else {
-        BBPOISectionHeaderView *headerView = [[[NSBundle mainBundle] loadNibNamed:@"BBPOISectionHeaderView" owner:self options:nil] firstObject];
+        BBPOISectionHeaderView *headerView = [[[BBConfig libBundle] loadNibNamed:@"BBPOISectionHeaderView" owner:self options:nil] firstObject];
         headerView.headerTitleLabel.text = [self sectionForIndex:section].sectionTitle;
         
         headerView.headerButton.hidden = section != 0; // Hide when not section 0
-        [headerView.headerButton setTitle:NSLocalizedStringFromTable(@"unselect.all", @"BBLocalizable", nil).uppercaseString forState:UIControlStateNormal];
+        [headerView.headerButton setTitle:@"Fravælg alle" forState:UIControlStateNormal];
         [headerView.headerButton addTarget:self action:@selector(headerButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         
         return headerView;

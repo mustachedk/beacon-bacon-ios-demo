@@ -69,7 +69,6 @@
 
 // Custom Navigation/Top Bar
 @property (weak, nonatomic) IBOutlet UIView *fakeNavigationBar;
-@property (weak, nonatomic) IBOutlet UIView *topLineView;
 
 @property (weak, nonatomic) IBOutlet UIButton *navBarNextButton;
 @property (weak, nonatomic) IBOutlet UIButton *navBarPreviousButton;
@@ -81,6 +80,8 @@
 // Default Top Bar
 @property (weak, nonatomic) IBOutlet UIView *defaultTopBar;
 @property (weak, nonatomic) IBOutlet UILabel *navBarTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *navBarSubtitleLabel;
+
 //@property (weak, nonatomic) IBOutlet UILabel *navBarSubtitleLabel;
 
 
@@ -95,11 +96,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *myFoundMaterialButton;
 @property (weak, nonatomic) IBOutlet UIButton *myLocationButton;
 @property (weak, nonatomic) IBOutlet UIButton *pointsOfInterestButton;
-
-
-// Bottom Left Conor Views
-@property (weak, nonatomic) IBOutlet UIButton *changeMapButton;
-
 
 // Other Views
 @property (weak, nonatomic) IBOutlet UIScrollView *mapScrollView;
@@ -129,8 +125,6 @@
 - (IBAction)pointsOfInterestAction:(id)sender;
 - (IBAction)myLocationAction:(id)sender;
 - (IBAction)myFoundMaterialButtonAction:(id)sender;
-
-- (IBAction)changeMapAction:(id)sender;
 
 //- (IBAction)myPositionPopDownButtonAction:(id)sender;
 - (IBAction)materialPopDownButtonAction:(id)sender;

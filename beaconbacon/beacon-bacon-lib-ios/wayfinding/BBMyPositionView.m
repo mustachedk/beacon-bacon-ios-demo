@@ -69,7 +69,7 @@
 //        CGFloat insetXY = BB_MY_POSITION_INDICATOR_WIDTH/2 - BB_MY_POSITION_ICON_WIDTH/2;
 //        myPositionImageView = [[UIImageView alloc] initWithFrame:CGRectMake(insetXY, insetXY, BB_MY_POSITION_ICON_WIDTH, BB_MY_POSITION_ICON_WIDTH)];
 //        myPositionImageView.contentMode = UIViewContentModeScaleAspectFit;
-//        myPositionImageView.image = [[UIImage imageNamed:@"position-icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+//        myPositionImageView.image = [[UIImage imageNamed:@"position-icon" inBundle:[BBConfig libBundle] compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 //        myPositionImageView.tintColor = [UIColor whiteColor];
 //        [myPosistionView addSubview:myPositionImageView];
 //    }
