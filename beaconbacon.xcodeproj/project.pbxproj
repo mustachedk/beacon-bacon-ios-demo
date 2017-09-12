@@ -189,7 +189,6 @@
 		775CE0951D92C1B20066C905 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 775CE0931D92C1B20066C905 /* LaunchScreen.storyboard */; };
 		775CE12D1D92C2310066C905 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775CE12C1D92C2310066C905 /* Foundation.framework */; };
 		775CE12F1D92C2940066C905 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775CE12E1D92C2940066C905 /* CoreLocation.framework */; };
-		777BD4FF1F67FBAE00C30DA8 /* BBAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 773F35D71EBB0EF0000BB453 /* BBAssets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -741,7 +740,6 @@
 				773F36351EBB0EF0000BB453 /* BBPOISectionHeaderView.xib in Resources */,
 				775CE0951D92C1B20066C905 /* LaunchScreen.storyboard in Resources */,
 				775CE0921D92C1B20066C905 /* Assets.xcassets in Resources */,
-				777BD4FF1F67FBAE00C30DA8 /* BBAssets.xcassets in Resources */,
 				773F36291EBB0EF0000BB453 /* BBLibraryMapPOIViewController.xib in Resources */,
 				775CE0901D92C1B20066C905 /* Main.storyboard in Resources */,
 				773F36301EBB0EF0000BB453 /* BBLoadingIndicatorCell.xib in Resources */,
