@@ -64,7 +64,6 @@
     CGFloat lastScale;
     
     BOOL invalidLocationAlertShown;
-    
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -188,7 +187,7 @@
             
         } else {
             if (!invalidLocationAlertShown) {
-                [self showAlert:@"Vi kan ikke finde din placering" message:@"Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service"];
+                [self showAlert:@"Vi kan ikke finde din placering" message:@"Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service."];
                 invalidLocationAlertShown = true;
             }
         }
@@ -250,7 +249,7 @@
         case CBCentralManagerStatePoweredOff: stateString = @"Bluetooth is currently powered off.";
             myCurrentLocationView.hidden = YES;
             if (!invalidLocationAlertShown) {
-                [self showAlert:@"Vi kan ikke finde din placering" message:@"Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service"];
+                [self showAlert:@"Vi kan ikke finde din placering" message:@"Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service."];
                 invalidLocationAlertShown = true;
             }
             break;
@@ -483,7 +482,7 @@
                     
                 } else {
                     if (self.wayfindingRequstObject != nil) {
-                        NSString *message = [NSString stringWithFormat:@"'%@' blev ikke fundet på %@. Du kan stadig bruge kortet, eller prøve at skifte bibliotek.", self.wayfindingRequstObject.subject_name, place.name];
+                        NSString *message = [NSString stringWithFormat:@"'%@' blev ikke fundet på %@. Du kan stadig bruge kortet, eller du kan prøve at skifte bibliotek ved at klikke på biblioteksnavnet foroven.", self.wayfindingRequstObject.subject_name, place.name];
                         [[[UIAlertView alloc] initWithTitle:@"Materialet blev ikke fundet" message:message delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
                     }
                     self.foundSubject = nil;
@@ -1143,7 +1142,9 @@ dispatch_queue_t dispatch_queue_nearest_pixel;
 }
 
 - (IBAction)myLocationAction:(id)sender {
-    if ([self.bluetoothManager userPositioningAvailable]) {
+    if (!place.beacon_positioning_enabled) {
+        [self showAlert:@"Din placering" message:@"Din placering kan ikke lokaliseres på dette bibliotek. Denne løsning virker pt. kun på udvalgte biblioteker."];
+    } else if ([self.bluetoothManager userPositioningAvailable]) {
         if ((myCurrentLocationView.hidden && currentDisplayFloorRef.floor_id == rangedBeaconsFloorRef.floor_id) || (myCurrentLocationView.hidden && rangedBeaconsFloorRef == nil)) {
             [self showAlert:@"Din placering" message:@"Vi er i gang med at lokalisere din nuværende placering, vi viser den på kortet, så snart vi har fundet den."];
         } else {
@@ -1161,7 +1162,7 @@ dispatch_queue_t dispatch_queue_nearest_pixel;
             }
         }
     } else {
-        [self showAlert:@"Vi kan ikke finde din placering" message:@"Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service"];
+        [self showAlert:@"Vi kan ikke finde din placering" message:@"Sørg for at aktivere bluetooth og tjek eventuelt om du har givet app’en tilladelse til at bruge lokalitet service."];
     }
 }
 
